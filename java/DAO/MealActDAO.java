@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ResourceBundle;
 
 import model.MealAct;
@@ -18,9 +19,9 @@ public class MealActDAO {
 		MealAct mealAct = null;
 
 		try (Connection conn = DriverManager.getConnection(
-				bundle.getString("JDBC_URL"),
-				bundle.getString("DB_USER"),
-				bundle.getString("DB_PASS"))) {
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
 
 			String sql = "INSERT INTO MEALACT(USRID,ACTTIME,ACTDETAILID,ACTTEXT) VALUES(?, ?, ?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
@@ -45,4 +46,31 @@ public class MealActDAO {
 		return mealAct;
 	}
 
+	public MealAct selectByActId(int actId) {
+		MealAct mealAct = null;
+		try (Connection conn = DriverManager.getConnection(
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
+
+			String sql = "SELECT * FROM MEALACT WHERE ACTID = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, actId);
+
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				int usrId = rs.getInt("USRID");
+				Timestamp actTime = rs.getTimestamp("ACTTIME");
+				int actDetailId = rs.getInt("ACTDETAILID");
+				String actText = rs.getString("ACTTEXT");
+
+				mealAct = new MealAct(usrId, actId, actTime, actDetailId, actText);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return mealAct;
+	}
 }

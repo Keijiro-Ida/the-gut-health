@@ -1,11 +1,12 @@
 package model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class ActDate implements Serializable {
 	private int usrId;
-	private int dateId;
-	private ActDate actDate;
+	private int actDateId;
+	private Date actDateToday;
 
 	private int actIdBreakfast;
 	private int actIdLunch;
@@ -20,13 +21,19 @@ public class ActDate implements Serializable {
 	public ActDate() {
 	}
 
-	public ActDate(int usrId, int dateId, ActDate actDate,
+	public ActDate(int usrId, int actDateId, Date actDateToday) {
+		this.usrId = usrId;
+		this.actDateId = actDateId;
+		this.actDateToday = actDateToday;
+	}
+
+	public ActDate(int usrId, int actDateId, Date actDateToday,
 			int actIdBreakFast, int actIdLunch, int actIdSnack,
 			int actIdDinner, int actIdBreakfastPlan, int actIdLunchPlan,
-			int actIdSnackPlan, int actIdDinnerPlan) {
+			int actIdSnackPlan, int actIdDinnerPlan, int score) {
 		this.usrId = usrId;
-		this.dateId = dateId;
-		this.actDate = actDate;
+		this.actDateId = actDateId;
+		this.actDateToday = actDateToday;
 		this.actIdBreakfast = actIdBreakFast;
 		this.actIdLunch = actIdLunch;
 		this.actIdSnack = actIdSnack;
@@ -35,18 +42,19 @@ public class ActDate implements Serializable {
 		this.actIdLunchPlan = actIdLunchPlan;
 		this.actIdSnackPlan = actIdSnackPlan;
 		this.actIdDinnerPlan = actIdDinnerPlan;
+		this.score = score;
 	}
 
 	public int getUsrId() {
 		return usrId;
 	}
 
-	public int getDateId() {
-		return dateId;
+	public int getActDateId() {
+		return actDateId;
 	}
 
-	public ActDate getActDate() {
-		return actDate;
+	public Date getActDateToday() {
+		return actDateToday;
 	}
 
 	public int getActIdBreakfast() {
@@ -86,4 +94,39 @@ public class ActDate implements Serializable {
 
 	}
 
+	public void setActIdBreakFast(int actId) {
+		this.actIdBreakfast = actId;
+	}
+
+	public void setActIdLunch(int actId) {
+		this.actIdLunch = actId;
+	}
+
+	public void setActIdSnack(int actId) {
+		this.actIdSnack = actId;
+	}
+
+	public void setActIdDinner(int actId) {
+		this.actIdDinner = actId;
+	}
+
+	public void setActIdBreakFastPlan(int actId) {
+		this.actIdBreakfastPlan = actId;
+	}
+
+	public void setActIdLunchPlan(int actId) {
+		this.actIdLunchPlan = actId;
+	}
+
+	public void setActIdSnackPlan(int actId) {
+		this.actIdSnackPlan = actId;
+	}
+
+	public void setActIdDinnerPlan(int actId) {
+		this.actIdDinnerPlan = actId;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
 }

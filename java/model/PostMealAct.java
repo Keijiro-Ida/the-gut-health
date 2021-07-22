@@ -11,6 +11,13 @@ public class PostMealAct {
 	public PostMealAct() {
 	}
 
+	public PostMealAct(int usrId, Timestamp actTime, int actDetailId, String actText) {
+		this.usrId = usrId;
+		this.actTime = actTime;
+		this.actDetailId = actDetailId;
+		this.actText = actText;
+	}
+
 	public int getUsrId() {
 		return usrId;
 

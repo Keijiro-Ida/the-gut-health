@@ -1,21 +1,21 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class PostActDate {
 	private int usrId;
-	private Date actDate;
+	private Date actDateToday;
 
-	public PostActDate(int usrId, Date actDate) {
+	public PostActDate(int usrId, Date actDateToday) {
 		this.usrId = usrId;
-		this.actDate = actDate;
+		this.actDateToday = actDateToday;
 	}
 
 	public int getUsrId() {
 		return usrId;
 	}
 
-	public Date getActDate() {
-		return actDate;
+	public Date getActDateToday() {
+		return actDateToday;
 	}
 }

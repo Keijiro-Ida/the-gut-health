@@ -3,10 +3,10 @@ package model;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class ActDate implements Serializable {
+public class DateMealAll implements Serializable {
 	private int usrId;
-	private int actDateId;
-	private Date actDateToday;
+	private int dateId;
+	private Date dateToday;
 
 	private int actIdBreakfast;
 	private int actIdLunch;
@@ -18,22 +18,22 @@ public class ActDate implements Serializable {
 	private int actIdDinnerPlan;
 	private int score;
 
-	public ActDate() {
+	public DateMealAll() {
 	}
 
-	public ActDate(int usrId, int actDateId, Date actDateToday) {
+	public DateMealAll(int usrId, int dateId, Date dateToday) {
 		this.usrId = usrId;
-		this.actDateId = actDateId;
-		this.actDateToday = actDateToday;
+		this.dateId = dateId;
+		this.dateToday = dateToday;
 	}
 
-	public ActDate(int usrId, int actDateId, Date actDateToday,
+	public DateMealAll(int usrId, int dateId, Date dateToday,
 			int actIdBreakFast, int actIdLunch, int actIdSnack,
 			int actIdDinner, int actIdBreakfastPlan, int actIdLunchPlan,
 			int actIdSnackPlan, int actIdDinnerPlan, int score) {
 		this.usrId = usrId;
-		this.actDateId = actDateId;
-		this.actDateToday = actDateToday;
+		this.dateId = dateId;
+		this.dateToday = dateToday;
 		this.actIdBreakfast = actIdBreakFast;
 		this.actIdLunch = actIdLunch;
 		this.actIdSnack = actIdSnack;
@@ -49,12 +49,12 @@ public class ActDate implements Serializable {
 		return usrId;
 	}
 
-	public int getActDateId() {
-		return actDateId;
+	public int getDateId() {
+		return dateId;
 	}
 
-	public Date getActDateToday() {
-		return actDateToday;
+	public Date getDateToday() {
+		return dateToday;
 	}
 
 	public int getActIdBreakfast() {
@@ -92,6 +92,10 @@ public class ActDate implements Serializable {
 	public int getScore() {
 		return score;
 
+	}
+
+	public void setDateToday(Date date) {
+		this.dateToday = date;
 	}
 
 	public void setActIdBreakFast(int actId) {

@@ -1,43 +1,50 @@
 package model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class MealAct implements Serializable {
 	private int usrId;
+	private int planAndResultId;
 	private int actId;
-	private Timestamp actTime;
-	private int actDetailId;
-	private String actText;
+	private LocalDateTime actTime;
+	private int mealId;
+	private int mealTypeId;
 
 	public MealAct() {
 	}
 
-	public MealAct(int usrId, int actId, Timestamp actTime, int actDetailId, String actText) {
+	public MealAct(int usrId, int planAndResultId, int actId, LocalDateTime actTime, int mealId, int mealTypeId) {
 		this.usrId = usrId;
+		this.planAndResultId = planAndResultId;
 		this.actId = actId;
 		this.actTime = actTime;
-		this.actDetailId = actDetailId;
-		this.actText = actText;
+		this.mealId = mealId;
+		this.mealTypeId = mealTypeId;
+
 	}
 
 	public int getUsrId() {
 		return usrId;
 	};
 
-	public int getActId() {
-		return actId;
+	public int getPlanAndResultId() {
+		return planAndResultId;
 	};
 
-	public Timestamp getActTime() {
+	public int getActId() {
+		return actId;
+	}
+
+	public LocalDateTime getActTime() {
 		return actTime;
 	};
 
-	public int getActDetailid() {
-		return actDetailId;
+	public int getMealId() {
+		return mealId;
 	};
 
-	public String getActText() {
-		return actText;
+	public int getMealTypeId() {
+		return mealTypeId;
 	};
 }

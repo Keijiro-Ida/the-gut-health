@@ -1,13 +1,14 @@
 package test;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import DAO.DateMealAllDAO;
 import DAO.MealActDAO;
-import model.DateMealAll;
+import DAO.PlanAndResultDAO;
 import model.MealAct;
-import model.PostDate;
+import model.PlanAndResult;
 import model.PostMealAct;
+import model.PostPlanAndResult;
 import model.users.Users;
 
 public class PostMealActTest {
@@ -17,12 +18,12 @@ public class PostMealActTest {
 		//testExecute2();
 		//testExecute3();
 		//testExecute4();
-		//testExecute5();
+		testExecute5();
 	}
 
 	public static void testExecute1() {
 		MealActDAO dao = new MealActDAO();
-		PostMealAct act = new PostMealAct(1, new Timestamp(System.currentTimeMillis() + 10000), 1, "サンドウィッチ");
+		PostMealAct act = new PostMealAct(1, 1, LocalDateTime.now(), 1, 1);
 		MealAct mealAct = dao.mealActCreate(act);
 		if (mealAct != null) {
 			System.out.println("成功 ID:" + mealAct.getActId());
@@ -32,11 +33,11 @@ public class PostMealActTest {
 	}
 
 	public static void testExecute2() {
-		DateMealAllDAO dao = new DateMealAllDAO();
-		PostDate date = new PostDate(1, new java.sql.Date(System.currentTimeMillis() - 1000000000));
-		DateMealAll act = dao.createDateMealAll(date);
+		PlanAndResultDAO dao = new PlanAndResultDAO();
+		PostPlanAndResult date = new PostPlanAndResult(1, LocalDate.now());
+		PlanAndResult act = dao.createPlanAndResult(date);
 		if (act != null) {
-			System.out.println("成功" + act.getDateId() + act.getDateToday());
+			System.out.println("成功" + act.getPlanAndResultId() + act.getDate());
 		} else {
 			System.out.println("失敗");
 		}
@@ -44,10 +45,10 @@ public class PostMealActTest {
 
 	public static void testExecute3() {
 		Users users = new Users(1, "11223344", "idatt1122@gmail.com");
-		DateMealAllDAO dao = new DateMealAllDAO();
-		DateMealAll actDate = dao.findByUsers(users);
+		PlanAndResultDAO dao = new PlanAndResultDAO();
+		PlanAndResult actDate = dao.findByUsers(users);
 		if (actDate != null) {
-			System.out.println("成功" + actDate.getDateToday());
+			System.out.println("成功" + actDate.getDate());
 		} else {
 			System.out.println("失敗");
 		}
@@ -58,7 +59,7 @@ public class PostMealActTest {
 		MealActDAO dao = new MealActDAO();
 		MealAct mealAct = dao.selectByActId(actId);
 		if (mealAct != null) {
-			System.out.println("成功" + mealAct.getActText());
+			System.out.println("成功" + mealAct.getPlanAndResultId() + " " + mealAct.getMealTypeId());
 		} else {
 			System.out.println("失敗");
 		}
@@ -66,15 +67,15 @@ public class PostMealActTest {
 
 	public static void testExecute5() {
 
-		PostDate date = new PostDate(1, java.sql.Date.valueOf("2021-07-11"));
-		DateMealAllDAO dao = new DateMealAllDAO();
-		DateMealAll actDate = dao.findByPostDate(date);
+		PostPlanAndResult date = new PostPlanAndResult(1, LocalDate.now());
+		PlanAndResultDAO dao = new PlanAndResultDAO();
+		PlanAndResult actDate = dao.findByPostPlanAndResult(date);
 		actDate.setActIdBreakFast(1);
 		actDate.setActIdSnackPlan(4);
 		actDate.setActIdDinnerPlan(5);
 		actDate.setScore(80);
 
-		int result = dao.updateDateMealAll(actDate);
+		int result = dao.updatePlanAndResult(actDate);
 		if (result == 1) {
 			System.out.println("成功");
 		} else {

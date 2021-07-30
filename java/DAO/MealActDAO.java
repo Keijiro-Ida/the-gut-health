@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import model.MealAct;
@@ -23,20 +24,22 @@ public class MealActDAO {
 				bundle.getString("DB_USER_LOCAL"),
 				bundle.getString("DB_PASS_LOCAL"))) {
 
-			String sql = "INSERT INTO MEALACT(USRID,ACTTIME,ACTDETAILID,ACTTEXT) VALUES(?, ?, ?, ?)";
+			String sql = "INSERT INTO MEALACT(USRID, PLANANDRESULTID, ACTTIME, MEALID, MEALTYPEID) VALUES(?, ?, ?, ?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, postMealAct.getUsrId());
-			pstmt.setTimestamp(2, postMealAct.getActTime());
-			pstmt.setInt(3, postMealAct.getActDetailId());
-			pstmt.setString(4, postMealAct.getActText());
+			pstmt.setInt(2, postMealAct.getPlanAndResultId());
+			pstmt.setTimestamp(3, Timestamp.valueOf(postMealAct.getActTime()));
+			pstmt.setInt(4, postMealAct.getMealId());
+			pstmt.setInt(5, postMealAct.getMealTypeId());
 
 			pstmt.executeUpdate();
 			ResultSet rs = pstmt.getGeneratedKeys();
 			if (rs.next()) {
 				int actId = rs.getInt(1);
 
-				mealAct = new MealAct(postMealAct.getUsrId(), actId, postMealAct.getActTime(),
-						postMealAct.getActDetailId(), postMealAct.getActText());
+				mealAct = new MealAct(postMealAct.getUsrId(), postMealAct.getPlanAndResultId(), actId,
+						postMealAct.getActTime(),
+						postMealAct.getMealId(), postMealAct.getMealTypeId());
 			}
 
 		} catch (SQLException e) {
@@ -60,11 +63,12 @@ public class MealActDAO {
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				int usrId = rs.getInt("USRID");
-				Timestamp actTime = rs.getTimestamp("ACTTIME");
-				int actDetailId = rs.getInt("ACTDETAILID");
-				String actText = rs.getString("ACTTEXT");
+				int planAndResultId = rs.getInt("PLANANDRESULTID");
+				LocalDateTime actTime = rs.getTimestamp("ACTTIME").toLocalDateTime();
+				int mealId = rs.getInt("MealId");
+				int mealTypeId = rs.getInt("MealTypeId");
 
-				mealAct = new MealAct(usrId, actId, actTime, actDetailId, actText);
+				mealAct = new MealAct(usrId, planAndResultId, actId, actTime, mealId, mealTypeId);
 			}
 
 		} catch (SQLException e) {

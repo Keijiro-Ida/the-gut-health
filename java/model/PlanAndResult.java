@@ -1,60 +1,63 @@
 package model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
-public class DateMealAll implements Serializable {
+public class PlanAndResult implements Serializable {
 	private int usrId;
-	private int dateId;
-	private Date dateToday;
+	private int planAndResultId;
+	private LocalDate date;
 
 	private int actIdBreakfast;
 	private int actIdLunch;
 	private int actIdSnack;
 	private int actIdDinner;
+	private int score;
 	private int actIdBreakfastPlan;
 	private int actIdLunchPlan;
 	private int actIdSnackPlan;
 	private int actIdDinnerPlan;
-	private int score;
+	private int scorePlan;
 
-	public DateMealAll() {
+	public PlanAndResult() {
 	}
 
-	public DateMealAll(int usrId, int dateId, Date dateToday) {
+	public PlanAndResult(int usrId, int planAndResultId, LocalDate date) {
 		this.usrId = usrId;
-		this.dateId = dateId;
-		this.dateToday = dateToday;
+		this.planAndResultId = planAndResultId;
+		this.date = date;
+
 	}
 
-	public DateMealAll(int usrId, int dateId, Date dateToday,
+	public PlanAndResult(int usrId, int planAndResultId, LocalDate date,
 			int actIdBreakFast, int actIdLunch, int actIdSnack,
-			int actIdDinner, int actIdBreakfastPlan, int actIdLunchPlan,
-			int actIdSnackPlan, int actIdDinnerPlan, int score) {
+			int actIdDinner, int score, int actIdBreakfastPlan, int actIdLunchPlan,
+			int actIdSnackPlan, int actIdDinnerPlan, int scorePlan) {
 		this.usrId = usrId;
-		this.dateId = dateId;
-		this.dateToday = dateToday;
+		this.planAndResultId = planAndResultId;
+		this.date = date;
 		this.actIdBreakfast = actIdBreakFast;
 		this.actIdLunch = actIdLunch;
 		this.actIdSnack = actIdSnack;
 		this.actIdDinner = actIdDinner;
+		this.score = score;
 		this.actIdBreakfastPlan = actIdBreakfastPlan;
 		this.actIdLunchPlan = actIdLunchPlan;
 		this.actIdSnackPlan = actIdSnackPlan;
 		this.actIdDinnerPlan = actIdDinnerPlan;
-		this.score = score;
+		this.scorePlan = scorePlan;
 	}
 
 	public int getUsrId() {
 		return usrId;
 	}
 
-	public int getDateId() {
-		return dateId;
+	public int getPlanAndResultId() {
+		return planAndResultId;
 	}
 
-	public Date getDateToday() {
-		return dateToday;
+	public LocalDate getDate() {
+		return date;
 	}
 
 	public int getActIdBreakfast() {
@@ -73,6 +76,11 @@ public class DateMealAll implements Serializable {
 		return actIdDinner;
 	}
 
+	public int getScore() {
+		return score;
+
+	}
+
 	public int getActIdBreakfastPlan() {
 		return actIdBreakfastPlan;
 	}
@@ -89,13 +97,13 @@ public class DateMealAll implements Serializable {
 		return actIdDinnerPlan;
 	}
 
-	public int getScore() {
-		return score;
+	public int getScorePlan() {
+		return scorePlan;
 
 	}
 
-	public void setDateToday(Date date) {
-		this.dateToday = date;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	public void setActIdBreakFast(int actId) {
@@ -114,6 +122,10 @@ public class DateMealAll implements Serializable {
 		this.actIdDinner = actId;
 	}
 
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	public void setActIdBreakFastPlan(int actId) {
 		this.actIdBreakfastPlan = actId;
 	}
@@ -130,7 +142,7 @@ public class DateMealAll implements Serializable {
 		this.actIdDinnerPlan = actId;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public void setScorePlan(int scorePlan) {
+		this.scorePlan = scorePlan;
 	}
 }

@@ -1,21 +1,23 @@
 package model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class PostMealAct {
 	private int usrId;
-	private Timestamp actTime;
-	private int actDetailId;
-	private String actText;
+	private int planAndResultId;
+	private LocalDateTime actTime;
+	private int mealId;
+	private int mealTypeId;
 
 	public PostMealAct() {
 	}
 
-	public PostMealAct(int usrId, Timestamp actTime, int actDetailId, String actText) {
+	public PostMealAct(int usrId, int planAndResultId, LocalDateTime actTime, int mealId, int mealTypeId) {
 		this.usrId = usrId;
+		this.planAndResultId = planAndResultId;
 		this.actTime = actTime;
-		this.actDetailId = actDetailId;
-		this.actText = actText;
+		this.mealId = mealId;
+		this.mealTypeId = mealTypeId;
 	}
 
 	public int getUsrId() {
@@ -23,15 +25,19 @@ public class PostMealAct {
 
 	}
 
-	public Timestamp getActTime() {
+	public int getPlanAndResultId() {
+		return planAndResultId;
+	}
+
+	public LocalDateTime getActTime() {
 		return actTime;
 	}
 
-	public int getActDetailId() {
-		return actDetailId;
+	public int getMealId() {
+		return mealId;
 	}
 
-	public String getActText() {
-		return actText;
+	public int getMealTypeId() {
+		return mealTypeId;
 	}
 }

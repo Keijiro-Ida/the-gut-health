@@ -1,15 +1,16 @@
 package test;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import model.CreateDateLogic;
-import model.DateMealAll;
-import model.GetDateLogic;
+import model.CreatePlanAndResultLogic;
+import model.GetPlanAndResultByUsersLogic;
 import model.MealAct;
-import model.PostDate;
+import model.PlanAndResult;
 import model.PostMealAct;
 import model.PostMealActLogic;
-import model.updateDateMealAllLogic;
+import model.PostPlanAndResult;
+import model.UpdatePlanAndResultLogic;
 import model.users.Users;
 
 public class boTest {
@@ -23,34 +24,33 @@ public class boTest {
 	public static void testExecute1() {
 
 		Users users = new Users(1, "11223344", "idatt1122@gmail.com");
-		GetDateLogic bo = new GetDateLogic();
-		DateMealAll date = bo.execute(users);
+		GetPlanAndResultByUsersLogic bo = new GetPlanAndResultByUsersLogic();
+		PlanAndResult date = bo.execute(users);
 		if (date == null) {
-			PostDate postDate = new PostDate(users.getUsrId(), java.sql.Date.valueOf("2021-07-23"));
-			CreateDateLogic bo2 = new CreateDateLogic();
-			DateMealAll dateNew = bo2.execute(postDate);
-			if (dateNew != null) {
-				System.out.println("date新規作成 dateId:" + dateNew.getDateId());
+			PostPlanAndResult postDate = new PostPlanAndResult(users.getUsrId(), LocalDate.now());
+			CreatePlanAndResultLogic bo2 = new CreatePlanAndResultLogic();
+			PlanAndResult planAndResult = bo2.execute(postDate);
+			if (planAndResult != null) {
+				System.out.println("date新規作成 dateId:" + planAndResult.getPlanAndResultId());
 			} else {
 				System.out.println("失敗");
 			}
 		} else {
-			System.out.println("成功:dateId:" + date.getDateId());
+			System.out.println("成功:dateId:" + date.getPlanAndResultId());
 		}
 	}
 
 	public static void testExecute2() {
-		Timestamp now = new Timestamp(System.currentTimeMillis());
-		PostMealAct act = new PostMealAct(1, now, 1, "ポテトサラダ");
+		PostMealAct act = new PostMealAct(1, 1, LocalDateTime.now(), 2, 2);
 		PostMealActLogic bo = new PostMealActLogic();
 		MealAct mealAct = bo.execute(act);
 		if (mealAct != null) {
 			System.out.println("成功");
 			Users users = new Users(1, "11223344", "idatt1122@gmail.com");
-			GetDateLogic bo2 = new GetDateLogic();
-			DateMealAll date = bo2.execute(users);
+			GetPlanAndResultByUsersLogic bo2 = new GetPlanAndResultByUsersLogic();
+			PlanAndResult date = bo2.execute(users);
 			date.setActIdBreakFast(mealAct.getActId());
-			updateDateMealAllLogic bo3 = new updateDateMealAllLogic();
+			UpdatePlanAndResultLogic bo3 = new UpdatePlanAndResultLogic();
 			int result = bo3.execute(date);
 			if (result == 1) {
 				System.out.println("Date更新成功");

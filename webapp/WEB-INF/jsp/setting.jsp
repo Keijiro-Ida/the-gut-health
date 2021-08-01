@@ -7,8 +7,9 @@
 <title>腸活アプリ</title>
 </head>
 <body>
-	<h3>カレンダー</h3>
-	<a href="/the-gut-healthy/MonthGraphServlet">グラフ</a>
+	<h3>腸活アプリ</h3>
+	<p>デフォルト設定</p>
+
 	<a href="/the-gut-healthy/MainServlet">Main</a>
 </body>
 </html>

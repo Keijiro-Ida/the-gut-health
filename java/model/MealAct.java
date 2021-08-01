@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class MealAct implements Serializable {
-	private int usrId;
 	private int planAndResultId;
 	private int actId;
 	private LocalDateTime actTime;
@@ -14,8 +13,7 @@ public class MealAct implements Serializable {
 	public MealAct() {
 	}
 
-	public MealAct(int usrId, int planAndResultId, int actId, LocalDateTime actTime, int mealId, int mealTypeId) {
-		this.usrId = usrId;
+	public MealAct(int planAndResultId, int actId, LocalDateTime actTime, int mealId, int mealTypeId) {
 		this.planAndResultId = planAndResultId;
 		this.actId = actId;
 		this.actTime = actTime;
@@ -23,10 +21,6 @@ public class MealAct implements Serializable {
 		this.mealTypeId = mealTypeId;
 
 	}
-
-	public int getUsrId() {
-		return usrId;
-	};
 
 	public int getPlanAndResultId() {
 		return planAndResultId;

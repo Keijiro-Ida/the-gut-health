@@ -24,20 +24,19 @@ public class MealActDAO {
 				bundle.getString("DB_USER_LOCAL"),
 				bundle.getString("DB_PASS_LOCAL"))) {
 
-			String sql = "INSERT INTO MEALACT(USRID, PLANANDRESULTID, ACTTIME, MEALID, MEALTYPEID) VALUES(?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO MEALACT(PLANANDRESULTID, ACTTIME, MEALID, THREEMEALSID) VALUES(?, ?, ?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
-			pstmt.setInt(1, postMealAct.getUsrId());
-			pstmt.setInt(2, postMealAct.getPlanAndResultId());
-			pstmt.setTimestamp(3, Timestamp.valueOf(postMealAct.getActTime()));
-			pstmt.setInt(4, postMealAct.getMealId());
-			pstmt.setInt(5, postMealAct.getMealTypeId());
+			pstmt.setInt(1, postMealAct.getPlanAndResultId());
+			pstmt.setTimestamp(2, Timestamp.valueOf(postMealAct.getActTime()));
+			pstmt.setInt(3, postMealAct.getMealId());
+			pstmt.setInt(4, postMealAct.getMealTypeId());
 
 			pstmt.executeUpdate();
 			ResultSet rs = pstmt.getGeneratedKeys();
 			if (rs.next()) {
 				int actId = rs.getInt(1);
 
-				mealAct = new MealAct(postMealAct.getUsrId(), postMealAct.getPlanAndResultId(), actId,
+				mealAct = new MealAct(postMealAct.getPlanAndResultId(), actId,
 						postMealAct.getActTime(),
 						postMealAct.getMealId(), postMealAct.getMealTypeId());
 			}
@@ -62,13 +61,12 @@ public class MealActDAO {
 
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
-				int usrId = rs.getInt("USRID");
 				int planAndResultId = rs.getInt("PLANANDRESULTID");
 				LocalDateTime actTime = rs.getTimestamp("ACTTIME").toLocalDateTime();
-				int mealId = rs.getInt("MealId");
-				int mealTypeId = rs.getInt("MealTypeId");
+				int mealId = rs.getInt("MEALID");
+				int threeMealsId = rs.getInt("THREEMEALSID");
 
-				mealAct = new MealAct(usrId, planAndResultId, actId, actTime, mealId, mealTypeId);
+				mealAct = new MealAct(planAndResultId, actId, actTime, mealId, threeMealsId);
 			}
 
 		} catch (SQLException e) {

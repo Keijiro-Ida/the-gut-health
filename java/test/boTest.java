@@ -2,10 +2,15 @@ package test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import model.CreatePlanAndResultLogic;
+import model.GetMealGenreListLogic;
+import model.GetMealListLogic;
 import model.GetPlanAndResultByUsersLogic;
+import model.Meal;
 import model.MealAct;
+import model.MealGenre;
 import model.PlanAndResult;
 import model.PostMealAct;
 import model.PostMealActLogic;
@@ -17,8 +22,9 @@ public class boTest {
 
 	public static void main(String[] args) {
 		//testExecute1();
-		testExecute2();
-
+		//testExecute2();
+		//testExecute3();
+		testExecute4();
 	}
 
 	public static void testExecute1() {
@@ -58,5 +64,17 @@ public class boTest {
 		} else {
 			System.out.println("失敗");
 		}
+	}
+
+	public static void testExecute3() {
+		GetMealGenreListLogic bo4 = new GetMealGenreListLogic();
+		ArrayList<MealGenre> list = bo4.execute();
+		list.forEach(mealGenre -> System.out.println(mealGenre.getMealGenreName()));
+	}
+
+	public static void testExecute4() {
+		GetMealListLogic bo5 = new GetMealListLogic();
+		ArrayList<Meal> list2 = bo5.execute(1);
+		list2.forEach(meal -> System.out.println(meal.getMealName()));
 	}
 }

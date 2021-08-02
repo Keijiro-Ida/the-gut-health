@@ -8,17 +8,17 @@ public class MealAct implements Serializable {
 	private int actId;
 	private LocalDateTime actTime;
 	private int mealId;
-	private int mealTypeId;
+	private int threeMealsId;
 
 	public MealAct() {
 	}
 
-	public MealAct(int planAndResultId, int actId, LocalDateTime actTime, int mealId, int mealTypeId) {
+	public MealAct(int planAndResultId, int actId, LocalDateTime actTime, int mealId, int threeMealsId) {
 		this.planAndResultId = planAndResultId;
 		this.actId = actId;
 		this.actTime = actTime;
 		this.mealId = mealId;
-		this.mealTypeId = mealTypeId;
+		this.threeMealsId = threeMealsId;
 
 	}
 
@@ -38,7 +38,7 @@ public class MealAct implements Serializable {
 		return mealId;
 	};
 
-	public int getMealTypeId() {
-		return mealTypeId;
+	public int getThreeMealsId() {
+		return threeMealsId;
 	};
 }

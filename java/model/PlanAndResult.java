@@ -106,7 +106,7 @@ public class PlanAndResult implements Serializable {
 		this.date = date;
 	}
 
-	public void setActIdBreakFast(int actId) {
+	public void setActIdBreakfast(int actId) {
 		this.actIdBreakfast = actId;
 	}
 

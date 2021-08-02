@@ -29,7 +29,7 @@ public class MealActDAO {
 			pstmt.setInt(1, postMealAct.getPlanAndResultId());
 			pstmt.setTimestamp(2, Timestamp.valueOf(postMealAct.getActTime()));
 			pstmt.setInt(3, postMealAct.getMealId());
-			pstmt.setInt(4, postMealAct.getMealTypeId());
+			pstmt.setInt(4, postMealAct.getThreeMealsId());
 
 			pstmt.executeUpdate();
 			ResultSet rs = pstmt.getGeneratedKeys();
@@ -38,7 +38,7 @@ public class MealActDAO {
 
 				mealAct = new MealAct(postMealAct.getPlanAndResultId(), actId,
 						postMealAct.getActTime(),
-						postMealAct.getMealId(), postMealAct.getMealTypeId());
+						postMealAct.getMealId(), postMealAct.getThreeMealsId());
 			}
 
 		} catch (SQLException e) {

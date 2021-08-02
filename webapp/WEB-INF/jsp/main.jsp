@@ -1,11 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="model.PlanAndResult, model.GetMealActLogic" %>
+<%@ page import="model.PlanAndResult, model.GetMealActLogic, java.util.*, model.*, DAO.*"%>
 <% PlanAndResult planAndResult = (PlanAndResult)session.getAttribute("planAndResult");
-   GetMealActLogic bo = new GetMealActLogic();
-	
-
-
+   GetMealGenreListLogic bo = new GetMealGenreListLogic();
+   ArrayList<MealGenre> genreList = bo.execute();
+   GetMealListLogic bo2 = new GetMealListLogic();
+   Map<MealGenre, ArrayList<Meal>> mealMap = new HashMap<>();
+   for(MealGenre mealGenre : genreList){
+	   ArrayList<Meal> mealList = bo2.execute(mealGenre.getMealGenreId());
+	   mealMap.put(mealGenre, mealList);
+	 
+   }
+   
+   GetMealActLogic bo3 = new GetMealActLogic();
+   MealAct mealAct = bo3.execute(planAndResult.getActIdBreakfast());
+   if(mealAct != null){
+   MealDAO dao = new MealDAO();
+   Meal meal = dao.selectMealByMealId(mealAct.getMealId());
+   }
 %>
 <!DOCTYPE html>
 <html>
@@ -31,13 +43,45 @@
 					<input type="time" name="plan_breakfast_time" form="my_form" />
 				</td>
 				<td>
-					<input type="text" name="plan_breakfast_text" form="my_form" />
+					<select name="plan_morning_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>
+					
 				</td>
 				<td>
+					<% if(planAndResult.getActIdBreakfast() != 0) { %>
+					<%=mealAct.getActTime() %>
+					<% } else { %>
 					<input type="time" name="breakfast_time" form="my_form" />
+					<% } %>
 				</td>
 				<td>
-					<input type="text" name="breakfast_text" form="my_form" />
+					<% if(mealAct != null) { %>
+					
+					<% } else { %>
+					
+					<select name="result_morning_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>
+					<% } %>
 				</td>
 			</tr>
 			<tr>
@@ -57,13 +101,36 @@
 					<input type="time" name="plan_lunch_time" form="my_form" />
 				</td>
 				<td>
-					<input type="text" name="plan_lunch_text" form="my_form" />
+					<select name="plan_lunch_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>	
+										
 				</td>
 				<td>
 					<input type="time" name="lunch_time" form="my_form" />
 				</td>
 				<td>
-					<input type="text" name="lunch_text" form="my_form" />
+					<select name="result_lunch_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>	
 				</td>
 			</tr>
 			<tr>
@@ -83,13 +150,35 @@
 					<input type="time" name="plan_snack_time" form="my_form" />
 				</td>
 				<td>
-					<input type="text" name="plan_snack_text" form="my_form" />
+					<select name="plan_snack_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>	
 				</td>
 				<td>
 					<input type="time" name="snack_time" form="my_form" />
 				</td>
 				<td>
-					<input type="text" name="snack_text" form="my_form" />
+					<select name="result_snack_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>	
 				</td>
 			</tr>
 			<tr>
@@ -109,13 +198,35 @@
 					<input type="time" name="plan_dinner_time" form="my_form" />
 				</td>
 				<td>
-					<input type="text" name="plan_dinner_text" form="my_form" />
+					<select name="plan_dinner_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>	
 				</td>
 				<td>
 					<input type="time" name="dinner_time" form="my_form" />
 				</td>
 				<td>
-					<input type="text" name="dinner_text" form="my_form" />
+					<select name="result_dinner_meal">
+						<option hidden>選択してください</option>
+						<% for(MealGenre mealGenre : genreList) {%>
+							<optgroup label=<%=mealGenre.getMealGenreName() %>>
+								<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+						  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+						 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+						 			 </option>
+								<% } %>
+							</optgroup>
+						<% } %>
+					</select>	
 				</td>
 			</tr>
 			<tr>
@@ -129,10 +240,7 @@
 	
 	
 	
-	
-	<p>actId:
-	<p><%= planAndResult.getPlanAndResultId() %>
-	</p>
+
 	<a href="/the-gut-healthy/PointServlet">腸活</a>
 	<br>
 	<a href="/the-gut-healthy/CalenderServlet">カレンダー</a>

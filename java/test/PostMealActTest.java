@@ -59,7 +59,7 @@ public class PostMealActTest {
 		MealActDAO dao = new MealActDAO();
 		MealAct mealAct = dao.selectByActId(actId);
 		if (mealAct != null) {
-			System.out.println("成功" + mealAct.getPlanAndResultId() + " " + mealAct.getMealTypeId());
+			System.out.println("成功" + mealAct.getPlanAndResultId() + " " + mealAct.getThreeMealsId());
 		} else {
 			System.out.println("失敗");
 		}

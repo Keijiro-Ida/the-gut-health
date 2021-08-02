@@ -6,16 +6,16 @@ public class PostMealAct {
 	private int planAndResultId;
 	private LocalDateTime actTime;
 	private int mealId;
-	private int mealTypeId;
+	private int threeMealsId;
 
 	public PostMealAct() {
 	}
 
-	public PostMealAct(int usrId, int planAndResultId, LocalDateTime actTime, int mealId, int mealTypeId) {
+	public PostMealAct(int planAndResultId, LocalDateTime actTime, int mealId, int threeMealsId) {
 		this.planAndResultId = planAndResultId;
 		this.actTime = actTime;
 		this.mealId = mealId;
-		this.mealTypeId = mealTypeId;
+		this.threeMealsId = threeMealsId;
 	}
 
 	public int getPlanAndResultId() {
@@ -30,7 +30,7 @@ public class PostMealAct {
 		return mealId;
 	}
 
-	public int getMealTypeId() {
-		return mealTypeId;
+	public int getThreeMealsId() {
+		return threeMealsId;
 	}
 }

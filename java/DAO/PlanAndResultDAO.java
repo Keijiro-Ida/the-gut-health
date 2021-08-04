@@ -23,7 +23,7 @@ public class PlanAndResultDAO {
 				bundle.getString("JDBC_URL_LOCAL"),
 				bundle.getString("DB_USER_LOCAL"),
 				bundle.getString("DB_PASS_LOCAL"))) {
-			String sql = "INSERT INTO PLANANDRESULT(USRID, DATE)"
+			String sql = "INSERT INTO PLANANDRESULT(USRID, PLANANDRESULTDATE)"
 					+ "		VALUES(?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, postPlanAndResult.getUsrId());
@@ -51,7 +51,7 @@ public class PlanAndResultDAO {
 				bundle.getString("JDBC_URL_LOCAL"),
 				bundle.getString("DB_USER_LOCAL"),
 				bundle.getString("DB_PASS_LOCAL"))) {
-			String sql = "SELECT * FROM PLANANDRESULT WHERE USRID = ? AND DATE = ?";
+			String sql = "SELECT * FROM PLANANDRESULT WHERE USRID = ? AND PLANANDRESULTDATE = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, users.getUsrId());
 			Date today = new Date(System.currentTimeMillis());
@@ -93,7 +93,7 @@ public class PlanAndResultDAO {
 				bundle.getString("JDBC_URL_LOCAL"),
 				bundle.getString("DB_USER_LOCAL"),
 				bundle.getString("DB_PASS_LOCAL"))) {
-			String sql = "SELECT * FROM PLANANDRESULT WHERE USRID = ? AND DATE = ?";
+			String sql = "SELECT * FROM PLANANDRESULT WHERE USRID = ? AND PLANANDRESULTDATE = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, postPlanAndResult.getUsrId());
 			;

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 public class PlanAndResult implements Serializable {
 	private int usrId;
 	private int planAndResultId;
-	private LocalDate date;
+	private LocalDate planAndResultDate;
 
 	private int actIdBreakfast;
 	private int actIdLunch;
@@ -22,20 +22,20 @@ public class PlanAndResult implements Serializable {
 	public PlanAndResult() {
 	}
 
-	public PlanAndResult(int usrId, int planAndResultId, LocalDate date) {
+	public PlanAndResult(int usrId, int planAndResultId, LocalDate planAndResultDate) {
 		this.usrId = usrId;
 		this.planAndResultId = planAndResultId;
-		this.date = date;
+		this.planAndResultDate = planAndResultDate;
 
 	}
 
-	public PlanAndResult(int usrId, int planAndResultId, LocalDate date,
+	public PlanAndResult(int usrId, int planAndResultId, LocalDate planAndResultDate,
 			int actIdBreakFast, int actIdLunch, int actIdSnack,
 			int actIdDinner, int score, int actIdBreakfastPlan, int actIdLunchPlan,
 			int actIdSnackPlan, int actIdDinnerPlan, int scorePlan) {
 		this.usrId = usrId;
 		this.planAndResultId = planAndResultId;
-		this.date = date;
+		this.planAndResultDate = planAndResultDate;
 		this.actIdBreakfast = actIdBreakFast;
 		this.actIdLunch = actIdLunch;
 		this.actIdSnack = actIdSnack;
@@ -56,8 +56,8 @@ public class PlanAndResult implements Serializable {
 		return planAndResultId;
 	}
 
-	public LocalDate getDate() {
-		return date;
+	public LocalDate getPlanAndResultDate() {
+		return planAndResultDate;
 	}
 
 	public int getActIdBreakfast() {
@@ -102,8 +102,8 @@ public class PlanAndResult implements Serializable {
 
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setPlanAndResultDate(LocalDate planAndResultDate) {
+		this.planAndResultDate = planAndResultDate;
 	}
 
 	public void setActIdBreakfast(int actId) {
@@ -126,7 +126,7 @@ public class PlanAndResult implements Serializable {
 		this.score = score;
 	}
 
-	public void setActIdBreakFastPlan(int actId) {
+	public void setActIdBreakfastPlan(int actId) {
 		this.actIdBreakfastPlan = actId;
 	}
 

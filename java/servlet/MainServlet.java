@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import DAO.MealActDAO;
 import model.CreatePlanAndResultLogic;
 import model.GetMealActLogic;
 import model.GetPlanAndResultByUsersLogic;
@@ -84,8 +85,10 @@ public class MainServlet extends HttpServlet {
 		for (int i = 1; i <= 8; i++) {
 			String mealId_String = request.getParameter("meal_name" + i);
 			String meal_time_String = request.getParameter("meal_time" + i);
-
-			if (!(mealId_String.equals("0")) && !(meal_time_String.equals(""))) {
+			System.out.println("mealId_String" + i + " " + mealId_String);
+			System.out.println("meal_time_String" + i + " " + meal_time_String);
+			if (!("0".equals(mealId_String)) && !("".equals(meal_time_String))
+					&& mealId_String != null && meal_time_String != null) {
 				int mealId = Integer.parseInt(mealId_String);
 				LocalTime meal_LocalTime = LocalTime.parse(meal_time_String,
 						DateTimeFormatter.ofPattern("HH:mm"));
@@ -94,7 +97,8 @@ public class MainServlet extends HttpServlet {
 				PostMealAct postMealAct = new PostMealAct(planAndResult.getPlanAndResultId(), meal_LocalDateTime,
 						mealId,
 						i);
-
+				MealActDAO mealActDAO = new MealActDAO();
+				mealActDAO.deleteMealAct(planAndResult.getPlanAndResultId(), i);
 				MealAct mealAct = bo.execute(postMealAct);
 				switch (i) {
 				case 1:

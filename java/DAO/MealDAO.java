@@ -49,7 +49,7 @@ public class MealDAO {
 				bundle.getString("DB_USER_LOCAL"),
 				bundle.getString("DB_PASS_LOCAL"))) {
 
-			String sql = "SELECT * FROM MEAL WHERE MEALGENREID = ?";
+			String sql = "SELECT * FROM MEAL WHERE MEALID = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, mealId);
 

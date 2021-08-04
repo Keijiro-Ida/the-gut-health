@@ -75,4 +75,25 @@ public class MealActDAO {
 		}
 		return mealAct;
 	}
+
+	public int deleteMealAct(int planAndResultId, int threeMealsId) {
+
+		try (Connection conn = DriverManager.getConnection(
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
+
+			String sql = "DELETE FROM MEALACT WHERE PLANANDRESULTID = ? AND THREEMEALSID = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, planAndResultId);
+			pstmt.setInt(2, threeMealsId);
+
+			int result = pstmt.executeUpdate();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 }

@@ -23,7 +23,7 @@ public class PostMealActTest {
 
 	public static void testExecute1() {
 		MealActDAO dao = new MealActDAO();
-		PostMealAct act = new PostMealAct(1, 1, LocalDateTime.now(), 1, 1);
+		PostMealAct act = new PostMealAct(1, LocalDateTime.now(), 1, 1);
 		MealAct mealAct = dao.mealActCreate(act);
 		if (mealAct != null) {
 			System.out.println("成功 ID:" + mealAct.getActId());
@@ -37,7 +37,7 @@ public class PostMealActTest {
 		PostPlanAndResult date = new PostPlanAndResult(1, LocalDate.now());
 		PlanAndResult act = dao.createPlanAndResult(date);
 		if (act != null) {
-			System.out.println("成功" + act.getPlanAndResultId() + act.getDate());
+			System.out.println("成功" + act.getPlanAndResultId() + act.getPlanAndResultDate());
 		} else {
 			System.out.println("失敗");
 		}
@@ -48,7 +48,7 @@ public class PostMealActTest {
 		PlanAndResultDAO dao = new PlanAndResultDAO();
 		PlanAndResult actDate = dao.findByUsers(users);
 		if (actDate != null) {
-			System.out.println("成功" + actDate.getDate());
+			System.out.println("成功" + actDate.getPlanAndResultDate());
 		} else {
 			System.out.println("失敗");
 		}
@@ -70,7 +70,7 @@ public class PostMealActTest {
 		PostPlanAndResult date = new PostPlanAndResult(1, LocalDate.now());
 		PlanAndResultDAO dao = new PlanAndResultDAO();
 		PlanAndResult actDate = dao.findByPostPlanAndResult(date);
-		actDate.setActIdBreakFast(1);
+		actDate.setActIdBreakfast(1);
 		actDate.setActIdSnackPlan(4);
 		actDate.setActIdDinnerPlan(5);
 		actDate.setScore(80);

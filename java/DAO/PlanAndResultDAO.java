@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import model.PlanAndResult;
@@ -158,6 +159,92 @@ public class PlanAndResultDAO {
 			e.printStackTrace();
 			return -1;
 		}
+	}
+
+	public ArrayList<PlanAndResult> getMonthPlanAndResultList(Users users, LocalDate localDate) {
+		ArrayList<PlanAndResult> monthPlanAndResultList = new ArrayList<PlanAndResult>();
+		try (Connection conn = DriverManager.getConnection(
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
+			String sql = "SELECT * FROM PLANANDRESULT WHERE USRID = ? AND PLANANDRESULTDATE BETWEEN ? AND ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, users.getUsrId());
+			pstmt.setDate(2, Date.valueOf(localDate.withDayOfMonth(1)));
+			pstmt.setDate(3,
+					Date.valueOf(localDate.withDayOfMonth(1).plusMonths(1).minusDays(1)));
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				int planAndResultId = rs.getInt("PLANANDRESULTID");
+				int actIdBreakfast = rs.getInt("ACTID_BREAKFAST");
+				int actIdLunch = rs.getInt("ACTID_LUNCH");
+				int actIdSnack = rs.getInt("ACTID_SNACK");
+				int actIdDinner = rs.getInt("ACTID_DINNER");
+				int score = rs.getInt("SCORE");
+				int actIdBreakfastPlan = rs.getInt("ACTID_BREAKFAST_PLAN");
+				int actIdLunchPlan = rs.getInt("ACTID_LUNCH_PLAN");
+				int actIdSnackPlan = rs.getInt("ACTID_SNACK_PLAN");
+				int actIdDinnerPlan = rs.getInt("ACTID_DINNER_PLAN");
+				int scorePlan = rs.getInt("SCORE_PLAN");
+				LocalDate planAndResultDate = rs.getDate("PLANANDRESULTDATE").toLocalDate();
+
+				PlanAndResult planAndResult = new PlanAndResult(users.getUsrId(), planAndResultId, planAndResultDate,
+						actIdBreakfast,
+						actIdLunch, actIdSnack,
+						actIdDinner, score, actIdBreakfastPlan, actIdLunchPlan, actIdSnackPlan, actIdDinnerPlan,
+						scorePlan);
+
+				monthPlanAndResultList.add(planAndResult);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return monthPlanAndResultList;
+	}
+
+	public PlanAndResult findByPlanAndResultId(int planAndResultId) {
+		PlanAndResult planAndResult = null;
+		try (Connection conn = DriverManager.getConnection(
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
+			String sql = "SELECT * FROM PLANANDRESULT WHERE PLANANDRESULTID = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, planAndResultId);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				int usrId = rs.getInt("USRID");
+				int actIdBreakfast = rs.getInt("ACTID_BREAKFAST");
+				int actIdLunch = rs.getInt("ACTID_LUNCH");
+				int actIdSnack = rs.getInt("ACTID_SNACK");
+				int actIdDinner = rs.getInt("ACTID_DINNER");
+				int score = rs.getInt("SCORE");
+				int actIdBreakfastPlan = rs.getInt("ACTID_BREAKFAST_PLAN");
+				int actIdLunchPlan = rs.getInt("ACTID_LUNCH_PLAN");
+				int actIdSnackPlan = rs.getInt("ACTID_SNACK_PLAN");
+				int actIdDinnerPlan = rs.getInt("ACTID_DINNER_PLAN");
+				int scorePlan = rs.getInt("SCORE_PLAN");
+				LocalDate planAndResultDate = rs.getDate("PLANANDRESULTDATE").toLocalDate();
+
+				planAndResult = new PlanAndResult(usrId, planAndResultId, planAndResultDate,
+						actIdBreakfast,
+						actIdLunch, actIdSnack,
+						actIdDinner, score, actIdBreakfastPlan, actIdLunchPlan, actIdSnackPlan, actIdDinnerPlan,
+						scorePlan);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return planAndResult;
 	}
 
 }

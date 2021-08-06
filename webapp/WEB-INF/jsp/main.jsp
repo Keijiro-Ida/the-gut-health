@@ -3,65 +3,17 @@
 <%@ page import="model.PlanAndResult, model.GetMealActLogic, java.util.*, model.*, DAO.*, java.time.format.DateTimeFormatter, java.time.Duration"%>
 <% PlanAndResult planAndResult = (PlanAndResult)session.getAttribute("planAndResult");
    ArrayList<MealAct> mealActList = (ArrayList<MealAct>)session.getAttribute("mealActList");
+   long[] durationMinutes = (long[])request.getAttribute("durationMinutes");
+   int[] score = (int[])request.getAttribute("score");
+   long[] digestionMinutes = (long[])request.getAttribute("digestionMinutes");
+   Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
+   ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
+   
    MealDAO mealDAO = new MealDAO();
    ThreeMealsAndSnackDAO threeMealsDAO = new ThreeMealsAndSnackDAO();
    FoodDAO foodDAO = new FoodDAO();
-   
-   long[] durationMinutes = new long[6];
-   int[] score = new int[6];
-   long[] digestionMinutes = new long[6];
-   int totalScorePlan = 0;
-   int totalScore =0;
-   for(int j = 0; j < 6; j += 2) {
-	   if(mealActList.get(j) != null) {
-		    digestionMinutes[j] = foodDAO.selectDigestionMinutesFromId(mealDAO.selectMealByMealId(mealActList.get(j).getMealId()).getFoodId());
-		    if(mealActList.get(j+2) != null){
-		    	durationMinutes[j] = Duration.between(mealActList.get(j).getActTime(), mealActList.get(j+2).getActTime()).toMinutes();
-		   
-		   		if(durationMinutes[j] >= digestionMinutes[j] + 60){
-				 	 score[j] = 40;
-			 	 } else if (durationMinutes[j] >= digestionMinutes[j]){
-				  	score[j] = 30;
-			  	} else if (durationMinutes[j] >= digestionMinutes[j] -60) {
-				  	score[j] = 15;
-			  	} else {
-				  	score[j] = 5;
-			  	}
-		    }
-		   totalScorePlan += score[j];
-	   }
-	   if(mealActList.get(j+1) != null) {
-		   digestionMinutes[j+1] = foodDAO.selectDigestionMinutesFromId(mealDAO.selectMealByMealId(mealActList.get(j+1).getMealId()).getFoodId());
-		   if(mealActList.get(j+3) != null) {
-		   durationMinutes[j+1] = Duration.between(mealActList.get(j+1).getActTime(), mealActList.get(j+3).getActTime()).toMinutes();
-		   
-			   if(durationMinutes[j+1] > digestionMinutes[j+1] + 60){
-					  score[j+1] = 40;
-				  } else if (durationMinutes[j+1] >= digestionMinutes[j+1]){
-					  score[j+1] = 30;
-				  } else if (durationMinutes[j+1] >= digestionMinutes[j+1] -60) {
-					  score[j+1] = 15;
-				  } else {
-					  score[j+1] = 5;
-				  }
-		  	 }
-		   totalScore += score[j+1];
-	   }
 	
-   }
-   
-   GetMealGenreListLogic bo = new GetMealGenreListLogic();
-   ArrayList<MealGenre> genreList = bo.execute();
-   GetMealListLogic bo2 = new GetMealListLogic();
-   Map<MealGenre, ArrayList<Meal>> mealMap = new HashMap<>();
-   for(MealGenre mealGenre : genreList){
-	   ArrayList<Meal> mealList = bo2.execute(mealGenre.getMealGenreId());
-	   mealMap.put(mealGenre, mealList);
-	 
-   }
-   
-   
-   
+   Calendar now = Calendar.getInstance();
    
    
 %>
@@ -188,21 +140,29 @@
 				</tr>
 				<tr>
 					<th>スキマ時間</th>
-					<% if(mealActList.get(j) != null && mealActList.get(j+2) != null) { %>
-					<td> <%=durationMinutes[j]%>分</td>
-					<% } else {%> 
-					<td> </td>
+					<% if(durationMinutes[j] != 0) {%>
+					<td><%=durationMinutes[j]%>分</td>
+					<% } else { %>
+					<td></td>
 					<% } %>
-					<% if(mealActList.get(j+1) != null && mealActList.get(j+3) != null) { %>
-					<td> <%=durationMinutes[j+1] %>分</td>
-					<% } else {%> 
-					<td> </td>
+					<% if(durationMinutes[j+1] != 0) {%>
+					<td><%=durationMinutes[j+1]%>分</td>
+					<% } else { %>
+					<td></td>
 					<% } %>
 				</tr>
 				<tr>
 					<th>スコア</th>
-					<% System.out.println(score[j+1]); %>
-					<td><%=score[j] %></td><td><%= score[j+1] %></td>
+					<% if(score[j] != 0) {%>
+					<td><%=score[j] %> 点</td>
+					<% } else { %>
+					<td></td>
+					<% } %>
+					<% if(score[j+1] != 0) {%>
+					<td><%=score[j+1] %> 点</td>
+					<% } else { %>
+					<td></td>
+					<% } %>
 				</tr>
 			<% } %>
 			
@@ -290,16 +250,16 @@
 						
 					
 				</tr>
-			<tr>
-					<th>消化時間</th>
+				<tr>
+				<th>消化時間</th>
 					<% if(mealActList.get(6) != null) {%>
-					<td><%=foodDAO.selectDigestionMinutesFromId(mealDAO.selectMealByMealId(mealActList.get(6).getMealId()).getFoodId()) %>分</td>
+					<td><%=digestionMinutes[6]%>分</td>
 					<% } else { %>
 					<td></td>
 					<% } %>
 					<td rowspan="1"> </td>
 					<% if(mealActList.get(7) != null) { %>
-					<td><%=foodDAO.selectDigestionMinutesFromId(mealDAO.selectMealByMealId(mealActList.get(7).getMealId()).getFoodId()) %>分</td>
+					<td><%=digestionMinutes[7]%>分</td>
 					<% } else { %>
 					<td><td>
 					<% } %>
@@ -309,7 +269,19 @@
 			
 			
 			<tr>
-				<th>TOTALスコア</th><td><%=totalScorePlan %></td><td></td><td><%=totalScore %></td><td></td>
+				<th>TOTALスコア</th>
+				<td><%=planAndResult.getScorePlan() %> / 120 点</td>
+				<td></td>
+				<td><%=planAndResult.getScore() %> / 120 点</td>
+				<td>
+				<% if(planAndResult.getScore() == 120 ) { %>
+				すごい！！
+				<% } else if(planAndResult.getScore() >= 100) {%>
+				がんばりました。
+				<% } else if(planAndResult.getScore() >= 80) {%>
+				もう少し!!
+				<% } %>
+				</td>
 			</tr>
 			
 		</table>
@@ -322,7 +294,7 @@
 
 	<a href="/the-gut-healthy/PointServlet">腸活</a>
 	<br>
-	<a href="/the-gut-healthy/CalenderServlet">カレンダー</a>
+	<a href="/the-gut-healthy/CalendarServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1 %>">カレンダー</a>
 	<br>
 	<a href="/the-gut-healthy/SettingServlet">Setting</a>
 	<br>

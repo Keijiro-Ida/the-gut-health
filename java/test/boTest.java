@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import DAO.PlanAndResultDAO;
 import model.CreatePlanAndResultLogic;
 import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
+import model.GetMonthPlanAndResultList;
+import model.GetPlanAndResultByIdLogic;
 import model.GetPlanAndResultByUsersLogic;
 import model.Meal;
 import model.MealAct;
@@ -24,7 +27,10 @@ public class boTest {
 		//testExecute1();
 		//testExecute2();
 		//testExecute3();
-		testExecute4();
+		//testExecute4();
+		//testExecute5();
+		//testExecute6();
+		testExecute7();
 	}
 
 	public static void testExecute1() {
@@ -47,7 +53,7 @@ public class boTest {
 	}
 
 	public static void testExecute2() {
-		PostMealAct act = new PostMealAct(1, 1, LocalDateTime.now(), 2, 2);
+		PostMealAct act = new PostMealAct(1, LocalDateTime.now(), 2, 2);
 		PostMealActLogic bo = new PostMealActLogic();
 		MealAct mealAct = bo.execute(act);
 		if (mealAct != null) {
@@ -55,7 +61,7 @@ public class boTest {
 			Users users = new Users(1, "11223344", "idatt1122@gmail.com");
 			GetPlanAndResultByUsersLogic bo2 = new GetPlanAndResultByUsersLogic();
 			PlanAndResult date = bo2.execute(users);
-			date.setActIdBreakFast(mealAct.getActId());
+			date.setActIdBreakfast(mealAct.getActId());
 			UpdatePlanAndResultLogic bo3 = new UpdatePlanAndResultLogic();
 			int result = bo3.execute(date);
 			if (result == 1) {
@@ -76,5 +82,31 @@ public class boTest {
 		GetMealListLogic bo5 = new GetMealListLogic();
 		ArrayList<Meal> list2 = bo5.execute(1);
 		list2.forEach(meal -> System.out.println(meal.getMealName()));
+	}
+
+	public static void testExecute5() {
+		PlanAndResultDAO dao = new PlanAndResultDAO();
+		Users users = new Users(1, "11223344", "idatt1122@gmail.com");
+		LocalDate localDate = LocalDate.now();
+		ArrayList<PlanAndResult> list = dao.getMonthPlanAndResultList(users, localDate);
+		list.forEach(p -> System.out.println("成功"));
+	}
+
+	public static void testExecute6() {
+		GetMonthPlanAndResultList bo = new GetMonthPlanAndResultList();
+		Users users = new Users(1, "11223344", "idatt1122@gmail.com");
+		LocalDate localDate = LocalDate.now();
+		ArrayList<PlanAndResult> list = bo.execute(users, localDate);
+		list.forEach(p -> System.out.println(p.getScore()));
+	}
+
+	public static void testExecute7() {
+		GetPlanAndResultByIdLogic bo = new GetPlanAndResultByIdLogic();
+		PlanAndResult planAndResult = bo.execute(5);
+		if (planAndResult != null) {
+			System.out.println("成功" + planAndResult.getPlanAndResultDate());
+		} else {
+			System.out.println("失敗");
+		}
 	}
 }

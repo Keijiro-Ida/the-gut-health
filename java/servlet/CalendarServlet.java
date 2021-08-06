@@ -1,7 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,10 +16,10 @@ import model.MyCalendarLogic;
 import model.users.Users;
 
 /**
- * Servlet implementation class MonthGraphServlet
+ * Servlet implementation class CalendarServlet
  */
-@WebServlet("/MonthGraphServlet")
-public class MonthGraphServlet extends HttpServlet {
+@WebServlet("/CalendarServlet")
+public class CalendarServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -31,6 +31,7 @@ public class MonthGraphServlet extends HttpServlet {
 		String s_year = request.getParameter("year");
 		String s_month = request.getParameter("month");
 
+		Calendar now = Calendar.getInstance();
 		MyCalendarLogic myCalendarLogic = new MyCalendarLogic();
 		MyCalendar mc = null;
 		if (s_year != null && s_month != null) {
@@ -47,33 +48,20 @@ public class MonthGraphServlet extends HttpServlet {
 			mc = myCalendarLogic.createMyCalendar(year, month, users);
 
 		} else {
-			mc = (MyCalendar) session.getAttribute("mc");
+			mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), users);
 		}
+
 		session.setAttribute("mc", mc);
-
-		ArrayList<String> dataList = new ArrayList<>();
-		ArrayList<Integer> scoreList = new ArrayList<>();
-		for (int i = 0; i < mc.getData().length; i++) {
-			for (int j = 0; j < 7; j++) {
-				if (mc.getData()[i][j] != "") {
-					dataList.add(mc.getData()[i][j]);
-					if (mc.getPlanAndResult_cal()[i][j] == null) {
-						int score = 0;
-						scoreList.add(score);
-					} else {
-						scoreList.add(mc.getPlanAndResult_cal()[i][j].getScore());
-					}
-				}
-			}
-		}
-		dataList.forEach(System.out::print);
-		System.out.println();
-		scoreList.forEach(System.out::print);
-
-		request.setAttribute("dataList", dataList);
-		request.setAttribute("scoreList", scoreList);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/monthGraph.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/calendar.jsp");
 		dispatcher.forward(request, response);
+
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

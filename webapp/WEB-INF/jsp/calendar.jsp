@@ -36,19 +36,30 @@
 		<% for(int i = 0; i < rows; i++) {%>
 			<tr>
 				<% for(int j = 0; j < 7; j++) { %>
-					<td><%= mc.getData()[i][j] %>
+					
 					<% if(mc.getPlanAndResult_cal()[i][j] != null) {%>
-					<br>
 						<% if(mc.getPlanAndResult_cal()[i][j].getPlanAndResultId() == planAndResult.getPlanAndResultId()) {%>
-							<a href="/the-gut-healthy/MainServlet"><%= mc.getPlanAndResult_cal()[i][j].getScore() %>
+							<td><a href="/the-gut-healthy/MainServlet" >
+							<%= mc.getData()[i][j] %>
 							</a>
+							<% if(mc.getPlanAndResult_cal()[i][j].getIsCommitted() == true) {%>
+						 		<br>
+								<%= mc.getPlanAndResult_cal()[i][j].getScore() %>
+							<% } %>
+							</td>
 						<% } else { %>
-							<a href="/the-gut-healthy/PastPlanAndResultServlet?planAndResultId=<%=mc.getPlanAndResult_cal()[i][j].getPlanAndResultId()%>" >
-							<%= mc.getPlanAndResult_cal()[i][j].getScore() %></a>
+							<td><a href="/the-gut-healthy/PastPlanAndResult?planAndResultId=<%=mc.getPlanAndResult_cal()[i][j].getPlanAndResultId()%>" >
+							<%= mc.getData()[i][j] %>
+							</a>
+							<% if(mc.getPlanAndResult_cal()[i][j].getIsCommitted() == true) {%>
+						 		<br>
+								<%= mc.getPlanAndResult_cal()[i][j].getScore() %>
+							<% } %>
+							</td>
 						<% } %>
-						</td>
 					<% } else { %>
-					</td>
+						<td><%= mc.getData()[i][j] %></td>
+					
 					<% } %>
 					
 				<% } %>

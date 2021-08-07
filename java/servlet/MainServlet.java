@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,10 +21,12 @@ import DAO.FoodDAO;
 import DAO.MealActDAO;
 import DAO.MealDAO;
 import model.CreatePlanAndResultLogic;
+import model.GetDurationMinutesLogic;
 import model.GetMealActLogic;
 import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
 import model.GetPlanAndResultByUsersLogic;
+import model.GetScoreLogic;
 import model.Meal;
 import model.MealAct;
 import model.MealGenre;
@@ -51,21 +52,33 @@ public class MainServlet extends HttpServlet {
 		GetPlanAndResultByUsersLogic bo = new GetPlanAndResultByUsersLogic();
 		PlanAndResult planAndResult = bo.execute(users);
 		ArrayList<MealAct> mealActList = new ArrayList<>();
+
 		if (planAndResult == null) {
 			CreatePlanAndResultLogic bo2 = new CreatePlanAndResultLogic();
 			PostPlanAndResult postPlanAndResult = new PostPlanAndResult(users.getUsrId(), LocalDate.now());
 			planAndResult = bo2.execute(postPlanAndResult);
 
 		}
+		String isCommitted_str = request.getParameter("isCommitted");
+
+		if ("0".equals(isCommitted_str)) {
+			planAndResult.setIsCommitted(false);
+			UpdatePlanAndResultLogic bo2 = new UpdatePlanAndResultLogic();
+			bo2.execute(planAndResult);
+		}
 		GetMealActLogic bo3 = new GetMealActLogic();
 		MealAct mealAct1 = bo3.execute(planAndResult.getActIdBreakfastPlan());
 		MealAct mealAct2 = bo3.execute(planAndResult.getActIdBreakfast());
-		MealAct mealAct3 = bo3.execute(planAndResult.getActIdLunchPlan());
-		MealAct mealAct4 = bo3.execute(planAndResult.getActIdLunch());
-		MealAct mealAct5 = bo3.execute(planAndResult.getActIdSnackPlan());
-		MealAct mealAct6 = bo3.execute(planAndResult.getActIdSnack());
-		MealAct mealAct7 = bo3.execute(planAndResult.getActIdDinnerPlan());
-		MealAct mealAct8 = bo3.execute(planAndResult.getActIdDinner());
+		MealAct mealAct3 = bo3.execute(planAndResult.getActIdAMSnackPlan());
+		MealAct mealAct4 = bo3.execute(planAndResult.getActIdAMSnack());
+		MealAct mealAct5 = bo3.execute(planAndResult.getActIdLunchPlan());
+		MealAct mealAct6 = bo3.execute(planAndResult.getActIdLunch());
+		MealAct mealAct7 = bo3.execute(planAndResult.getActIdPMSnackPlan());
+		MealAct mealAct8 = bo3.execute(planAndResult.getActIdPMSnack());
+		MealAct mealAct9 = bo3.execute(planAndResult.getActIdDinnerPlan());
+		MealAct mealAct10 = bo3.execute(planAndResult.getActIdDinner());
+		MealAct mealAct11 = bo3.execute(planAndResult.getActIdNightSnackPlan());
+		MealAct mealAct12 = bo3.execute(planAndResult.getActIdNightSnack());
 		mealActList.add(mealAct1);
 		mealActList.add(mealAct2);
 		mealActList.add(mealAct3);
@@ -74,90 +87,54 @@ public class MainServlet extends HttpServlet {
 		mealActList.add(mealAct6);
 		mealActList.add(mealAct7);
 		mealActList.add(mealAct8);
+		mealActList.add(mealAct9);
+		mealActList.add(mealAct10);
+		mealActList.add(mealAct11);
+		mealActList.add(mealAct12);
 
 		MealDAO mealDAO = new MealDAO();
 		FoodDAO foodDAO = new FoodDAO();
 
-		long[] durationMinutes = new long[6];
-		int[] score = new int[6];
-		long[] digestionMinutes = new long[8];
+		long[] durationMinutes = new long[10];
+		String[] durationMinutes_str = new String[10];
+		int[] score = new int[10];
+		long[] digestionMinutes = new long[12];
+		String[] digestionMinutes_str = new String[12];
 
-		for (int j = 0; j < 6; j += 2) {
+		GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
+		durationMinutes = durationBO.execute(mealActList);
+		for (int j = 0; j < 12; j++) {
 			if (mealActList.get(j) != null) {
 				digestionMinutes[j] = foodDAO.selectDigestionMinutesFromId(
 						mealDAO.selectMealByMealId(mealActList.get(j).getMealId()).getFoodId());
-				if (mealActList.get(j + 2) != null) {
-					durationMinutes[j] = Duration
-							.between(mealActList.get(j).getActTime(), mealActList.get(j + 2).getActTime()).toMinutes();
-
-				} else if (j <= 3 && mealActList.get(j + 2) == null && mealActList.get(j + 4) != null) {
-					durationMinutes[j] = Duration
-							.between(mealActList.get(j).getActTime(), mealActList.get(j + 4).getActTime()).toMinutes();
-				}
-
-				if (durationMinutes[j] == 0) {
-					score[j] = 0;
-				} else if (durationMinutes[j] >= digestionMinutes[j] + 180) {
-					score[j] = 80;
-				} else if (durationMinutes[j] >= digestionMinutes[j] + 120) {
-					score[j] = 60;
-				} else if (durationMinutes[j] >= digestionMinutes[j] + 60) {
-					score[j] = 40;
-				} else if (durationMinutes[j] >= digestionMinutes[j]) {
-					score[j] = 30;
-				} else if (durationMinutes[j] >= digestionMinutes[j] - 60) {
-					score[j] = 15;
-				} else {
-					score[j] = 5;
-				}
-
-			}
-			if (mealActList.get(j + 1) != null) {
-				digestionMinutes[j + 1] = foodDAO.selectDigestionMinutesFromId(
-						mealDAO.selectMealByMealId(mealActList.get(j + 1).getMealId()).getFoodId());
-				if (mealActList.get(j + 3) != null) {
-					durationMinutes[j + 1] = Duration
-							.between(mealActList.get(j + 1).getActTime(), mealActList.get(j + 3).getActTime())
-							.toMinutes();
-
-				} else if (j + 1 <= 4 && mealActList.get(j + 3) == null && mealActList.get(j + 5) != null) {
-					durationMinutes[j + 1] = Duration
-							.between(mealActList.get(j + 1).getActTime(), mealActList.get(j + 5).getActTime())
-							.toMinutes();
-				}
-
-				if (durationMinutes[j + 1] == 0) {
-					score[j + 1] = 0;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] + 180) {
-					score[j + 1] = 80;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] + 120) {
-					score[j + 1] = 60;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] + 60) {
-					score[j + 1] = 40;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1]) {
-					score[j + 1] = 30;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] - 60) {
-					score[j + 1] = 15;
-				} else {
-					score[j + 1] = 5;
-				}
 
 			}
 
+			GetScoreLogic scoreBO = new GetScoreLogic();
+			score = scoreBO.execute(digestionMinutes, durationMinutes);
+
 		}
-		if (mealActList.get(6) != null) {
-			digestionMinutes[6] = foodDAO.selectDigestionMinutesFromId(
-					mealDAO.selectMealByMealId(mealActList.get(6).getMealId()).getFoodId());
+		for (int i = 0; i < 10; i++) {
+			if (durationMinutes[i] != 0) {
+				long hour = durationMinutes[i] / 60;
+				long minutes = durationMinutes[i] - hour * 60;
+				durationMinutes_str[i] = hour + "時間" + minutes + "分";
+			}
 		}
-		if (mealActList.get(7) != null) {
-			digestionMinutes[7] = foodDAO.selectDigestionMinutesFromId(
-					mealDAO.selectMealByMealId(mealActList.get(7).getMealId()).getFoodId());
+		for (int i = 0; i < 12; i++) {
+			if (digestionMinutes[i] != 0) {
+				long hour = digestionMinutes[i] / 60;
+				long minutes = digestionMinutes[i] - hour * 60;
+				digestionMinutes_str[i] = hour + "時間" + minutes + "分";
+			}
 		}
 
 		request.setAttribute("durationMinutes", durationMinutes);
-		request.setAttribute("digestionMinutes", digestionMinutes);
-		request.setAttribute("score", score);
+		request.setAttribute("durationMinutes_str", durationMinutes_str);
 
+		request.setAttribute("score", score);
+		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
+		request.setAttribute("digestionMinutes", digestionMinutes);
 		session.setAttribute("mealActList", mealActList);
 		session.setAttribute("planAndResult", planAndResult);
 
@@ -172,9 +149,13 @@ public class MainServlet extends HttpServlet {
 		}
 		request.setAttribute("mealMap", mealMap);
 		request.setAttribute("genreList", genreList);
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
-		dispatcher.forward(request, response);
+		if (planAndResult.getIsCommitted() == false) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+			dispatcher.forward(request, response);
+		} else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/isCommittedMain.jsp");
+			dispatcher.forward(request, response);
+		}
 	}
 
 	@Override
@@ -186,7 +167,7 @@ public class MainServlet extends HttpServlet {
 		ArrayList<MealAct> mealActList = (ArrayList<MealAct>) session.getAttribute("mealActList");
 		PostMealActLogic bo = new PostMealActLogic();
 
-		for (int i = 1; i <= 8; i++) {
+		for (int i = 1; i <= 12; i++) {
 			String mealId_String = request.getParameter("meal_name" + i);
 			String meal_time_String = request.getParameter("meal_time" + i);
 
@@ -211,22 +192,34 @@ public class MainServlet extends HttpServlet {
 					planAndResult.setActIdBreakfast(mealAct.getActId());
 					break;
 				case 3:
-					planAndResult.setActIdLunchPlan(mealAct.getActId());
+					planAndResult.setActIdAMSnackPlan(mealAct.getActId());
 					break;
 				case 4:
-					planAndResult.setActIdLunch(mealAct.getActId());
+					planAndResult.setActIdAMSnack(mealAct.getActId());
 					break;
 				case 5:
-					planAndResult.setActIdSnackPlan(mealAct.getActId());
+					planAndResult.setActIdLunch(mealAct.getActId());
 					break;
 				case 6:
-					planAndResult.setActIdSnack(mealAct.getActId());
+					planAndResult.setActIdLunchPlan(mealAct.getActId());
 					break;
 				case 7:
-					planAndResult.setActIdDinnerPlan(mealAct.getActId());
+					planAndResult.setActIdPMSnackPlan(mealAct.getActId());
 					break;
 				case 8:
+					planAndResult.setActIdPMSnack(mealAct.getActId());
+					break;
+				case 9:
+					planAndResult.setActIdDinnerPlan(mealAct.getActId());
+					break;
+				case 10:
 					planAndResult.setActIdDinner(mealAct.getActId());
+					break;
+				case 11:
+					planAndResult.setActIdNightSnackPlan(mealAct.getActId());
+					break;
+				case 12:
+					planAndResult.setActIdNightSnackPlan(mealAct.getActId());
 					break;
 				}
 				mealActList.remove(i - 1);
@@ -240,94 +233,65 @@ public class MainServlet extends HttpServlet {
 		MealDAO mealDAO = new MealDAO();
 		FoodDAO foodDAO = new FoodDAO();
 
-		long[] durationMinutes = new long[6];
-		int[] score = new int[6];
-		long[] digestionMinutes = new long[8];
-		int totalScorePlan = 0;
-		int totalScore = 0;
-		for (int j = 0; j < 6; j += 2) {
+		long[] durationMinutes = new long[10];
+		String[] durationMinutes_str = new String[10];
+		int[] score = new int[10];
+		long[] digestionMinutes = new long[12];
+		String[] digestionMinutes_str = new String[12];
+
+		GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
+		durationMinutes = durationBO.execute(mealActList);
+		for (int j = 0; j < 12; j++) {
 			if (mealActList.get(j) != null) {
 				digestionMinutes[j] = foodDAO.selectDigestionMinutesFromId(
 						mealDAO.selectMealByMealId(mealActList.get(j).getMealId()).getFoodId());
-				if (mealActList.get(j + 2) != null) {
-					durationMinutes[j] = Duration
-							.between(mealActList.get(j).getActTime(), mealActList.get(j + 2).getActTime()).toMinutes();
 
-				} else if (j <= 3 && mealActList.get(j + 2) == null && mealActList.get(j + 4) != null) {
-					durationMinutes[j] = Duration
-							.between(mealActList.get(j).getActTime(), mealActList.get(j + 4).getActTime()).toMinutes();
-				}
-
-				if (durationMinutes[j] == 0) {
-					score[j] = 0;
-				} else if (durationMinutes[j] >= digestionMinutes[j] + 180) {
-					score[j] = 80;
-				} else if (durationMinutes[j] >= digestionMinutes[j] + 120) {
-					score[j] = 60;
-				} else if (durationMinutes[j] >= digestionMinutes[j] + 60) {
-					score[j] = 40;
-				} else if (durationMinutes[j] >= digestionMinutes[j]) {
-					score[j] = 30;
-				} else if (durationMinutes[j] >= digestionMinutes[j] - 60) {
-					score[j] = 15;
-				} else {
-					score[j] = 5;
-				}
-
-				totalScorePlan += score[j];
-			}
-			if (mealActList.get(j + 1) != null) {
-				digestionMinutes[j + 1] = foodDAO.selectDigestionMinutesFromId(
-						mealDAO.selectMealByMealId(mealActList.get(j + 1).getMealId()).getFoodId());
-				if (mealActList.get(j + 3) != null) {
-					durationMinutes[j + 1] = Duration
-							.between(mealActList.get(j + 1).getActTime(), mealActList.get(j + 3).getActTime())
-							.toMinutes();
-
-				} else if (j + 1 <= 4 && mealActList.get(j + 3) == null && mealActList.get(j + 5) != null) {
-					durationMinutes[j + 1] = Duration
-							.between(mealActList.get(j + 1).getActTime(), mealActList.get(j + 5).getActTime())
-							.toMinutes();
-				}
-
-				if (durationMinutes[j + 1] == 0) {
-					score[j + 1] = 0;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] + 180) {
-					score[j + 1] = 80;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] + 120) {
-					score[j + 1] = 60;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] + 60) {
-					score[j + 1] = 40;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1]) {
-					score[j + 1] = 30;
-				} else if (durationMinutes[j + 1] >= digestionMinutes[j + 1] - 60) {
-					score[j + 1] = 15;
-				} else {
-					score[j + 1] = 5;
-				}
-
-				totalScore += score[j + 1];
 			}
 
+			GetScoreLogic scoreBO = new GetScoreLogic();
+			score = scoreBO.execute(digestionMinutes, durationMinutes);
+
 		}
-		if (mealActList.get(6) != null) {
-			digestionMinutes[6] = foodDAO.selectDigestionMinutesFromId(
-					mealDAO.selectMealByMealId(mealActList.get(6).getMealId()).getFoodId());
+		for (int i = 0; i < 10; i++) {
+			if (durationMinutes[i] != 0) {
+				long hour = durationMinutes[i] / 60;
+				long minutes = durationMinutes[i] - hour * 60;
+				durationMinutes_str[i] = hour + "時間" + minutes + "分";
+			}
 		}
-		if (mealActList.get(7) != null) {
-			digestionMinutes[7] = foodDAO.selectDigestionMinutesFromId(
-					mealDAO.selectMealByMealId(mealActList.get(7).getMealId()).getFoodId());
+		for (int i = 0; i < 12; i++) {
+			if (digestionMinutes[i] != 0) {
+				long hour = digestionMinutes[i] / 60;
+				long minutes = digestionMinutes[i] - hour * 60;
+				digestionMinutes_str[i] = hour + "時間" + minutes + "分";
+			}
 		}
 
+		request.setAttribute("durationMinutes", durationMinutes);
+		request.setAttribute("durationMinutes_str", durationMinutes_str);
+		request.setAttribute("digestionMinutes", digestionMinutes);
+		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
+		request.setAttribute("score", score);
+
+		int totalScorePlan = 0;
+		int totalScore = 0;
+		for (int i = 0; i < 10; i += 2) {
+			totalScorePlan += score[i];
+			totalScore += score[i + 1];
+
+		}
+
+		boolean isCommitted = false;
+		String isCommitted_str = request.getParameter("planAndResultSubmit");
+		if (isCommitted_str.equals("1")) {
+			isCommitted = true;
+		}
 		planAndResult.setScorePlan(totalScorePlan);
 		planAndResult.setScore(totalScore);
+		planAndResult.setIsCommitted(isCommitted);
 
 		UpdatePlanAndResultLogic bo2 = new UpdatePlanAndResultLogic();
 		bo2.execute(planAndResult);
-
-		request.setAttribute("durationMinutes", durationMinutes);
-		request.setAttribute("digestionMinutes", digestionMinutes);
-		request.setAttribute("score", score);
 
 		session.setAttribute("planAndResult", planAndResult);
 		session.setAttribute("mealActList", mealActList);
@@ -344,8 +308,14 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("mealMap", mealMap);
 		request.setAttribute("genreList", genreList);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
-		dispatcher.forward(request, response);
+		if (planAndResult.getIsCommitted() == false) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+			dispatcher.forward(request, response);
+		} else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/isCommittedMain.jsp");
+			dispatcher.forward(request, response);
+		}
+
 	}
 
 }

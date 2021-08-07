@@ -15,10 +15,10 @@ public class PostMealActTest {
 
 	public static void main(String[] args) {
 		//testExecute1();
-		//testExecute2();
+		testExecute2();
 		//testExecute3();
 		//testExecute4();
-		testExecute5();
+		//testExecute5();
 	}
 
 	public static void testExecute1() {
@@ -71,7 +71,6 @@ public class PostMealActTest {
 		PlanAndResultDAO dao = new PlanAndResultDAO();
 		PlanAndResult actDate = dao.findByPostPlanAndResult(date);
 		actDate.setActIdBreakfast(1);
-		actDate.setActIdSnackPlan(4);
 		actDate.setActIdDinnerPlan(5);
 		actDate.setScore(80);
 

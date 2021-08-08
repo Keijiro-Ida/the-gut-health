@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import DAO.PlanAndResultDAO;
 import model.CreatePlanAndResultLogic;
+import model.GetAverageScoreListLogic;
 import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
 import model.GetMonthPlanAndResultList;
@@ -30,7 +31,8 @@ public class boTest {
 		//testExecute4();
 		//testExecute5();
 		//testExecute6();
-		testExecute7();
+		//testExecute7();
+		testExecute8();
 	}
 
 	public static void testExecute1() {
@@ -108,5 +110,11 @@ public class boTest {
 		} else {
 			System.out.println("失敗");
 		}
+	}
+
+	public static void testExecute8() {
+		GetAverageScoreListLogic bo = new GetAverageScoreListLogic();
+		ArrayList<Integer> list = bo.execute(1, 2021);
+		list.forEach(k -> System.out.println(k + " "));
 	}
 }

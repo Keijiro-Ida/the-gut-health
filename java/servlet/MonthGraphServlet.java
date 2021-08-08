@@ -51,12 +51,14 @@ public class MonthGraphServlet extends HttpServlet {
 		}
 		session.setAttribute("mc", mc);
 
-		ArrayList<String> dataList = new ArrayList<>();
+		ArrayList<String> dateList = new ArrayList<>();
 		ArrayList<Integer> scoreList = new ArrayList<>();
 		for (int i = 0; i < mc.getData().length; i++) {
 			for (int j = 0; j < 7; j++) {
 				if (mc.getData()[i][j] != "") {
-					dataList.add(mc.getData()[i][j]);
+					mc.getData()[i][j] = mc.getData()[i][j].replace("*", "");
+					//String date = mc.getMonth() + "月" + mc.getData()[i][j] + "日";
+					dateList.add(mc.getData()[i][j]);
 					if (mc.getPlanAndResult_cal()[i][j] == null) {
 						int score = 0;
 						scoreList.add(score);
@@ -66,11 +68,8 @@ public class MonthGraphServlet extends HttpServlet {
 				}
 			}
 		}
-		dataList.forEach(System.out::print);
-		System.out.println();
-		scoreList.forEach(System.out::print);
 
-		request.setAttribute("dataList", dataList);
+		request.setAttribute("dateList", dateList);
 		request.setAttribute("scoreList", scoreList);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/monthGraph.jsp");
 		dispatcher.forward(request, response);

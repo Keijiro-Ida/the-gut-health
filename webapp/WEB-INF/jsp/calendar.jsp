@@ -48,7 +48,7 @@
 							<% } %>
 							</td>
 						<% } else { %>
-							<td><a href="/the-gut-healthy/PastPlanAndResult?planAndResultId=<%=mc.getPlanAndResult_cal()[i][j].getPlanAndResultId()%>" >
+							<td><a href="/the-gut-healthy/PastPlanAndResultServlet?planAndResultId=<%=mc.getPlanAndResult_cal()[i][j].getPlanAndResultId()%>" >
 							<%= mc.getData()[i][j] %>
 							</a>
 							<% if(mc.getPlanAndResult_cal()[i][j].getIsCommitted() == true) {%>
@@ -69,7 +69,7 @@
 	
 	
 	</table>
-	<a href="/the-gut-healthy/MonthGraphServlet">グラフ</a>
+	<a href="/the-gut-healthy/MonthGraphServlet">月スコアグラフ</a>
 	<a href="/the-gut-healthy/MainServlet">Main</a>
 	</div>
 </body>

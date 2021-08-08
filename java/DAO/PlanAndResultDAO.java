@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import model.PlanAndResult;
@@ -285,6 +287,36 @@ public class PlanAndResultDAO {
 			return null;
 		}
 		return planAndResult;
+	}
+
+	public Map<Integer, Integer> getAverageScoreMap(int usrId, int year) {
+		Map<Integer, Integer> averageScoreMap = new HashMap<>();
+		;
+		try (Connection conn = DriverManager.getConnection(
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
+			String sql = "SELECT MONTH(PLANANDRESULTDATE) AS MONTH, AVG(SCORE) AS AVGSCORE "
+					+ "FROM PLANANDRESULT WHERE USRID = ? AND YEAR(PLANANDRESULTDATE) = ? "
+					+ "GROUP BY MONTH(PLANANDRESULTDATE)";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, usrId);
+			pstmt.setInt(2, year);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				int month = rs.getInt("MONTH");
+				int averageScore = rs.getInt("AVGSCORE");
+				averageScoreMap.put(month, averageScore);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return averageScoreMap;
 	}
 
 }

@@ -48,7 +48,7 @@ public class CalendarServlet extends HttpServlet {
 			mc = myCalendarLogic.createMyCalendar(year, month, users);
 
 		} else {
-			mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), users);
+			mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH + 1), users);
 		}
 
 		session.setAttribute("mc", mc);

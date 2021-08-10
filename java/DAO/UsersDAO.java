@@ -70,9 +70,9 @@ public class UsersDAO {
 	public int updateUsers(Users users) {
 		int result = 0;
 		try (Connection conn = DriverManager.getConnection(
-				bundle.getString("JDBC_URL"),
-				bundle.getString("DB_USER"),
-				bundle.getString("DB_PASS"))) {
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
 
 			String sql = "UPDATE USERS SET MAIL = ? , PASS = ?  WHERE USRID = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);

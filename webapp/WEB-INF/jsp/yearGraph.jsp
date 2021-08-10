@@ -72,6 +72,6 @@
 	</script>
 	<a href="/the-gut-healthy/MonthGraphServlet">日別スコアグラフ</a>
 	<br>
-	<a href="/the-gut-healthy/CalenderServlet">カレンダー</a>
+	<a href="/the-gut-healthy/CalendarServlet?year=<%=mc.getYear()%>&month=<%=mc.getMonth()%>">カレンダー</a>
 </body>
 </html>

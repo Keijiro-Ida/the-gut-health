@@ -550,7 +550,7 @@
 	<br>
 	<a href="/the-gut-healthy/CalendarServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1 %>">カレンダー</a>
 	<br>
-	<a href="/the-gut-healthy/SettingServlet">Setting</a>
+	<a href="/the-gut-healthy/UpdateUsersServlet">ユーザー情報変更</a>
 	<br>
 	<a href="/the-gut-healthy/LogoutServlet">ログアウト</a>
 </body>

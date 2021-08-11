@@ -17,10 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import DAO.DefaultPlanAndResultDAO;
 import DAO.FoodDAO;
 import DAO.MealActDAO;
 import DAO.MealDAO;
 import model.CreatePlanAndResultLogic;
+import model.DefaultPlanAndResult;
 import model.GetDurationMinutesLogic;
 import model.GetMealActLogic;
 import model.GetMealGenreListLogic;
@@ -149,6 +151,32 @@ public class MainServlet extends HttpServlet {
 		}
 		request.setAttribute("mealMap", mealMap);
 		request.setAttribute("genreList", genreList);
+
+		DefaultPlanAndResultDAO dao = new DefaultPlanAndResultDAO();
+		DefaultPlanAndResult defaultSetting = dao.findByUsrId(users.getUsrId());
+		ArrayList<String> timeList = new ArrayList<String>();
+		ArrayList<Integer> mealIdList = new ArrayList<Integer>();
+
+		if (defaultSetting != null) {
+
+			timeList.add(defaultSetting.getBreakfastTime());
+			timeList.add(defaultSetting.getAmSnackTime());
+			timeList.add(defaultSetting.getLunchTime());
+			timeList.add(defaultSetting.getPmSnackTime());
+			timeList.add(defaultSetting.getDinnerTime());
+			timeList.add(defaultSetting.getNightSnackTime());
+			mealIdList.add(defaultSetting.getBreakfastId());
+			mealIdList.add(defaultSetting.getAmSnackID());
+			mealIdList.add(defaultSetting.getLunchId());
+			mealIdList.add(defaultSetting.getPmSnackId());
+			mealIdList.add(defaultSetting.getDinnerId());
+			mealIdList.add(defaultSetting.getNightSnackId());
+
+		}
+		request.setAttribute("defaultSetting", defaultSetting);
+		request.setAttribute("timeList", timeList);
+		request.setAttribute("mealIdList", mealIdList);
+
 		if (planAndResult.getIsCommitted() == false) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
 			dispatcher.forward(request, response);
@@ -163,6 +191,7 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
+		Users users = (Users) session.getAttribute("users");
 		PlanAndResult planAndResult = (PlanAndResult) session.getAttribute("planAndResult");
 		ArrayList<MealAct> mealActList = (ArrayList<MealAct>) session.getAttribute("mealActList");
 		PostMealActLogic bo = new PostMealActLogic();
@@ -307,6 +336,31 @@ public class MainServlet extends HttpServlet {
 		}
 		request.setAttribute("mealMap", mealMap);
 		request.setAttribute("genreList", genreList);
+
+		DefaultPlanAndResultDAO dao = new DefaultPlanAndResultDAO();
+		DefaultPlanAndResult defaultSetting = dao.findByUsrId(users.getUsrId());
+		ArrayList<String> timeList = new ArrayList<String>();
+		ArrayList<Integer> mealIdList = new ArrayList<Integer>();
+
+		if (defaultSetting != null) {
+
+			timeList.add(defaultSetting.getBreakfastTime());
+			timeList.add(defaultSetting.getAmSnackTime());
+			timeList.add(defaultSetting.getLunchTime());
+			timeList.add(defaultSetting.getPmSnackTime());
+			timeList.add(defaultSetting.getDinnerTime());
+			timeList.add(defaultSetting.getNightSnackTime());
+			mealIdList.add(defaultSetting.getBreakfastId());
+			mealIdList.add(defaultSetting.getAmSnackID());
+			mealIdList.add(defaultSetting.getLunchId());
+			mealIdList.add(defaultSetting.getPmSnackId());
+			mealIdList.add(defaultSetting.getDinnerId());
+			mealIdList.add(defaultSetting.getNightSnackId());
+
+		}
+		request.setAttribute("defaultSetting", defaultSetting);
+		request.setAttribute("timeList", timeList);
+		request.setAttribute("mealIdList", mealIdList);
 
 		if (planAndResult.getIsCommitted() == false) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");

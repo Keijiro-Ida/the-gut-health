@@ -308,7 +308,7 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		request.setAttribute("genreList", genreList);
 
 		if (planAndResult.getIsCommitted() == false) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndReslt.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResult.jsp");
 			dispatcher.forward(request, response);
 		} else {
 			RequestDispatcher dispatcher = request

@@ -25,7 +25,8 @@
 			</tr>
 		</table>
 		<input type="submit" value="更新">
-	
+		<br>
+		<a href="/the-gut-healthy/MainServlet">メイン画面</a>
 	</form>
 </body>
 </html>

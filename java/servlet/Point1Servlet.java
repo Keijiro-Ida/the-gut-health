@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class PointServlet
+ * Servlet implementation class Point1Servlet
  */
-@WebServlet("/PointServlet")
-public class PointServlet extends HttpServlet {
+@WebServlet("/Point1Servlet")
+public class Point1Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/point.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/point1.jsp");
 		dispatcher.forward(request, response);
 	}
 

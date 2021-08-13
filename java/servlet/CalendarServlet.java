@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.GetPlanAndResultByUsersLogic;
 import model.MyCalendar;
 import model.MyCalendarLogic;
+import model.PlanAndResult;
 import model.users.Users;
 
 /**
@@ -50,6 +52,10 @@ public class CalendarServlet extends HttpServlet {
 		} else {
 			mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH + 1), users);
 		}
+		GetPlanAndResultByUsersLogic bo3 = new GetPlanAndResultByUsersLogic();
+		PlanAndResult todayPlanAndResult = bo3.execute(users);
+
+		request.setAttribute("todayPlanAndResultId", todayPlanAndResult.getPlanAndResultId());
 
 		session.setAttribute("mc", mc);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/calendar.jsp");

@@ -6,18 +6,25 @@
 <head>
 <meta charset="UTF-8">
 <title>腸活アプリ</title>
+<link rel="stylesheet" type="text/css" href="/the-gut-healthy/css/style.css">
 </head>
 <body>
-	<h3>腸活アプリ</h3>
-	<c:choose>
-		<c:when test="${users != null }">
-		<p>ログインできました。</p>
-		<a href="/the-gut-healthy/MainServlet">メイン画面</a>
-		</c:when>
-		<c:otherwise>
-		<p>ログインできませんでした</p>
-		<a href="/the-gut-healthy">TOP画面</a>
-		</c:otherwise>
-	</c:choose>
+	<div id="pagebody">
+		<div id="header">
+			<p>腸活アプリ</p>
+		</div>
+		<div id="main">
+			<c:choose>
+				<c:when test="${users != null }">
+				<p>ログインできました。</p>
+				<a href="/the-gut-healthy/MainServlet">メイン画面</a>
+				</c:when>
+				<c:otherwise>
+				<p>ログインできませんでした</p>
+				<a href="/the-gut-healthy">TOP画面</a>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
 </body>
 </html>

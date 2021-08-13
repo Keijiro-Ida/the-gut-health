@@ -4,11 +4,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>腸活アプリ</title>
+<link rel="stylesheet" type="text/css" href="/the-gut-healthy/css/style.css">
 </head>
 <body>
-	<h3>腸活アプリ</h3>
-	<p>ログアウトしました。</p>
-	<a href="/the-gut-healthy">TOP画面</a>
+	<div id="pagebody">
+		<div id="header">
+			<p>腸活アプリ</p>
+		</div>
+		<div id="main">
+			<p>ログアウトしました。</p>
+			<a href="/the-gut-healthy">TOP画面</a>
+		</div>
+	</div>
 </body>
 </html>

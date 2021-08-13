@@ -37,7 +37,7 @@ public class DefaultPlanAndResultDAO {
 			pstmt.setInt(12, postDefault.getNightSnackId());
 			pstmt.setString(13, postDefault.getNightSnackTime());
 			result = pstmt.executeUpdate();
-			System.out.println(postDefault.getPmSnackId());
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return -1;

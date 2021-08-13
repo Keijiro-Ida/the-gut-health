@@ -248,7 +248,7 @@ public class MainServlet extends HttpServlet {
 					planAndResult.setActIdNightSnackPlan(mealAct.getActId());
 					break;
 				case 12:
-					planAndResult.setActIdNightSnackPlan(mealAct.getActId());
+					planAndResult.setActIdNightSnack(mealAct.getActId());
 					break;
 				}
 				mealActList.remove(i - 1);

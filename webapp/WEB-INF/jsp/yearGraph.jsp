@@ -11,15 +11,37 @@
 <head>
 <meta charset="UTF-8">
 <title>腸活アプリ</title>
+<link rel="stylesheet" type="text/css" href="/the-gut-healthy/css/style.css">
 </head>
 <body>
-	<h3>年グラフ</h3>
-		<a href="?year=<%=mc.getYear() -1 %>&month=<%=mc.getMonth()%>">前年</a>
-		<a href="?year=<%=mc.getYear() + 1 %>&month=<%=mc.getMonth()%>">翌年</a>
+	<div id="pagebody">
+		<div id="header">
+			<p>腸活アプリ</p>
+		</div>
+		<div id="main">
+		<div id="nav">
+				<ul class="float">
+					<li><a href="?year=<%=mc.getYear()-1 %>&month=<%=mc.getMonth()%>">前年</a></li>
+					<li><a href="?year=<%=mc.getYear()+1%>&month=<%=mc.getMonth()%>">翌年</a></li>
+					<li><a href="/the-gut-healthy/MonthGraphServlet">日別グラフ</a></li>
+					<li><a href="/the-gut-healthy/CalendarServlet?year=<%=mc.getYear()%>&month=<%=mc.getMonth()%>">カレンダー</a></li>
+				</ul>
+			</div>
+			<br>
+			<br>
+			<br>
+			<h1><%=mc.getYear() %>年</h1>	
+			<canvas id="myLineChart"></canvas>
+		    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 		
-	<canvas id="myLineChart"></canvas>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
-	<script>
+			
+			<br>
+			<br>
+			<a href="/the-gut-healthy/MainServlet" id="return">戻る</a>
+			
+		</div>
+	</div>
+		<script>
 	var mcYear = ${mc.getYear()};
 	var title = mcYear + '年' ;
 	var monthList = ${monthList};
@@ -40,16 +62,13 @@
 				{ 
 					label:'月平均スコア',
 					data: averageScoreList,
-					borderColor: "rgba(200,112,126,1)",
+					borderColor: "rgba(100,100,255,1)",
 					backGroundColor:"rgba(0, 0, 0, 0)"
 				}
 			],
 		},
 		options: {
-			title: {
-				display: true,
-				text: title
-			},
+	
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -70,8 +89,5 @@
 	
 	
 	</script>
-	<a href="/the-gut-healthy/MonthGraphServlet">日別スコアグラフ</a>
-	<br>
-	<a href="/the-gut-healthy/CalendarServlet?year=<%=mc.getYear()%>&month=<%=mc.getMonth()%>">カレンダー</a>
 </body>
 </html>

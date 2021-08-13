@@ -56,8 +56,7 @@ public class DefaultSettingServlet extends HttpServlet {
 			mealIdList.add(defaultSetting.getNightSnackId());
 
 		}
-		System.out.println("timeList;" + timeList);
-		System.out.println("mealIdList:" + mealIdList);
+
 		request.setAttribute("defaultSetting", defaultSetting);
 		request.setAttribute("timeList", timeList);
 		request.setAttribute("mealIdList", mealIdList);
@@ -97,8 +96,7 @@ public class DefaultSettingServlet extends HttpServlet {
 			for (int i = 1; i <= 12; i += 2) {
 				String mealId_String = request.getParameter("meal_name" + i);
 				String mealTime = request.getParameter("meal_time" + i);
-				System.out.println("mealID" + i + " " + mealId_String);
-				System.out.println("Time" + i + " " + mealTime);
+
 				if (!("0".equals(mealId_String)) && !("".equals(mealTime))
 						&& mealId_String != null && mealTime != null) {
 					int mealId = Integer.parseInt(mealId_String);
@@ -131,7 +129,7 @@ public class DefaultSettingServlet extends HttpServlet {
 					}
 				}
 			}
-			System.out.println("postDefault.getPmSnackId" + postDefault.getPmSnackId());
+
 			postDefault.setUsrId(users.getUsrId());
 			CreateDefaultPlanAndResultLogic bo = new CreateDefaultPlanAndResultLogic();
 			int result = bo.execute(postDefault);

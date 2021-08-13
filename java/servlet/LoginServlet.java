@@ -27,9 +27,13 @@ public class LoginServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String mail = request.getParameter("mail");
 		String pass = request.getParameter("pass");
-		Login login = new Login(mail, pass);
-		LoginLogic bo = new LoginLogic();
-		Users users = bo.execute(login);
+		Users users = null;
+		if (!("".equals(mail)) || !("".equals(pass))) {
+
+			Login login = new Login(mail, pass);
+			LoginLogic bo = new LoginLogic();
+			users = bo.execute(login);
+		}
 
 		if (users != null) {
 			HttpSession session = request.getSession();

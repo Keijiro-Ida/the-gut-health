@@ -6,11 +6,20 @@
 <head>
 <meta charset="UTF-8">
 <title>腸活アプリ</title>
+<link rel="stylesheet" type="text/css" href="/the-gut-healthy/css/style.css">
 </head>
 <body>
-	<h3>デフォルト設定</h3>
-	<c:out value="${msg }" />
-	<br>
-	<a href="/the-gut-healthy/MainServlet" >Main</a>
+	<div id="pagebody">
+		<div id="header">
+			<p>腸活アプリ</p>
+		</div>
+		<div id="main">
+			<h3>デフォルト設定</h3>
+			<c:out value="${msg }" />
+			<br>
+			<br>
+			<a href="/the-gut-healthy/MainServlet" >戻る</a>
+		</div>
+	</div>
 </body>
 </html>

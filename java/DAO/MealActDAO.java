@@ -96,4 +96,24 @@ public class MealActDAO {
 			return -1;
 		}
 	}
+
+	public int deleteMealActById(int mealActId) {
+
+		try (Connection conn = DriverManager.getConnection(
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
+
+			String sql = "DELETE FROM MEALACT WHERE ACTID  = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, mealActId);
+
+			int result = pstmt.executeUpdate();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 }

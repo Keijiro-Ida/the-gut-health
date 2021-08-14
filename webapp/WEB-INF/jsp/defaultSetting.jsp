@@ -27,15 +27,13 @@
 			<p>腸活アプリ</p>
 		</div>
 		<div id="main">
-	
+			<h3>デフォルト食事設定</h3>
+			<p>毎日決まった時間に、食べる食事を登録することで</p>
+			<p>毎日の入力を省くことができる機能です。下記からご登録ください。</p>
+		
 			
 			<form action="/the-gut-healthy/DefaultSettingServlet" method="post" id="my_form">
 				<table>
-					
-					<tr>
-						<th> </th><th colspan="2">Default設定</th>
-					</tr>    
-					         
 					<tr>
 						<th> </th><th>Time</th><th>Food</th>
 					</tr>

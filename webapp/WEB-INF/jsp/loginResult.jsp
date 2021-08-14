@@ -13,6 +13,9 @@
 		<div id="header">
 			<p>腸活アプリ</p>
 		</div>
+		<br>
+		<br>
+		<br>
 		<div id="main">
 			<c:choose>
 				<c:when test="${users != null }">
@@ -20,7 +23,7 @@
 				<a href="/the-gut-healthy/MainServlet">メイン画面</a>
 				</c:when>
 				<c:otherwise>
-				<p>ログインできませんでした</p>
+				<p>ログインできませんでした。</p>
 				<a href="/the-gut-healthy">TOP画面</a>
 				</c:otherwise>
 			</c:choose>

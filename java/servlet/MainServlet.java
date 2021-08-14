@@ -21,6 +21,7 @@ import DAO.DefaultPlanAndResultDAO;
 import DAO.FoodDAO;
 import DAO.MealActDAO;
 import DAO.MealDAO;
+import DAO.PlanAndResultDAO;
 import model.CreatePlanAndResultLogic;
 import model.DefaultPlanAndResult;
 import model.GetDurationMinutesLogic;
@@ -227,10 +228,10 @@ public class MainServlet extends HttpServlet {
 					planAndResult.setActIdAMSnack(mealAct.getActId());
 					break;
 				case 5:
-					planAndResult.setActIdLunch(mealAct.getActId());
+					planAndResult.setActIdLunchPlan(mealAct.getActId());
 					break;
 				case 6:
-					planAndResult.setActIdLunchPlan(mealAct.getActId());
+					planAndResult.setActIdLunch(mealAct.getActId());
 					break;
 				case 7:
 					planAndResult.setActIdPMSnackPlan(mealAct.getActId());
@@ -296,12 +297,6 @@ public class MainServlet extends HttpServlet {
 			}
 		}
 
-		request.setAttribute("durationMinutes", durationMinutes);
-		request.setAttribute("durationMinutes_str", durationMinutes_str);
-		request.setAttribute("digestionMinutes", digestionMinutes);
-		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
-		request.setAttribute("score", score);
-
 		int totalScorePlan = 0;
 		int totalScore = 0;
 		for (int i = 0; i < 10; i += 2) {
@@ -310,20 +305,11 @@ public class MainServlet extends HttpServlet {
 
 		}
 
-		boolean isCommitted = false;
-		String isCommitted_str = request.getParameter("planAndResultSubmit");
-		if (isCommitted_str.equals("1")) {
-			isCommitted = true;
-		}
 		planAndResult.setScorePlan(totalScorePlan);
 		planAndResult.setScore(totalScore);
-		planAndResult.setIsCommitted(isCommitted);
 
 		UpdatePlanAndResultLogic bo2 = new UpdatePlanAndResultLogic();
 		bo2.execute(planAndResult);
-
-		session.setAttribute("planAndResult", planAndResult);
-		session.setAttribute("mealActList", mealActList);
 
 		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
 		ArrayList<MealGenre> genreList = getMealGenreBO.execute();
@@ -361,6 +347,49 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("defaultSetting", defaultSetting);
 		request.setAttribute("timeList", timeList);
 		request.setAttribute("mealIdList", mealIdList);
+
+		boolean isCommitted = false;
+		String isCommitted_str = request.getParameter("planAndResultSubmit");
+		if (isCommitted_str.equals("1")) {
+			isCommitted = true;
+			planAndResult.setIsCommitted(isCommitted);
+		} else if (isCommitted_str.equals("2")) {
+			MealActDAO mealActDAO = new MealActDAO();
+			mealActDAO.deleteMealActById(planAndResult.getActIdBreakfastPlan());
+			mealActDAO.deleteMealActById(planAndResult.getActIdBreakfast());
+			mealActDAO.deleteMealActById(planAndResult.getActIdAMSnackPlan());
+			mealActDAO.deleteMealActById(planAndResult.getActIdAMSnack());
+			mealActDAO.deleteMealActById(planAndResult.getActIdLunch());
+			mealActDAO.deleteMealActById(planAndResult.getActIdLunchPlan());
+			mealActDAO.deleteMealActById(planAndResult.getActIdPMSnackPlan());
+			mealActDAO.deleteMealActById(planAndResult.getActIdPMSnack());
+			mealActDAO.deleteMealActById(planAndResult.getActIdDinnerPlan());
+			mealActDAO.deleteMealActById(planAndResult.getActIdDinner());
+			mealActDAO.deleteMealActById(planAndResult.getActIdNightSnack());
+			mealActDAO.deleteMealActById(planAndResult.getActIdNightSnackPlan());
+			for (int i = 0; i < mealActList.size(); i++) {
+				mealActList.set(i, null);
+			}
+			PlanAndResultDAO planAndResultDAO = new PlanAndResultDAO();
+			planAndResultDAO.deletePlanAndResult(planAndResult.getPlanAndResultId());
+			CreatePlanAndResultLogic createLogic = new CreatePlanAndResultLogic();
+			PostPlanAndResult postPlanAndResult = new PostPlanAndResult(users.getUsrId(), LocalDate.now());
+			planAndResult = createLogic.execute(postPlanAndResult);
+			
+			durationMinutes = new long[10];
+			durationMinutes_str = new String[10];
+			score = new int[10];
+			digestionMinutes = new long[12];
+			digestionMinutes_str = new String[12];
+
+		}
+		request.setAttribute("durationMinutes", durationMinutes);
+		request.setAttribute("durationMinutes_str", durationMinutes_str);
+		request.setAttribute("digestionMinutes", digestionMinutes);
+		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
+		request.setAttribute("score", score);
+		session.setAttribute("planAndResult", planAndResult);
+		session.setAttribute("mealActList", mealActList);
 
 		if (planAndResult.getIsCommitted() == false) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");

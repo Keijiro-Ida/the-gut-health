@@ -20,7 +20,16 @@
    DefaultPlanAndResult defaultSetting = (DefaultPlanAndResult)request.getAttribute("defaultSetting");
 	ArrayList<String> timeList = (ArrayList<String>)request.getAttribute("timeList");
 	ArrayList<Integer> mealIdList = (ArrayList<Integer>) request.getAttribute("mealIdList");
-   
+	String[] msg60 = {"がんばってますね", "がんばれ〜！","もう少し!","もう少しでツルツルの腸が!", "ファイト!!", "ガンバ！！", "あとちょっとです！！"};
+	String[] msg80 = {"がんばりました","継続してきましょう！", "腸が喜んでいます!", "腸のレベルが上がりました"};
+	String[] msg100 = {"素晴らしいです!", "よくがんばりました！", "腸が歓喜しています！", "すごい!継続しましょう！"};
+	String[] msg120 ={"あなたの腸はアスリートレベルです","素晴らしい!!", "スゴッ", "ヤバッ", "腸が喜んでます!!", "あなたすごいですね。", "半端ない!","あなたの腸はつるつるです。"};
+	String[] msg140 ={"あなたの腸は超人レベルです", "鬼ヤバッ", "半端ないッ!!", "あなたの腸は最強です"};
+	int num60 = (int) (Math.random() * (msg60.length));
+	int num80 = (int) (Math.random() * (msg80.length));
+	int num100 = (int) (Math.random() * (msg100.length));
+	int num120 = (int) (Math.random() * (msg120.length));
+	int num140 = (int) (Math.random() * (msg140.length));
 %>
 <!DOCTYPE html>
 <html>
@@ -39,9 +48,10 @@
 			<div id="nav">
 				<ul class="float">
 					<li><a href="/the-gut-healthy/Point1Servlet">腸活とは？</a></li>
+					<li><a href="/the-gut-healthy/Point2Servlet">消化スピード</a></li>
 					<li><a href="/the-gut-healthy/CalendarServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1 %>">カレンダー</a></li>
 					<li><a href="/the-gut-healthy/MonthGraphServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1%>">スコアグラフ</a></li>
-					<li><a href="/the-gut-healthy/DefaultSettingServlet">デフォルト設定</a></li>
+					
 				</ul>
 			</div>
 			<br>
@@ -266,32 +276,32 @@
 									
 									<% } %>
 										<%if(mealActList.get(j+3) == null){%>		
-										<td>
-										<% if(defaultSetting == null || timeList.get(j/2 + 1) == null  || "".equals(timeList.get(j/2 + 1))) {%>
+											<td>
+											<% if(defaultSetting == null || timeList.get(j/2 + 1) == null  || "".equals(timeList.get(j/2 + 1))) {%>
 													<input type="time" name="meal_time<%=j+4 %>"  form="my_form" />
-												<% } else { %>
+											<% } else { %>
 													<input type="time" name="meal_time<%=j+4 %>"  form="my_form" value="<%=timeList.get(j/2 + 1) %>"/>
-												<% } %>
-										
-										</td>
-										<td>
-										<select name="meal_name<%=j+4 %>" >
-												<% if(defaultSetting == null || mealIdList.get(j/2 + 1) == null  || mealIdList.get(j/2 + 1) == 0) {%>
-													<option value=0>選択してください</option>
-												<% } else { %>
-													<option value=<%=mealIdList.get(j/2 + 1) %>><%=mealDAO.selectMealByMealId(mealIdList.get(j/2 + 1)).getMealName()%></option>
-												<% } %>
-												<% for(MealGenre mealGenre : genreList) {%>
-													<optgroup label=<%=mealGenre.getMealGenreName() %>>
-														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
-												  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
-												 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
-												 			 </option>
-														<% } %>
-													</optgroup>
-												<% } %>
-										</select>
-										</td>
+											<% } %>
+											
+											</td>
+											<td>
+											<select name="meal_name<%=j+4 %>" >
+													<% if(defaultSetting == null || mealIdList.get(j/2 + 1) == null  || mealIdList.get(j/2 + 1) == 0) {%>
+														<option value=0>選択してください</option>
+													<% } else { %>
+														<option value=<%=mealIdList.get(j/2 + 1) %>><%=mealDAO.selectMealByMealId(mealIdList.get(j/2 + 1)).getMealName()%></option>
+													<% } %>
+													<% for(MealGenre mealGenre : genreList) {%>
+														<optgroup label=<%=mealGenre.getMealGenreName() %>>
+															<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
+													  			<option label=<%= mealMap.get(mealGenre).get(i).getMealName() %> value=<%= mealMap.get(mealGenre).get(i).getMealId() %>>
+													 			 <%= mealMap.get(mealGenre).get(i).getMealName()%>
+													 			 </option>
+															<% } %>
+														</optgroup>
+													<% } %>
+											</select>
+											</td>
 									<% } else { %>
 										<td>
 											<input type="time" name="meal_time<%=j+4 %>" form="my_form"
@@ -634,21 +644,28 @@
 							<td></td>
 							<td><%=planAndResult.getScore() %> / 120 点</td>
 							<td>
-							<% if(planAndResult.getScore() == 120 ) { %>
-							すごい！！
+							<% if(planAndResult.getScore() > 120 ) { %>
+								<%= msg140[num140] %>
 							<% } else if(planAndResult.getScore() >= 100) {%>
-							がんばりました。
+								<%= msg120[num120] %>
 							<% } else if(planAndResult.getScore() >= 80) {%>
-							もう少し!!
+								<%= msg100[num100] %>
+							<% } else if(planAndResult.getScore() >= 60) {%>
+								<%= msg80[num80] %>
+							<% } else if(planAndResult.getScore() >= 40) {%>
+								<%= msg60[num60] %>
 							<% } %>
 							</td>
 						</tr>
 						
 					</table>
 					<br>
+					<button type="submit" class="btn_main" name="planAndResultSubmit" value="2" form="my_form" >削除</button>
 					<button type="submit" class="btn_main" name="planAndResultSubmit" value="0" form="my_form" >保存</button>
 					<button type="submit" class="btn_main" name="planAndResultSubmit" value="1" form="my_form" >確定</button>
 				</form>
+				<br>
+				<a href="/the-gut-healthy/DefaultSettingServlet">デフォルト設定</a>
 				<br>
 				<a href="/the-gut-healthy/UpdateUsersServlet">ユーザー情報変更</a>
 				<br>

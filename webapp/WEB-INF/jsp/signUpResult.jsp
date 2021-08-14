@@ -13,6 +13,9 @@
 		<div id="header">
 			<p>腸活アプリ</p>
 		</div>
+		<br>
+		<br>
+		<br>
 		<div id="main">
 		<c:choose>
 			<c:when test="${signUp != null }">

@@ -152,6 +152,7 @@ div#timeAndFood table{
 div#timeAndFood tr.snack{
 	background-color: #DDDDDD;
 }
+
 #isCommittedScore {
 background: #FFC7AF;
 }
@@ -163,24 +164,13 @@ span.score{
 	color:red;
 	
 }
-div#main #combi{
-	float: left;
-	border: 3px solid #DDDDDD;
+#main #main_text{
+	float:center;
+	
+	
 }
-div#main #rest{
-	float: left;
-	border: 3px solid #DDDDDD;
+span.ng{
+	font-size:x-large;
+	font-weight:bold;
+	color:red;
 }
-div#main #fast{
-	float: left;
-	border: 3px solid #DDDDDD;
-}
-div#main #slow{
-	float: left;
-	border: 3px solid #DDDDDD;
-}
-div#main #neutral{
-	float: left;
-	border: 3px solid #DDDDDD;
-}
-

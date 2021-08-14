@@ -12,7 +12,9 @@
 		<div id="header">
 			<p>腸活アプリ</p>
 		</div>
+			<br><br><br><br>
 		<div id="main">
+			
 			<p>ログアウトしました。</p>
 			<a href="/the-gut-healthy">TOP画面</a>
 		</div>

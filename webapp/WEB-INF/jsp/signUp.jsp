@@ -13,6 +13,9 @@
 			<p>腸活アプリ</p>
 		</div>
 		<div id="main">
+		<br>
+		<br>
+		<br>
 		<form action="/the-gut-healthy/SignUpServlet" method="post">
 			<table>
 				<tr>

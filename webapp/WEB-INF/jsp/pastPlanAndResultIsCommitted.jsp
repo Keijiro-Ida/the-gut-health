@@ -16,7 +16,16 @@
    FoodDAO foodDAO = new FoodDAO();
 	
    Calendar now = Calendar.getInstance();
-   
+   String[] msg60 = {"がんばってますね", "がんばれ〜！","もう少し!","もう少しでツルツルの腸が!", "ファイト!!", "ガンバ！！", "あとちょっとです！！"};
+   String[] msg80 = {"がんばりました","継続してきましょう！", "腸が喜んでいます!", "腸のレベルが上がりました"};
+   String[] msg100 = {"素晴らしいです!", "よくがんばりました！", "腸が歓喜しています！", "すごい!継続しましょう！"};
+   String[] msg120 ={"あなたの腸はアスリートレベルです","素晴らしい!!", "スゴッ", "ヤバッ", "腸が喜んでます!!", "あなたすごいですね。", "半端ない!","あなたの腸はつるつるです。"};
+   String[] msg140 ={"あなたの腸は超人レベルです", "鬼ヤバッ", "半端ないッ!!", "あなたの腸は最強です"};
+   int num60 = (int) (Math.random() * (msg60.length));
+   int num80 = (int) (Math.random() * (msg80.length));
+   int num100 = (int) (Math.random() * (msg100.length));
+   int num120 = (int) (Math.random() * (msg120.length));
+   int num140 = (int) (Math.random() * (msg140.length));
    
 %>
 <!DOCTYPE html>
@@ -92,7 +101,7 @@
 								<% if(digestionMinutes[j+1] != 0) { %>
 								<td><%=digestionMinutes_str[j+1]%></td>
 								<% } else { %>
-								<td><td>
+								<td></td>
 								<% } %>
 								<td rowspan="3"> </td>
 								
@@ -171,7 +180,7 @@
 								<% if(digestionMinutes[j+3] != 0) { %>
 								<td><%=digestionMinutes_str[j+3]%></td>
 								<% } else { %>
-								<td><td>
+								<td></td>
 								<% } %>
 								<td rowspan="3"> </td>
 								
@@ -246,7 +255,7 @@
 								<% if(digestionMinutes[9] != 0) { %>
 								<td><%=digestionMinutes_str[9]%></td>
 								<% } else { %>
-								<td><td>
+								<td></td>
 								<% } %>
 								<td rowspan="3"> </td>
 								
@@ -336,12 +345,16 @@
 							<td></td>
 							<td><%=planAndResult.getScore() %> / 120 点</td>
 							<td>
-							<% if(planAndResult.getScore() == 120 ) { %>
-							すごい！！
+							<% if(planAndResult.getScore() > 120 ) { %>
+								<%= msg140[num140] %>
 							<% } else if(planAndResult.getScore() >= 100) {%>
-							がんばりました。
+								<%= msg120[num120] %>
 							<% } else if(planAndResult.getScore() >= 80) {%>
-							もう少し!!
+								<%= msg100[num100] %>
+							<% } else if(planAndResult.getScore() >= 60) {%>
+								<%= msg80[num80] %>
+							<% } else if(planAndResult.getScore() >= 40) {%>
+								<%= msg60[num60] %>
 							<% } %>
 							</td>
 						</tr>

@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,8 +45,10 @@ public class YearGraphServlet extends HttpServlet {
 		}
 		session.setAttribute("mc", mc);
 
-		ArrayList<Integer> monthList = new ArrayList<>(
-				List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+		ArrayList<Integer> monthList = new ArrayList<>();
+		for (int i = 1; i <= 12; i++) {
+			monthList.add(i);
+		}
 
 		GetAverageScoreListLogic bo = new GetAverageScoreListLogic();
 		ArrayList<Integer> averageScoreList = bo.execute(users.getUsrId(), mc.getYear());

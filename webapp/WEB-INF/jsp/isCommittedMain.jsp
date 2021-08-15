@@ -10,22 +10,11 @@
    String[] digestionMinutes_str = (String[])request.getAttribute("digestionMinutes_str");
    Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
    ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
-   
+   ArrayList<String> threeMealsList = (ArrayList<String>)request.getAttribute("threeMealsList");
    MealDAO mealDAO = new MealDAO();
-   ThreeMealsAndSnackDAO threeMealsDAO = new ThreeMealsAndSnackDAO();
-   FoodDAO foodDAO = new FoodDAO();
+	
 	
    Calendar now = Calendar.getInstance();
-   String[] msg60 = {"がんばってますね", "がんばれ〜！","もう少し!","もう少しでツルツルの腸が!", "ファイト!!", "ガンバ！！", "あとちょっとです！！"};
-   String[] msg80 = {"がんばりました","継続してきましょう！", "腸が喜んでいます!", "腸のレベルが上がりました"};
-   String[] msg100 = {"素晴らしいです!", "よくがんばりました！", "腸が歓喜しています！", "すごい!継続しましょう！"};
-   String[] msg120 ={"あなたの腸はアスリートレベルです","素晴らしい!!", "スゴッ", "ヤバッ", "腸が喜んでます!!", "あなたすごいですね。", "半端ない!","あなたの腸はつるつるです。"};
-   String[] msg140 ={"あなたの腸は超人レベルです", "鬼ヤバッ", "半端ないッ!!", "あなたの腸は最強です"};
-   int num60 = (int) (Math.random() * (msg60.length));
-   int num80 = (int) (Math.random() * (msg80.length));
-   int num100 = (int) (Math.random() * (msg100.length));
-   int num120 = (int) (Math.random() * (msg120.length));
-   int num140 = (int) (Math.random() * (msg140.length));
    
 %>
 <!DOCTYPE html>
@@ -42,10 +31,10 @@
 		</div>
 		<div id="main">
 			<div id="nav">
-					<ul><li><a href="/the-gut-healthy/PointServlet">腸活</a></li>
+					<ul><li><a href="/the-gut-healthy/Point1Servlet">腸活とは？</a></li>
+						<li><a href="/the-gut-healthy/Point2Servlet">消化スピード</a></li>
 						<li><a href="/the-gut-healthy/CalendarServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1 %>">カレンダー</a></li>
-						<li><a href="/the-gut-healthy/MonthGraphServlet">月スコアグラフ</a></li>
-						<li><a href="/the-gut-healthy/DefaultSettingServlet">デフォルト設定</a></li>
+						<li><a href="/the-gut-healthy/MonthGraphServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1%>">スコアグラフ</a></li>
 					</ul>
 			</div>
 			<br>
@@ -64,7 +53,7 @@
 					
 					<tr>
 						<% for(int j = 0; j < 8; j += 4) {%>
-							<th><%=threeMealsDAO.selectThreeMeals().get(j+1).getThreeMealsName() %></th>
+							<th><%=threeMealsList.get(j+1) %></th>
 								<%if(mealActList.get(j) == null){%>		
 									<td>
 									</td>
@@ -142,7 +131,7 @@
 							<% } %>
 						</tr>
 						<tr class="snack">
-							<th><%=threeMealsDAO.selectThreeMeals().get(j+3).getThreeMealsName() %></th>
+							<th><%=threeMealsList.get(j+3) %></th>
 								<%if(mealActList.get(j+2) == null){%>		
 									<td>
 									</td>
@@ -220,7 +209,7 @@
 						</tr>
 					<% } %>
 					<tr>
-							<th><%=threeMealsDAO.selectThreeMeals().get(9).getThreeMealsName() %></th>
+							<th><%=threeMealsList.get(9)%></th>
 								<%if(mealActList.get(8) == null){%>		
 									<td>
 									</td>
@@ -295,7 +284,7 @@
 						</tr>
 					
 						<tr class="snack">
-							<th><%=threeMealsDAO.selectThreeMeals().get(11).getThreeMealsName() %></th>
+							<th><%=threeMealsList.get(11) %></th>
 								<%if(mealActList.get(10) == null){%>		
 									<td>
 									</td>
@@ -359,15 +348,15 @@
 						<td><%=planAndResult.getScore() %> / 120 点</td>
 						<td>
 						<% if(planAndResult.getScore() > 120 ) { %>
-							<%= msg140[num140] %>
-							<% } else if(planAndResult.getScore() >= 100) {%>
-							<%= msg120[num120] %>
-							<% } else if(planAndResult.getScore() >= 80) {%>
-							<%= msg100[num100] %>
-							<% } else if(planAndResult.getScore() >= 60) {%>
-							<%= msg80[num80] %>
-							<% } else if(planAndResult.getScore() >= 40) {%>
-							<%= msg60[num60] %>
+							<%= ScoreMessage.getMsg140() %>
+						<% } else if(planAndResult.getScore() >= 100) {%>
+							<%= ScoreMessage.getMsg120() %>
+						<% } else if(planAndResult.getScore() >= 80) {%>
+							<%= ScoreMessage.getMsg100() %>
+						<% } else if(planAndResult.getScore() >= 60) {%>
+							<%= ScoreMessage.getMsg80() %>
+						<% } else if(planAndResult.getScore() >= 40) {%>
+							<%= ScoreMessage.getMsg60() %>
 						<% } %>
 						
 						</td>
@@ -377,6 +366,10 @@
 				<br>
 				<button type="button" class="btn_main" onclick="location.href='/the-gut-healthy/MainServlet?isCommitted=0'" >修正</button>
 				<br>
+				<br>
+				<a href="/the-gut-healthy/DefaultSettingServlet">デフォルト設定</a>
+				<br>
+				<a href="/the-gut-healthy/UpdateUsersServlet">ユーザー情報変更</a>
 				<br>
 				<a href="/the-gut-healthy/LogoutServlet">ログアウト</a>
 			</div>

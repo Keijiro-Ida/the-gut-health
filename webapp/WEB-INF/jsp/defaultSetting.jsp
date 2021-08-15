@@ -5,10 +5,9 @@
    DefaultPlanAndResult defaultSetting = (DefaultPlanAndResult) request.getAttribute("defaultSetting");
    Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
    ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
-   
+   ArrayList<String> threeMealsList = (ArrayList<String>)request.getAttribute("threeMealsList");
    MealDAO mealDAO = new MealDAO();
-   ThreeMealsAndSnackDAO threeMealsDAO = new ThreeMealsAndSnackDAO();
-   FoodDAO foodDAO = new FoodDAO();
+
    ArrayList<String> timeList = (ArrayList<String>)request.getAttribute("timeList");
    ArrayList<Integer> mealIdList = (ArrayList<Integer>)request.getAttribute("mealIdList");
    
@@ -41,7 +40,7 @@
 					<%if(defaultSetting != null) { %>
 						<% for(int j = 0; j < 12; j += 2) {%>
 							<tr>
-								<th><%=threeMealsDAO.selectThreeMeals().get(j+1).getThreeMealsName() %></th>
+								<th><%=threeMealsList.get(j+1) %></th>
 										<td>
 										<% if( "".equals(timeList.get(j/2)) || timeList.get(j/2) == null) {%>
 										<input type="time" name="meal_time<%=j+1 %>"  form="my_form" />
@@ -74,7 +73,7 @@
 					<% } else { %>
 						<% for(int j = 0; j < 12; j += 2) {%>
 							<tr>
-								<th><%=threeMealsDAO.selectThreeMeals().get(j+1).getThreeMealsName() %></th>
+								<th><%=threeMealsList.get(j+1) %></th>
 										<td>
 										<input type="time" name="meal_time<%=j+1 %>"  form="my_form" />
 										</td>

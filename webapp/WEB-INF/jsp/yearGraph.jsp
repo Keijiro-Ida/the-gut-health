@@ -37,7 +37,7 @@
 			
 			<br>
 			<br>
-			<a href="/the-gut-healthy/MainServlet" id="return">戻る</a>
+			<a href="/the-gut-healthy/MainServlet" id="return">Main画面へ戻る</a>
 			
 		</div>
 	</div>

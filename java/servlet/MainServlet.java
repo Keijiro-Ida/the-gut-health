@@ -30,6 +30,7 @@ import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
 import model.GetPlanAndResultByUsersLogic;
 import model.GetScoreLogic;
+import model.GetThreeMealsNameLogic;
 import model.Meal;
 import model.MealAct;
 import model.MealGenre;
@@ -178,6 +179,10 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("timeList", timeList);
 		request.setAttribute("mealIdList", mealIdList);
 
+		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
+		ArrayList<String> threeMealsList = threeMealsName.execute();
+		request.setAttribute("threeMealsList", threeMealsList);
+
 		if (planAndResult.getIsCommitted() == false) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
 			dispatcher.forward(request, response);
@@ -308,9 +313,6 @@ public class MainServlet extends HttpServlet {
 		planAndResult.setScorePlan(totalScorePlan);
 		planAndResult.setScore(totalScore);
 
-		UpdatePlanAndResultLogic bo2 = new UpdatePlanAndResultLogic();
-		bo2.execute(planAndResult);
-
 		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
 		ArrayList<MealGenre> genreList = getMealGenreBO.execute();
 		GetMealListLogic getMealListBO = new GetMealListLogic();
@@ -375,7 +377,7 @@ public class MainServlet extends HttpServlet {
 			CreatePlanAndResultLogic createLogic = new CreatePlanAndResultLogic();
 			PostPlanAndResult postPlanAndResult = new PostPlanAndResult(users.getUsrId(), LocalDate.now());
 			planAndResult = createLogic.execute(postPlanAndResult);
-			
+
 			durationMinutes = new long[10];
 			durationMinutes_str = new String[10];
 			score = new int[10];
@@ -383,6 +385,12 @@ public class MainServlet extends HttpServlet {
 			digestionMinutes_str = new String[12];
 
 		}
+		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
+		ArrayList<String> threeMealsList = threeMealsName.execute();
+		request.setAttribute("threeMealsList", threeMealsList);
+
+		UpdatePlanAndResultLogic bo2 = new UpdatePlanAndResultLogic();
+		bo2.execute(planAndResult);
 		request.setAttribute("durationMinutes", durationMinutes);
 		request.setAttribute("durationMinutes_str", durationMinutes_str);
 		request.setAttribute("digestionMinutes", digestionMinutes);
@@ -400,5 +408,4 @@ public class MainServlet extends HttpServlet {
 		}
 
 	}
-
 }

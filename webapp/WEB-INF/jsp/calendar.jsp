@@ -57,28 +57,18 @@
 										<td><a href="/the-gut-healthy/MainServlet" class="today">
 											<%= mc.getData()[i][j] %>
 											<br>
-											
-											<% if(mc.getPlanAndResult_cal()[i][j].getIsCommitted() == true) {%>
-									 			<span class="score">
-												<%= mc.getPlanAndResult_cal()[i][j].getScore() %>点
-												</span>
-											<% } else {%>
-													<br>
-											<% } %>
+											<span class="score">
+											<%= mc.getPlanAndResult_cal()[i][j].getScore() %>点
+											</span>
+											<br>
 											</a>
 										</td>
 									<% } else { %>
 										<td><a href="/the-gut-healthy/PastPlanAndResultServlet?planAndResultId=<%=mc.getPlanAndResult_cal()[i][j].getPlanAndResultId()%>" class="other" >
 											<%= mc.getData()[i][j] %>
-											
-									 		<br>
-									 		
-											<% if(mc.getPlanAndResult_cal()[i][j].getIsCommitted() == true) {%>
-													<span class="score"><%= mc.getPlanAndResult_cal()[i][j].getScore() %>点
-													</span>
-											<% } else {%>
-												<br>
-											<% } %>
+											<br>
+									 		<span class="score"><%= mc.getPlanAndResult_cal()[i][j].getScore() %>点
+											</span>
 											</a>
 										</td>
 									<% } %>

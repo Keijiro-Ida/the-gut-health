@@ -10,23 +10,12 @@
    String[] digestionMinutes_str = (String[])request.getAttribute("digestionMinutes_str");
    Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
    ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
-   
+   ArrayList<String> threeMealsList = (ArrayList<String>)request.getAttribute("threeMealsList");
    MealDAO mealDAO = new MealDAO();
-   ThreeMealsAndSnackDAO threeMealsDAO = new ThreeMealsAndSnackDAO();
-   FoodDAO foodDAO = new FoodDAO();
+
 	
    Calendar now = Calendar.getInstance();
-   String[] msg60 = {"がんばってますね", "がんばれ〜！","もう少し!","もう少しでツルツルの腸が!", "ファイト!!", "ガンバ！！", "あとちょっとです！！"};
-   String[] msg80 = {"がんばりました","継続してきましょう！", "腸が喜んでいます!", "腸のレベルが上がりました"};
-   String[] msg100 = {"素晴らしいです!", "よくがんばりました！", "腸が歓喜しています！", "すごい!継続しましょう！"};
-   String[] msg120 ={"あなたの腸はアスリートレベルです","素晴らしい!!", "スゴッ", "ヤバッ", "腸が喜んでます!!", "あなたすごいですね。", "半端ない!","あなたの腸はつるつるです。"};
-   String[] msg140 ={"あなたの腸は超人レベルです", "鬼ヤバッ", "半端ないッ!!", "あなたの腸は最強です"};
-   int num60 = (int) (Math.random() * (msg60.length));
-   int num80 = (int) (Math.random() * (msg80.length));
-   int num100 = (int) (Math.random() * (msg100.length));
-   int num120 = (int) (Math.random() * (msg120.length));
-   int num140 = (int) (Math.random() * (msg140.length));
-   
+ 
 %>
 <!DOCTYPE html>
 <html>
@@ -57,7 +46,7 @@
 						
 						<tr>
 							<% for(int j = 0; j < 8; j += 4) {%>
-								<th><%=threeMealsDAO.selectThreeMeals().get(j+1).getThreeMealsName() %></th>
+								<th><%=threeMealsList.get(j+1) %></th>
 									<%if(mealActList.get(j) == null){%>		
 										<td>
 										</td>
@@ -134,8 +123,8 @@
 								<td></td>
 								<% } %>
 							</tr>
-							<tr>
-								<th><%=threeMealsDAO.selectThreeMeals().get(j+3).getThreeMealsName() %></th>
+							<tr class="snack">
+								<th><%=threeMealsList.get(j+3) %></th>
 									<%if(mealActList.get(j+2) == null){%>		
 										<td>
 										</td>
@@ -169,7 +158,7 @@
 									
 								
 							</tr>
-							<tr>
+							<tr class="snack">
 								<th>消化時間</th>
 								<% if(digestionMinutes[j+2] != 0) {%>
 								<td><%=digestionMinutes_str[j+2]%></td>
@@ -185,7 +174,7 @@
 								<td rowspan="3"> </td>
 								
 							</tr>
-							<tr>
+							<tr class="snack">
 								<th>スキマ時間</th>
 								<% if(durationMinutes[j+2] != 0) {%>
 								<td><%=durationMinutes_str[j+2]%></td>
@@ -198,7 +187,7 @@
 								<td></td>
 								<% } %>
 							</tr>
-							<tr>
+							<tr class="snack">
 								<th>スコア</th>
 								<% if(score[j+2] != 0) {%>
 								<td><%=score[j+2] %> 点</td>
@@ -213,7 +202,7 @@
 							</tr>
 						<% } %>
 						<tr>
-								<th><%=threeMealsDAO.selectThreeMeals().get(9).getThreeMealsName() %></th>
+								<th><%=threeMealsList.get(9) %></th>
 									<%if(mealActList.get(8) == null){%>		
 										<td>
 										</td>
@@ -287,8 +276,8 @@
 								<% } %>
 							</tr>
 						
-							<tr>
-								<th><%=threeMealsDAO.selectThreeMeals().get(11).getThreeMealsName() %></th>
+							<tr class="snack">
+								<th><%=threeMealsList.get(11) %></th>
 									<%if(mealActList.get(10) == null){%>		
 										<td>
 										</td>
@@ -321,7 +310,7 @@
 									
 								
 							</tr>
-							<tr>
+							<tr class="snack">
 							<th>消化時間</th>
 								<% if(digestionMinutes[10] != 0) {%>
 								<td><%=digestionMinutes_str[10]%></td>
@@ -332,29 +321,29 @@
 								<% if(digestionMinutes[11] != 0) { %>
 								<td><%=digestionMinutes_str[11]%></td>
 								<% } else { %>
-								<td><td>
+								<td></td>
 								<% } %>
 								<td rowspan="1"> </td>
 								
 							</tr>
 						
 						
-						<tr>
+						<tr id="isCommittedScore">
 							<th>TOTALスコア</th>
 							<td><%=planAndResult.getScorePlan() %> / 120 点</td>
 							<td></td>
 							<td><%=planAndResult.getScore() %> / 120 点</td>
 							<td>
 							<% if(planAndResult.getScore() > 120 ) { %>
-								<%= msg140[num140] %>
+								<%= ScoreMessage.getMsg140() %>
 							<% } else if(planAndResult.getScore() >= 100) {%>
-								<%= msg120[num120] %>
+								<%= ScoreMessage.getMsg120() %>
 							<% } else if(planAndResult.getScore() >= 80) {%>
-								<%= msg100[num100] %>
+								<%= ScoreMessage.getMsg100() %>
 							<% } else if(planAndResult.getScore() >= 60) {%>
-								<%= msg80[num80] %>
+								<%= ScoreMessage.getMsg80() %>
 							<% } else if(planAndResult.getScore() >= 40) {%>
-								<%= msg60[num60] %>
+								<%= ScoreMessage.getMsg60() %>
 							<% } %>
 							</td>
 						</tr>

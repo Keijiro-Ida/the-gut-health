@@ -42,6 +42,7 @@ public class PlanAndResultDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+
 			return null;
 		}
 		return planAndResult;

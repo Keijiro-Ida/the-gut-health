@@ -8,13 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import model.ThreeMealsAndSnack;
-
 public class ThreeMealsAndSnackDAO {
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 
-	public ArrayList<ThreeMealsAndSnack> selectThreeMeals() {
-		ArrayList<ThreeMealsAndSnack> list = new ArrayList<>();
+	public ArrayList<String> selectThreeMeals() {
+		ArrayList<String> list = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
 				bundle.getString("DB_USER_LOCAL"),
@@ -25,11 +23,8 @@ public class ThreeMealsAndSnackDAO {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				int threeMealsId = rs.getInt("THREEMEALSID");
 				String threeMealsName = rs.getString("THREEMEALSNAME");
-
-				ThreeMealsAndSnack threeMealsAndSnack = new ThreeMealsAndSnack(threeMealsId, threeMealsName);
-				list.add(threeMealsAndSnack);
+				list.add(threeMealsName);
 			}
 
 		} catch (SQLException e) {

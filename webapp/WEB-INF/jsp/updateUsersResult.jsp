@@ -14,7 +14,7 @@
 			<p>腸活アプリ</p>
 		</div>
 		<div id="main">
-			<img src="front_img.jpg">
+			
 			<h3>ユーザー情報変更</h3>
 			<c:choose>
 				<c:when test="${errMsg != null }">

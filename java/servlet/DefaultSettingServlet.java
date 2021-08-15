@@ -18,6 +18,7 @@ import model.CreateDefaultPlanAndResultLogic;
 import model.DefaultPlanAndResult;
 import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
+import model.GetThreeMealsNameLogic;
 import model.Meal;
 import model.MealGenre;
 import model.PostDefaultPlanAndResult;
@@ -68,10 +69,15 @@ public class DefaultSettingServlet extends HttpServlet {
 		for (MealGenre mealGenre : genreList) {
 			ArrayList<Meal> mealList = getMealListBO.execute(mealGenre.getMealGenreId());
 			mealMap.put(mealGenre, mealList);
-
 		}
 		request.setAttribute("mealMap", mealMap);
 		request.setAttribute("genreList", genreList);
+
+		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
+		ArrayList<String> threeMealsList = threeMealsName.execute();
+
+		request.setAttribute("threeMealsList", threeMealsList);
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/defaultSetting.jsp");
 		dispatcher.forward(request, response);
 	}

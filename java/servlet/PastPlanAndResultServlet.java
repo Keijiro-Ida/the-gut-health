@@ -25,6 +25,7 @@ import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
 import model.GetPlanAndResultByIdLogic;
 import model.GetScoreLogic;
+import model.GetThreeMealsNameLogic;
 import model.Meal;
 import model.MealAct;
 import model.MealGenre;
@@ -32,7 +33,6 @@ import model.PlanAndResult;
 import model.PostMealAct;
 import model.PostMealActLogic;
 import model.UpdatePlanAndResultLogic;
-import model.users.Users;
 
 /**
  * Servlet implementation class PastPlanAndResultServlet
@@ -48,12 +48,13 @@ public class PastPlanAndResultServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		int planAndResultId = Integer.parseInt(request.getParameter("planAndResultId"));
+
 		GetPlanAndResultByIdLogic bo = new GetPlanAndResultByIdLogic();
 		PlanAndResult planAndResult = bo.execute(planAndResultId);
 		ArrayList<MealAct> mealActList = new ArrayList<>();
 		GetMealActLogic bo2 = new GetMealActLogic();
 		HttpSession session = request.getSession();
-		Users users = (Users) session.getAttribute("users");
+
 		String isCommitted_str = request.getParameter("isCommitted");
 
 		if ("0".equals(isCommitted_str)) {
@@ -132,6 +133,10 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		session.setAttribute("mealActList", mealActList);
 		session.setAttribute("planAndResult", planAndResult);
 
+		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
+		ArrayList<String> threeMealsList = threeMealsName.execute();
+		request.setAttribute("threeMealsList", threeMealsList);
+
 		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
 		ArrayList<MealGenre> genreList = getMealGenreBO.execute();
 		GetMealListLogic getMealListBO = new GetMealListLogic();
@@ -197,10 +202,10 @@ public class PastPlanAndResultServlet extends HttpServlet {
 					planAndResult.setActIdAMSnack(mealAct.getActId());
 					break;
 				case 5:
-					planAndResult.setActIdLunch(mealAct.getActId());
+					planAndResult.setActIdLunchPlan(mealAct.getActId());
 					break;
 				case 6:
-					planAndResult.setActIdLunchPlan(mealAct.getActId());
+					planAndResult.setActIdLunch(mealAct.getActId());
 					break;
 				case 7:
 					planAndResult.setActIdPMSnackPlan(mealAct.getActId());
@@ -218,7 +223,7 @@ public class PastPlanAndResultServlet extends HttpServlet {
 					planAndResult.setActIdNightSnackPlan(mealAct.getActId());
 					break;
 				case 12:
-					planAndResult.setActIdNightSnackPlan(mealAct.getActId());
+					planAndResult.setActIdNightSnack(mealAct.getActId());
 					break;
 				}
 				mealActList.remove(i - 1);
@@ -294,6 +299,10 @@ public class PastPlanAndResultServlet extends HttpServlet {
 
 		session.setAttribute("planAndResult", planAndResult);
 		session.setAttribute("mealActList", mealActList);
+
+		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
+		ArrayList<String> threeMealsList = threeMealsName.execute();
+		request.setAttribute("threeMealsList", threeMealsList);
 
 		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
 		ArrayList<MealGenre> genreList = getMealGenreBO.execute();

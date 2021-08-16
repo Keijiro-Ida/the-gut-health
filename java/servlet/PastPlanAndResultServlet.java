@@ -23,6 +23,7 @@ import model.GetDurationMinutesLogic;
 import model.GetMealActLogic;
 import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
+import model.GetMealNameListLogic;
 import model.GetPlanAndResultByIdLogic;
 import model.GetScoreLogic;
 import model.GetThreeMealsNameLogic;
@@ -86,6 +87,10 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		mealActList.add(mealAct10);
 		mealActList.add(mealAct11);
 		mealActList.add(mealAct12);
+
+		GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
+		ArrayList<String> mealActList_str = mealNameBO.execute(mealActList);
+		request.setAttribute("mealActList_str", mealActList_str);
 
 		MealDAO mealDAO = new MealDAO();
 		FoodDAO foodDAO = new FoodDAO();
@@ -233,6 +238,9 @@ public class PastPlanAndResultServlet extends HttpServlet {
 				mealActList.add(i - 1, null);
 			}
 		}
+		GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
+		ArrayList<String> mealActList_str = mealNameBO.execute(mealActList);
+		request.setAttribute("mealActList_str", mealActList_str);
 
 		MealDAO mealDAO = new MealDAO();
 		FoodDAO foodDAO = new FoodDAO();

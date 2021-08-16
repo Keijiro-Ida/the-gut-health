@@ -6,10 +6,10 @@
    Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
    ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
    ArrayList<String> threeMealsList = (ArrayList<String>)request.getAttribute("threeMealsList");
-   MealDAO mealDAO = new MealDAO();
 
    ArrayList<String> timeList = (ArrayList<String>)request.getAttribute("timeList");
    ArrayList<Integer> mealIdList = (ArrayList<Integer>)request.getAttribute("mealIdList");
+   ArrayList<String> defaultNameList = (ArrayList<String>)request.getAttribute("defaultNameList");
    
    
 %>
@@ -54,7 +54,7 @@
 											<% if(mealIdList.get(j/2) == null  || mealIdList.get(j/2) == 0) {%>
 												<option value=0>選択してください</option>
 											<% } else { %>
-												<option value=<%=mealIdList.get(j/2) %>><%=mealDAO.selectMealByMealId(mealIdList.get(j/2)).getMealName()%></option>
+												<option value=<%=mealIdList.get(j/2) %>><%=defaultNameList.get(j/2) %></option>
 											<% } %>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>

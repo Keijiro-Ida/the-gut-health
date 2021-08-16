@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import DAO.DefaultPlanAndResultDAO;
 import model.CreateDefaultPlanAndResultLogic;
 import model.DefaultPlanAndResult;
+import model.GetDefaultNameListLogic;
 import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
 import model.GetThreeMealsNameLogic;
@@ -57,10 +58,13 @@ public class DefaultSettingServlet extends HttpServlet {
 			mealIdList.add(defaultSetting.getNightSnackId());
 
 		}
+		GetDefaultNameListLogic nameListBO = new GetDefaultNameListLogic();
+		ArrayList<String> defaultNameList = nameListBO.execute(defaultSetting);
 
 		request.setAttribute("defaultSetting", defaultSetting);
 		request.setAttribute("timeList", timeList);
 		request.setAttribute("mealIdList", mealIdList);
+		request.setAttribute("defaultNameList", defaultNameList);
 
 		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
 		ArrayList<MealGenre> genreList = getMealGenreBO.execute();

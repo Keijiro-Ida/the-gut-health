@@ -3,6 +3,7 @@
 <%@ page import="model.PlanAndResult, model.GetMealActLogic, java.util.*, model.*, DAO.*, java.time.format.DateTimeFormatter, java.time.Duration"%>
 <% PlanAndResult planAndResult = (PlanAndResult)session.getAttribute("planAndResult");
    ArrayList<MealAct> mealActList = (ArrayList<MealAct>)session.getAttribute("mealActList");
+   ArrayList<String> mealActList_str = (ArrayList<String>)request.getAttribute("mealActList_str");
    long[] durationMinutes = (long[])request.getAttribute("durationMinutes");
    int[] score = (int[])request.getAttribute("score");
    long[] digestionMinutes = (long[])request.getAttribute("digestionMinutes");
@@ -11,9 +12,6 @@
    Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
    ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
    ArrayList<String> threeMealsList = (ArrayList<String>)request.getAttribute("threeMealsList");
-   MealDAO mealDAO = new MealDAO();
-
-	
    Calendar now = Calendar.getInstance();
 
    
@@ -73,7 +71,7 @@
 									</td>
 									<td>
 									<select name="meal_name<%=j+1 %>" >
-											<option value=<%=mealActList.get(j).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(j).getMealId() %>><%=mealActList_str.get(j) %></option>
 											<% for(MealGenre mealGenre : genreList) {%>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -112,7 +110,7 @@
 									</td>
 									<td>
 									<select name="meal_name<%=j+2 %>" >
-											<option value=<%=mealActList.get(j+1).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j+1).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(j+1).getMealId() %>><%=mealActList_str.get(j+1) %></option>
 											<% for(MealGenre mealGenre : genreList) {%>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -201,7 +199,7 @@
 									</td>
 									<td>
 									<select name="meal_name<%=j+3 %>" >
-											<option value=<%=mealActList.get(j+2).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j+2).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(j+2).getMealId() %>><%=mealActList_str.get(j+2) %></option>
 											<% for(MealGenre mealGenre : genreList) {%>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -240,7 +238,7 @@
 									</td>
 									<td>
 									<select name="meal_name<%=j+4 %>" >
-											<option value=<%=mealActList.get(j+3).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j+3).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(j+3).getMealId() %>><%=mealActList_str.get(j+3) %></option>
 											<% for(MealGenre mealGenre : genreList) {%>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -328,7 +326,7 @@
 									</td>
 									<td>
 									<select name="meal_name9" >
-											<option value=<%=mealActList.get(8).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(8).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(8).getMealId() %>><%=mealActList_str.get(8) %></option>
 											<% for(MealGenre mealGenre : genreList) {%>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -367,7 +365,7 @@
 									</td>
 									<td>
 									<select name="meal_name10" >
-											<option value=<%=mealActList.get(9).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(9).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(9).getMealId() %>><%=mealActList_str.get(9) %></option>
 											<% for(MealGenre mealGenre : genreList) {%>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -452,7 +450,7 @@
 									</td>
 									<td>
 									<select name="meal_name11" >
-											<option value=<%=mealActList.get(10).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(10).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(10).getMealId() %>><%=mealActList_str.get(10) %></option>
 											<% for(MealGenre mealGenre : genreList) {%>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -491,7 +489,7 @@
 									</td>
 									<td>
 									<select name="meal_name12" >
-											<option value=<%=mealActList.get(11).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(11).getMealId()).getMealName() %></option>
+											<option value=<%=mealActList.get(11).getMealId() %>><%=mealActList_str.get(11) %></option>
 											<% for(MealGenre mealGenre : genreList) { %>
 												<optgroup label=<%=mealGenre.getMealGenreName() %>>
 													<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>

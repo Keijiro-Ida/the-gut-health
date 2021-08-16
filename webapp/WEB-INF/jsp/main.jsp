@@ -3,6 +3,7 @@
 <%@ page import="model.PlanAndResult, model.GetMealActLogic, java.util.*, model.*, DAO.*, java.time.format.DateTimeFormatter, java.time.Duration, model.ScoreMessage"%>
 <% PlanAndResult planAndResult = (PlanAndResult)session.getAttribute("planAndResult");
    ArrayList<MealAct> mealActList = (ArrayList<MealAct>)session.getAttribute("mealActList");
+   ArrayList<String> mealActList_str = (ArrayList<String>)request.getAttribute("mealActList_str");
    long[] durationMinutes = (long[])request.getAttribute("durationMinutes");
    int[] score = (int[])request.getAttribute("score");
    long[] digestionMinutes = (long[])request.getAttribute("digestionMinutes");
@@ -11,16 +12,14 @@
    Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
    ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
    ArrayList<String> threeMealsList = (ArrayList<String>)request.getAttribute("threeMealsList");
-   MealDAO mealDAO = new MealDAO();
-   
 	
    Calendar now = Calendar.getInstance();
    
    DefaultPlanAndResult defaultSetting = (DefaultPlanAndResult)request.getAttribute("defaultSetting");
    ArrayList<String> timeList = (ArrayList<String>)request.getAttribute("timeList");
    ArrayList<Integer> mealIdList = (ArrayList<Integer>) request.getAttribute("mealIdList");
-	
-	
+   ArrayList<String> defaultNameList = (ArrayList<String>)request.getAttribute("defaultNameList");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -79,7 +78,7 @@
 												<% if(defaultSetting == null || mealIdList.get(j/2) == null  || mealIdList.get(j/2) == 0) {%>
 													<option value=0>選択してください</option>
 												<% } else { %>
-													<option value=<%=mealIdList.get(j/2) %>><%=mealDAO.selectMealByMealId(mealIdList.get(j/2)).getMealName()%></option>
+													<option value=<%=mealIdList.get(j/2) %>><%=defaultNameList.get(j/2)%></option>
 												<% } %>
 			
 												<% for(MealGenre mealGenre : genreList) {%>
@@ -100,7 +99,7 @@
 										</td>
 										<td>
 										<select name="meal_name<%=j+1 %>" >
-												<option value=<%=mealActList.get(j).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(j).getMealId() %>><%=mealActList_str.get(j) %></option>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -127,7 +126,7 @@
 												<% if(defaultSetting == null || mealIdList.get(j/2) == null  || mealIdList.get(j/2) == 0) {%>
 													<option value=0>選択してください</option>
 												<% } else { %>
-													<option value=<%=mealIdList.get(j/2) %>><%=mealDAO.selectMealByMealId(mealIdList.get(j/2)).getMealName()%></option>
+													<option value=<%=mealIdList.get(j/2) %>><%=defaultNameList.get(j/2)%></option>
 												<% } %>
 			
 												<% for(MealGenre mealGenre : genreList) {%>
@@ -148,7 +147,7 @@
 										</td>
 										<td>
 										<select name="meal_name<%=j+2 %>" >
-												<option value=<%=mealActList.get(j+1).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j+1).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(j+1).getMealId() %>><%=mealActList_str.get(j+1) %></option>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -232,7 +231,7 @@
 												<% if(defaultSetting == null || mealIdList.get(j/2 + 1) == null  || mealIdList.get(j/2 + 1) == 0) {%>
 													<option value=0>選択してください</option>
 												<% } else { %>
-													<option value=<%=mealIdList.get(j/2 + 1) %>><%=mealDAO.selectMealByMealId(mealIdList.get(j/2 + 1)).getMealName()%></option>
+													<option value=<%=mealIdList.get(j/2 + 1) %>><%=defaultNameList.get(j/2 + 1)%></option>
 												<% } %>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
@@ -252,7 +251,7 @@
 										</td>
 										<td>
 										<select name="meal_name<%=j+3 %>" >
-												<option value=<%=mealActList.get(j+2).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j+2).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(j+2).getMealId() %>><%=mealActList_str.get(j+2) %></option>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -280,7 +279,7 @@
 													<% if(defaultSetting == null || mealIdList.get(j/2 + 1) == null  || mealIdList.get(j/2 + 1) == 0) {%>
 														<option value=0>選択してください</option>
 													<% } else { %>
-														<option value=<%=mealIdList.get(j/2 + 1) %>><%=mealDAO.selectMealByMealId(mealIdList.get(j/2 + 1)).getMealName()%></option>
+														<option value=<%=mealIdList.get(j/2 + 1) %>><%=defaultNameList.get(j/2 + 1)%></option>
 													<% } %>
 													<% for(MealGenre mealGenre : genreList) {%>
 														<optgroup label=<%=mealGenre.getMealGenreName() %>>
@@ -300,7 +299,7 @@
 										</td>
 										<td>
 										<select name="meal_name<%=j+4 %>" >
-												<option value=<%=mealActList.get(j+3).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(j+3).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(j+3).getMealId() %>><%=mealActList_str.get(j+3) %></option>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -381,7 +380,7 @@
 												<% if(defaultSetting == null || mealIdList.get(4) == null  || mealIdList.get(4) == 0) {%>
 													<option value=0>選択してください</option>
 												<% } else { %>
-													<option value=<%=mealIdList.get(4) %>><%=mealDAO.selectMealByMealId(mealIdList.get(4)).getMealName()%></option>
+													<option value=<%=mealIdList.get(4) %>><%=defaultNameList.get(4)%></option>
 												<% } %>
 												<option value=0>選択してください</option>
 												<% for(MealGenre mealGenre : genreList) {%>
@@ -402,7 +401,7 @@
 										</td>
 										<td>
 										<select name="meal_name9" >
-												<option value=<%=mealActList.get(8).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(8).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(8).getMealId() %>><%=mealActList_str.get(8) %></option>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -416,7 +415,7 @@
 										</td>
 									
 									<% } %>
-										<%if(mealActList.get(9) == null){%>		
+										<% if(mealActList.get(9) == null){ %>		
 										<td>
 										<% if(defaultSetting == null || timeList.get(4) == null  || "".equals(timeList.get(4))) {%>
 													<input type="time" name="meal_time10"  form="my_form" />
@@ -430,7 +429,7 @@
 												<% if(defaultSetting == null || mealIdList.get(4) == null  || mealIdList.get(4) == 0) {%>
 													<option value=0>選択してください</option>
 												<% } else { %>
-													<option value=<%=mealIdList.get(4) %>><%=mealDAO.selectMealByMealId(mealIdList.get(4)).getMealName()%></option>
+													<option value=<%= mealIdList.get(4) %>><%=defaultNameList.get(4)%></option>
 												<% } %>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
@@ -450,7 +449,7 @@
 										</td>
 										<td>
 										<select name="meal_name10" >
-												<option value=<%=mealActList.get(9).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(9).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(9).getMealId() %>><%=mealActList_str.get(9) %></option>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -524,7 +523,7 @@
 												<% if(defaultSetting == null || mealIdList.get(5) == null  || mealIdList.get(5) == 0) {%>
 													<option value=0>選択してください</option>
 												<% } else { %>
-													<option value=<%=mealIdList.get(5) %>><%=mealDAO.selectMealByMealId(mealIdList.get(5)).getMealName()%></option>
+													<option value=<%=mealIdList.get(5) %>><%=defaultNameList.get(5)%></option>
 												<% } %>
 											
 												<% for(MealGenre mealGenre : genreList) {%>
@@ -545,7 +544,7 @@
 										</td>
 										<td>
 										<select name="meal_name11" >
-												<option value=<%=mealActList.get(10).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(10).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(10).getMealId() %>><%=mealActList_str.get(10) %></option>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -573,7 +572,7 @@
 												<% if(defaultSetting == null || mealIdList.get(5) == null  || mealIdList.get(5) == 0) {%>
 													<option value=0>選択してください</option>
 												<% } else { %>
-													<option value=<%=mealIdList.get(5) %>><%=mealDAO.selectMealByMealId(mealIdList.get(5)).getMealName()%></option>
+													<option value=<%=mealIdList.get(5) %>><%=defaultNameList.get(5)%></option>
 												<% } %>
 												<% for(MealGenre mealGenre : genreList) {%>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
@@ -593,7 +592,7 @@
 										</td>
 										<td>
 										<select name="meal_name12" >
-												<option value=<%=mealActList.get(11).getMealId() %>><%=mealDAO.selectMealByMealId(mealActList.get(11).getMealId()).getMealName() %></option>
+												<option value=<%=mealActList.get(11).getMealId() %>><%=mealActList_str.get(11) %></option>
 												<% for(MealGenre mealGenre : genreList) { %>
 													<optgroup label=<%=mealGenre.getMealGenreName() %>>
 														<% for(int i = 0; i < mealMap.get(mealGenre).size(); i++)  {%>
@@ -651,7 +650,7 @@
 						
 					</table>
 					<br>
-					<button type="submit" class="btn_main" name="planAndResultSubmit" value="2" form="my_form" >削除</button>
+					<button type="submit" class="btn_main" name="planAndResultSubmit" value="2" form="my_form" >クリア</button>
 					<button type="submit" class="btn_main" name="planAndResultSubmit" value="0" form="my_form" >保存</button>
 					<button type="submit" class="btn_main" name="planAndResultSubmit" value="1" form="my_form" >確定</button>
 				</form>

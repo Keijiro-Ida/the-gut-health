@@ -3,6 +3,7 @@
 <%@ page import="model.PlanAndResult, model.GetMealActLogic, java.util.*, model.*, DAO.*, java.time.format.DateTimeFormatter, java.time.Duration"%>
 <% PlanAndResult planAndResult = (PlanAndResult)session.getAttribute("planAndResult");
    ArrayList<MealAct> mealActList = (ArrayList<MealAct>)session.getAttribute("mealActList");
+   ArrayList<String> mealActList_str = (ArrayList<String>)request.getAttribute("mealActList_str");
    long[] durationMinutes = (long[])request.getAttribute("durationMinutes");
    int[] score = (int[])request.getAttribute("score");
    long[] digestionMinutes = (long[])request.getAttribute("digestionMinutes");
@@ -11,7 +12,6 @@
    Map<MealGenre, ArrayList<Meal>> mealMap = (Map<MealGenre, ArrayList<Meal>>)request.getAttribute("mealMap");
    ArrayList<MealGenre> genreList =(ArrayList<MealGenre>)request.getAttribute("genreList");
    ArrayList<String> threeMealsList = (ArrayList<String>)request.getAttribute("threeMealsList");
-   MealDAO mealDAO = new MealDAO();
 
 	
    Calendar now = Calendar.getInstance();
@@ -57,7 +57,7 @@
 										<%=mealActList.get(j).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(j).getMealId()).getMealName() %>
+											<%=mealActList_str.get(j) %>
 										</td>
 									
 									<% } %>
@@ -71,7 +71,7 @@
 											<%=mealActList.get(j+1).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(j+1).getMealId()).getMealName() %>
+											<%=mealActList_str.get(j+1) %>
 										</td>
 									
 									<% } %>
@@ -135,7 +135,7 @@
 											<%=mealActList.get(j+2).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(j+2).getMealId()).getMealName() %>
+											<%=mealActList_str.get(j+2) %>
 										</td>
 									
 									<% } %>
@@ -149,7 +149,7 @@
 											<%=mealActList.get(j+3).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(j+3).getMealId()).getMealName() %>
+											<%=mealActList_str.get(j+3) %>
 									
 										</td>
 									
@@ -213,7 +213,7 @@
 											<%=mealActList.get(8).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(8).getMealId()).getMealName() %>
+											<%=mealActList_str.get(8)%>
 			
 										</td>
 									
@@ -228,7 +228,7 @@
 											<%=mealActList.get(9).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(9).getMealId()).getMealName() %>
+											<%=mealActList_str.get(9) %>
 										</td>
 									
 									<% } %>
@@ -288,7 +288,7 @@
 											<%=mealActList.get(10).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(10).getMealId()).getMealName() %>
+											<%=mealActList_str.get(10) %>
 										</td>
 									
 									<% } %>
@@ -302,7 +302,7 @@
 											<%=mealActList.get(11).getActTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) %>
 										</td>
 										<td>
-											<%=mealDAO.selectMealByMealId(mealActList.get(11).getMealId()).getMealName() %>
+											<%=mealActList_str.get(11) %>
 										</td>
 									
 									<% } %>

@@ -24,10 +24,12 @@ import DAO.MealDAO;
 import DAO.PlanAndResultDAO;
 import model.CreatePlanAndResultLogic;
 import model.DefaultPlanAndResult;
+import model.GetDefaultNameListLogic;
 import model.GetDurationMinutesLogic;
 import model.GetMealActLogic;
 import model.GetMealGenreListLogic;
 import model.GetMealListLogic;
+import model.GetMealNameListLogic;
 import model.GetPlanAndResultByUsersLogic;
 import model.GetScoreLogic;
 import model.GetThreeMealsNameLogic;
@@ -96,6 +98,9 @@ public class MainServlet extends HttpServlet {
 		mealActList.add(mealAct11);
 		mealActList.add(mealAct12);
 
+		GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
+		ArrayList<String> mealActList_str = mealNameBO.execute(mealActList);
+
 		MealDAO mealDAO = new MealDAO();
 		FoodDAO foodDAO = new FoodDAO();
 
@@ -140,6 +145,7 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
 		request.setAttribute("digestionMinutes", digestionMinutes);
 		session.setAttribute("mealActList", mealActList);
+		request.setAttribute("mealActList_str", mealActList_str);
 		session.setAttribute("planAndResult", planAndResult);
 
 		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
@@ -158,6 +164,8 @@ public class MainServlet extends HttpServlet {
 		DefaultPlanAndResult defaultSetting = dao.findByUsrId(users.getUsrId());
 		ArrayList<String> timeList = new ArrayList<String>();
 		ArrayList<Integer> mealIdList = new ArrayList<Integer>();
+		GetDefaultNameListLogic defaultNameListBO = new GetDefaultNameListLogic();
+		ArrayList<String> defaultNameList = defaultNameListBO.execute(defaultSetting);
 
 		if (defaultSetting != null) {
 
@@ -178,6 +186,7 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("defaultSetting", defaultSetting);
 		request.setAttribute("timeList", timeList);
 		request.setAttribute("mealIdList", mealIdList);
+		request.setAttribute("defaultNameList", defaultNameList);
 
 		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
 		ArrayList<String> threeMealsList = threeMealsName.execute();
@@ -264,6 +273,8 @@ public class MainServlet extends HttpServlet {
 				mealActList.add(i - 1, null);
 			}
 		}
+		GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
+		ArrayList<String> mealActList_str = mealNameBO.execute(mealActList);
 
 		MealDAO mealDAO = new MealDAO();
 		FoodDAO foodDAO = new FoodDAO();
@@ -325,31 +336,6 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("mealMap", mealMap);
 		request.setAttribute("genreList", genreList);
 
-		DefaultPlanAndResultDAO dao = new DefaultPlanAndResultDAO();
-		DefaultPlanAndResult defaultSetting = dao.findByUsrId(users.getUsrId());
-		ArrayList<String> timeList = new ArrayList<String>();
-		ArrayList<Integer> mealIdList = new ArrayList<Integer>();
-
-		if (defaultSetting != null) {
-
-			timeList.add(defaultSetting.getBreakfastTime());
-			timeList.add(defaultSetting.getAmSnackTime());
-			timeList.add(defaultSetting.getLunchTime());
-			timeList.add(defaultSetting.getPmSnackTime());
-			timeList.add(defaultSetting.getDinnerTime());
-			timeList.add(defaultSetting.getNightSnackTime());
-			mealIdList.add(defaultSetting.getBreakfastId());
-			mealIdList.add(defaultSetting.getAmSnackID());
-			mealIdList.add(defaultSetting.getLunchId());
-			mealIdList.add(defaultSetting.getPmSnackId());
-			mealIdList.add(defaultSetting.getDinnerId());
-			mealIdList.add(defaultSetting.getNightSnackId());
-
-		}
-		request.setAttribute("defaultSetting", defaultSetting);
-		request.setAttribute("timeList", timeList);
-		request.setAttribute("mealIdList", mealIdList);
-
 		boolean isCommitted = false;
 		String isCommitted_str = request.getParameter("planAndResultSubmit");
 		if (isCommitted_str.equals("1")) {
@@ -398,6 +384,7 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("score", score);
 		session.setAttribute("planAndResult", planAndResult);
 		session.setAttribute("mealActList", mealActList);
+		request.setAttribute("mealActList_str", mealActList_str);
 
 		if (planAndResult.getIsCommitted() == false) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");

@@ -1,5 +1,6 @@
 package test;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,7 +14,7 @@ import model.users.Users;
 
 public class PostMealActTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		//testExecute1();
 		testExecute2();
 		//testExecute3();
@@ -21,7 +22,7 @@ public class PostMealActTest {
 		//testExecute5();
 	}
 
-	public static void testExecute1() {
+	public static void testExecute1() throws SQLException {
 		MealActDAO dao = new MealActDAO();
 		PostMealAct act = new PostMealAct(1, LocalDateTime.now(), 1, 1);
 		MealAct mealAct = dao.mealActCreate(act);
@@ -32,7 +33,7 @@ public class PostMealActTest {
 		}
 	}
 
-	public static void testExecute2() {
+	public static void testExecute2() throws SQLException {
 		PlanAndResultDAO dao = new PlanAndResultDAO();
 		PostPlanAndResult date = new PostPlanAndResult(1, LocalDate.now());
 		PlanAndResult act = dao.createPlanAndResult(date);

@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
@@ -47,10 +48,18 @@ public class CalendarServlet extends HttpServlet {
 				month = 1;
 				year++;
 			}
-			mc = myCalendarLogic.createMyCalendar(year, month, users);
+			try {
+				mc = myCalendarLogic.createMyCalendar(year, month, users);
+			} catch (SQLException e) {
+				response.sendRedirect("/WEB-INF/jsp/error.jsp");
+			}
 
 		} else {
-			mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH + 1), users);
+			try {
+				mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH + 1), users);
+			} catch (SQLException e) {
+				response.sendRedirect("/WEB-INF/jsp/error.jsp");
+			}
 		}
 		GetPlanAndResultByUsersLogic bo3 = new GetPlanAndResultByUsersLogic();
 		PlanAndResult todayPlanAndResult = bo3.execute(users);

@@ -45,7 +45,7 @@ public class DefaultPlanAndResultDAO {
 		return result;
 	}
 
-	public DefaultPlanAndResult findByUsrId(int usrId) {
+	public DefaultPlanAndResult findByUsrId(int usrId) throws SQLException {
 		DefaultPlanAndResult defaultSetting = null;
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -80,7 +80,7 @@ public class DefaultPlanAndResultDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return defaultSetting;
 	}

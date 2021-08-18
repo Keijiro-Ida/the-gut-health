@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -38,7 +39,11 @@ public class YearGraphServlet extends HttpServlet {
 		if (s_year != null && s_month != null) {
 			int year = Integer.parseInt(s_year);
 			int month = Integer.parseInt(s_month);
-			mc = myCalendarLogic.createMyCalendar(year, month, users);
+			try {
+				mc = myCalendarLogic.createMyCalendar(year, month, users);
+			} catch (SQLException e) {
+				response.sendRedirect("/WEB-INF/jsp/error.jsp");
+			}
 
 		} else {
 			mc = (MyCalendar) session.getAttribute("mc");

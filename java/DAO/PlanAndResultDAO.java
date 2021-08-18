@@ -19,7 +19,7 @@ import model.users.Users;
 public class PlanAndResultDAO {
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 
-	public PlanAndResult createPlanAndResult(PostPlanAndResult postPlanAndResult) {
+	public PlanAndResult createPlanAndResult(PostPlanAndResult postPlanAndResult) throws SQLException {
 		PlanAndResult planAndResult = null;
 
 		try (Connection conn = DriverManager.getConnection(
@@ -43,7 +43,7 @@ public class PlanAndResultDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 
-			return null;
+			throw e;
 		}
 		return planAndResult;
 	}
@@ -186,7 +186,7 @@ public class PlanAndResultDAO {
 		}
 	}
 
-	public ArrayList<PlanAndResult> getMonthPlanAndResultList(Users users, LocalDate localDate) {
+	public ArrayList<PlanAndResult> getMonthPlanAndResultList(Users users, LocalDate localDate) throws SQLException {
 		ArrayList<PlanAndResult> monthPlanAndResultList = new ArrayList<PlanAndResult>();
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -235,12 +235,12 @@ public class PlanAndResultDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return monthPlanAndResultList;
 	}
 
-	public PlanAndResult findByPlanAndResultId(int planAndResultId) {
+	public PlanAndResult findByPlanAndResultId(int planAndResultId) throws SQLException {
 		PlanAndResult planAndResult = null;
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -285,7 +285,7 @@ public class PlanAndResultDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return planAndResult;
 	}

@@ -16,7 +16,7 @@ public class MealActDAO {
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 	//データベースの情報を取得
 
-	public MealAct mealActCreate(PostMealAct postMealAct) {
+	public MealAct mealActCreate(PostMealAct postMealAct) throws SQLException {
 		MealAct mealAct = null;
 
 		try (Connection conn = DriverManager.getConnection(
@@ -43,7 +43,7 @@ public class MealActDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return mealAct;
 	}

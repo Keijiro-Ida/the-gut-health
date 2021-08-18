@@ -13,7 +13,7 @@ import model.MealGenre;
 public class MealGenreDAO {
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 
-	public ArrayList<MealGenre> selectMealGenreAll() {
+	public ArrayList<MealGenre> selectMealGenreAll() throws SQLException {
 		ArrayList<MealGenre> list = new ArrayList<>();
 
 		try (Connection conn = DriverManager.getConnection(
@@ -34,7 +34,7 @@ public class MealGenreDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return list;
 	}

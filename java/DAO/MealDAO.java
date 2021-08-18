@@ -14,7 +14,7 @@ public class MealDAO {
 
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 
-	public ArrayList<Meal> selectMealByMealGenre(int mealGenreId) {
+	public ArrayList<Meal> selectMealByMealGenre(int mealGenreId) throws SQLException {
 		ArrayList<Meal> list = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -37,12 +37,12 @@ public class MealDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return list;
 	}
 
-	public Meal selectMealByMealId(int mealId) {
+	public Meal selectMealByMealId(int mealId) throws SQLException {
 		Meal meal = null;
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -65,7 +65,7 @@ public class MealDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return meal;
 	}

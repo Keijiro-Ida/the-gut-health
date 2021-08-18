@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,7 +8,7 @@ import java.util.Calendar;
 import model.users.Users;
 
 public class MyCalendarLogic {
-	public MyCalendar createMyCalendar(int year, int month, Users users) {
+	public MyCalendar createMyCalendar(int year, int month, Users users) throws SQLException {
 		MyCalendar mc = new MyCalendar();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);

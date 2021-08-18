@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 public class ThreeMealsAndSnackDAO {
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 
-	public ArrayList<String> selectThreeMeals() {
+	public ArrayList<String> selectThreeMeals() throws SQLException {
 		ArrayList<String> list = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -29,7 +29,7 @@ public class ThreeMealsAndSnackDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return list;
 	}

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DAO.MealDAO;
@@ -7,7 +8,7 @@ import DAO.MealDAO;
 public class GetDefaultNameListLogic {
 	ArrayList<String> defaultMealNameList = new ArrayList<String>();
 
-	public ArrayList<String> execute(DefaultPlanAndResult defaultSetting) {
+	public ArrayList<String> execute(DefaultPlanAndResult defaultSetting) throws SQLException {
 
 		MealDAO mealDAO = new MealDAO();
 		if (defaultSetting != null) {

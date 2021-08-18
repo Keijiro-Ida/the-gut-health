@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +39,13 @@ public class DefaultSettingServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Users users = (Users) session.getAttribute("users");
 		DefaultPlanAndResultDAO dao = new DefaultPlanAndResultDAO();
-		DefaultPlanAndResult defaultSetting = dao.findByUsrId(users.getUsrId());
+		DefaultPlanAndResult defaultSetting = null;
+		try {
+			defaultSetting = dao.findByUsrId(users.getUsrId());
+		} catch (SQLException e) {
+			response.sendRedirect("/WEB-INF/jsp/error.jsp");
+		}
+
 		ArrayList<String> timeList = new ArrayList<String>();
 		ArrayList<Integer> mealIdList = new ArrayList<Integer>();
 
@@ -59,7 +66,12 @@ public class DefaultSettingServlet extends HttpServlet {
 
 		}
 		GetDefaultNameListLogic nameListBO = new GetDefaultNameListLogic();
-		ArrayList<String> defaultNameList = nameListBO.execute(defaultSetting);
+		ArrayList<String> defaultNameList = null;
+		try {
+			defaultNameList = nameListBO.execute(defaultSetting);
+		} catch (SQLException e) {
+			response.sendRedirect("/WEB-INF/jsp/error.jsp");
+		}
 
 		request.setAttribute("defaultSetting", defaultSetting);
 		request.setAttribute("timeList", timeList);
@@ -67,18 +79,38 @@ public class DefaultSettingServlet extends HttpServlet {
 		request.setAttribute("defaultNameList", defaultNameList);
 
 		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
-		ArrayList<MealGenre> genreList = getMealGenreBO.execute();
+		ArrayList<MealGenre> genreList = null;
+		try {
+			genreList = getMealGenreBO.execute();
+			if (genreList == null) {
+				response.sendRedirect("/WEB-INF/jsp/error.jsp");
+			}
+		} catch (SQLException e) {
+			response.sendRedirect("/WEB-INF/jsp/error.jsp");
+		}
 		GetMealListLogic getMealListBO = new GetMealListLogic();
 		Map<MealGenre, ArrayList<Meal>> mealMap = new HashMap<>();
 		for (MealGenre mealGenre : genreList) {
-			ArrayList<Meal> mealList = getMealListBO.execute(mealGenre.getMealGenreId());
-			mealMap.put(mealGenre, mealList);
+			try {
+				ArrayList<Meal> mealList = getMealListBO.execute(mealGenre.getMealGenreId());
+				mealMap.put(mealGenre, mealList);
+			} catch (SQLException e) {
+				response.sendRedirect("/WEB-INF/jsp/error.jsp");
+			}
 		}
 		request.setAttribute("mealMap", mealMap);
 		request.setAttribute("genreList", genreList);
 
 		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
-		ArrayList<String> threeMealsList = threeMealsName.execute();
+		ArrayList<String> threeMealsList = null;
+		try {
+			threeMealsList = threeMealsName.execute();
+			if (threeMealsList == null) {
+				response.sendRedirect("/WEB-INF/jsp/error.jsp");
+			}
+		} catch (SQLException e) {
+			response.sendRedirect("/WEB-INF/jsp/error.jsp");
+		}
 
 		request.setAttribute("threeMealsList", threeMealsList);
 
@@ -94,10 +126,18 @@ public class DefaultSettingServlet extends HttpServlet {
 		Users users = (Users) session.getAttribute("users");
 
 		DefaultPlanAndResultDAO dao = new DefaultPlanAndResultDAO();
-		DefaultPlanAndResult defaultSetting = dao.findByUsrId(users.getUsrId());
+		DefaultPlanAndResult defaultSetting = null;
+		try {
+			defaultSetting = dao.findByUsrId(users.getUsrId());
+		} catch (SQLException e) {
+			response.sendRedirect("/WEB-INF/jsp/error.jsp");
+		}
 		if (defaultSetting != null) {
 			DefaultPlanAndResultDAO defaultDAO = new DefaultPlanAndResultDAO();
-			defaultDAO.deleteByUsrId(users.getUsrId());
+			int result = defaultDAO.deleteByUsrId(users.getUsrId());
+			if (result != 1) {
+				response.sendRedirect("/WEB-INF/jsp/error.jsp");
+			}
 		}
 		String isRegist_str = request.getParameter("defaultSubmit");
 		if (isRegist_str.equals("1")) {

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DAO.MealDAO;
@@ -7,7 +8,7 @@ import DAO.MealDAO;
 public class GetMealNameListLogic {
 	ArrayList<String> mealNameList = new ArrayList<String>();
 
-	public ArrayList<String> execute(ArrayList<MealAct> mealActList) {
+	public ArrayList<String> execute(ArrayList<MealAct> mealActList) throws SQLException {
 		MealDAO mealDAO = new MealDAO();
 		for (int i = 0; i < 12; i++) {
 			if (mealActList.get(i) != null) {

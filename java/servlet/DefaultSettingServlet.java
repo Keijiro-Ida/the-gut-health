@@ -19,8 +19,10 @@ import model.CreateDefaultPlanAndResultLogic;
 import model.DefaultPlanAndResult;
 import model.GetDefaultNameListLogic;
 import model.GetMealGenreListLogic;
+import model.GetMealIdListLogic;
 import model.GetMealListLogic;
 import model.GetThreeMealsNameLogic;
+import model.GetTimeListLogic;
 import model.Meal;
 import model.MealGenre;
 import model.PostDefaultPlanAndResult;
@@ -46,25 +48,11 @@ public class DefaultSettingServlet extends HttpServlet {
 			response.sendRedirect("/WEB-INF/jsp/error.jsp");
 		}
 
-		ArrayList<String> timeList = new ArrayList<String>();
-		ArrayList<Integer> mealIdList = new ArrayList<Integer>();
+		GetTimeListLogic timeListBO = new GetTimeListLogic();
+		ArrayList<String> timeList = timeListBO.execute(defaultSetting);
+		GetMealIdListLogic mealIdListBO = new GetMealIdListLogic();
+		ArrayList<Integer> mealIdList = mealIdListBO.execute(defaultSetting);
 
-		if (defaultSetting != null) {
-
-			timeList.add(defaultSetting.getBreakfastTime());
-			timeList.add(defaultSetting.getAmSnackTime());
-			timeList.add(defaultSetting.getLunchTime());
-			timeList.add(defaultSetting.getPmSnackTime());
-			timeList.add(defaultSetting.getDinnerTime());
-			timeList.add(defaultSetting.getNightSnackTime());
-			mealIdList.add(defaultSetting.getBreakfastId());
-			mealIdList.add(defaultSetting.getAmSnackID());
-			mealIdList.add(defaultSetting.getLunchId());
-			mealIdList.add(defaultSetting.getPmSnackId());
-			mealIdList.add(defaultSetting.getDinnerId());
-			mealIdList.add(defaultSetting.getNightSnackId());
-
-		}
 		GetDefaultNameListLogic nameListBO = new GetDefaultNameListLogic();
 		ArrayList<String> defaultNameList = null;
 		try {

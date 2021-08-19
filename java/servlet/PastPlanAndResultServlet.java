@@ -19,7 +19,9 @@ import javax.servlet.http.HttpSession;
 
 import DAO.MealActDAO;
 import model.GetDigestionMinutesLogic;
+import model.GetDigestionMinutes_strLogic;
 import model.GetDurationMinutesLogic;
+import model.GetDuration_strLogic;
 import model.GetMealActListLogic;
 import model.GetMealActLogic;
 import model.GetMealGenreListLogic;
@@ -85,10 +87,8 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		request.setAttribute("mealActList_str", mealActList_str);
 
 		long[] durationMinutes = new long[10];
-		String[] durationMinutes_str = new String[10];
 		int[] score = new int[10];
 		long[] digestionMinutes = new long[12];
-		String[] digestionMinutes_str = new String[12];
 
 		GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
 		durationMinutes = durationBO.execute(mealActList);
@@ -102,20 +102,11 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		GetScoreLogic scoreBO = new GetScoreLogic();
 		score = scoreBO.execute(digestionMinutes, durationMinutes);
 
-		for (int i = 0; i < 10; i++) {
-			if (durationMinutes[i] != 0) {
-				long hour = durationMinutes[i] / 60;
-				long minutes = durationMinutes[i] - hour * 60;
-				durationMinutes_str[i] = hour + "時間" + minutes + "分";
-			}
-		}
-		for (int i = 0; i < 12; i++) {
-			if (digestionMinutes[i] != 0) {
-				long hour = digestionMinutes[i] / 60;
-				long minutes = digestionMinutes[i] - hour * 60;
-				digestionMinutes_str[i] = hour + "時間" + minutes + "分";
-			}
-		}
+		GetDuration_strLogic duration_strBO = new GetDuration_strLogic();
+		String[] durationMinutes_str = duration_strBO.execute(durationMinutes); //スキマ時間 文字列
+
+		GetDigestionMinutes_strLogic digestion_strBO = new GetDigestionMinutes_strLogic(); //消化時間 文字列
+		String[] digestionMinutes_str = digestion_strBO.execute(digestionMinutes);
 
 		request.setAttribute("durationMinutes", durationMinutes);
 		request.setAttribute("durationMinutes_str", durationMinutes_str);
@@ -182,71 +173,27 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		PlanAndResult planAndResult = (PlanAndResult) session.getAttribute("planAndResult");
 		ArrayList<MealAct> mealActList = (ArrayList<MealAct>) session.getAttribute("mealActList");
-		PostMealActLogic bo = new PostMealActLogic();
 
 		for (int i = 1; i <= 12; i++) {
 			String mealId_String = request.getParameter("meal_name" + i);
 			String meal_time_String = request.getParameter("meal_time" + i);
-
 			if (!("0".equals(mealId_String)) && !("".equals(meal_time_String))
-					&& mealId_String != null && meal_time_String != null) {
-				int mealId = Integer.parseInt(mealId_String);
-				LocalTime meal_LocalTime = LocalTime.parse(meal_time_String,
-						DateTimeFormatter.ofPattern("HH:mm"));
-				LocalDateTime meal_LocalDateTime = LocalDateTime.of(planAndResult.getPlanAndResultDate(),
-						meal_LocalTime);
-				PostMealAct postMealAct = new PostMealAct(planAndResult.getPlanAndResultId(), meal_LocalDateTime,
-						mealId,
-						i);
-				MealActDAO mealActDAO = new MealActDAO();
-				mealActDAO.deleteMealAct(planAndResult.getPlanAndResultId(), i);
+					&& mealId_String != null && meal_time_String != null) { //食事行為の登録、食事計画と実績の登録
+
 				MealAct mealAct = null;
 				try {
-					mealAct = bo.execute(postMealAct);
+					mealAct = getMealAct(i, mealId_String, meal_time_String, planAndResult);
+					if (mealAct == null) {
+						response.sendRedirect("/WEB-INF/error.jsp");
+					}
 				} catch (SQLException e) {
 					response.sendRedirect("/WEB-INF/error.jsp");
 				}
-				switch (i) {
-				case 1:
-					planAndResult.setActIdBreakfastPlan(mealAct.getActId());
-					break;
-				case 2:
-					planAndResult.setActIdBreakfast(mealAct.getActId());
-					break;
-				case 3:
-					planAndResult.setActIdAMSnackPlan(mealAct.getActId());
-					break;
-				case 4:
-					planAndResult.setActIdAMSnack(mealAct.getActId());
-					break;
-				case 5:
-					planAndResult.setActIdLunchPlan(mealAct.getActId());
-					break;
-				case 6:
-					planAndResult.setActIdLunch(mealAct.getActId());
-					break;
-				case 7:
-					planAndResult.setActIdPMSnackPlan(mealAct.getActId());
-					break;
-				case 8:
-					planAndResult.setActIdPMSnack(mealAct.getActId());
-					break;
-				case 9:
-					planAndResult.setActIdDinnerPlan(mealAct.getActId());
-					break;
-				case 10:
-					planAndResult.setActIdDinner(mealAct.getActId());
-					break;
-				case 11:
-					planAndResult.setActIdNightSnackPlan(mealAct.getActId());
-					break;
-				case 12:
-					planAndResult.setActIdNightSnack(mealAct.getActId());
-					break;
-				}
+				setPlanAndResult(i, planAndResult, mealAct);//食事計画と実績インスタンスに食事行為IDを登録
+
 				mealActList.remove(i - 1);
 				mealActList.add(i - 1, mealAct);
-			} else {
+			} else { //登録が不正の場合はnullを登録
 				mealActList.remove(i - 1);
 				mealActList.add(i - 1, null);
 			}
@@ -261,10 +208,8 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		request.setAttribute("mealActList_str", mealActList_str);
 
 		long[] durationMinutes = new long[10];
-		String[] durationMinutes_str = new String[10];
 		int[] score = new int[10];
 		long[] digestionMinutes = new long[12];
-		String[] digestionMinutes_str = new String[12];
 
 		GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
 		durationMinutes = durationBO.execute(mealActList);
@@ -277,20 +222,11 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		GetScoreLogic scoreBO = new GetScoreLogic();
 		score = scoreBO.execute(digestionMinutes, durationMinutes);
 
-		for (int i = 0; i < 10; i++) {
-			if (durationMinutes[i] != 0) {
-				long hour = durationMinutes[i] / 60;
-				long minutes = durationMinutes[i] - hour * 60;
-				durationMinutes_str[i] = hour + "時間" + minutes + "分";
-			}
-		}
-		for (int i = 0; i < 12; i++) {
-			if (digestionMinutes[i] != 0) {
-				long hour = digestionMinutes[i] / 60;
-				long minutes = digestionMinutes[i] - hour * 60;
-				digestionMinutes_str[i] = hour + "時間" + minutes + "分";
-			}
-		}
+		GetDuration_strLogic duration_strBO = new GetDuration_strLogic();
+		String[] durationMinutes_str = duration_strBO.execute(durationMinutes); //スキマ時間 文字列
+
+		GetDigestionMinutes_strLogic digestion_strBO = new GetDigestionMinutes_strLogic(); //消化時間 文字列
+		String[] digestionMinutes_str = digestion_strBO.execute(digestionMinutes);
 
 		request.setAttribute("durationMinutes", durationMinutes);
 		request.setAttribute("durationMinutes_str", durationMinutes_str);
@@ -370,4 +306,66 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		}
 
 	}
+
+	public MealAct getMealAct(int i, String mealId_String, String meal_time_String, PlanAndResult planAndResult)
+			throws SQLException {//食事行為の登録、食事計画と実績の登録
+		MealAct mealAct = null;
+		PostMealActLogic bo = new PostMealActLogic();
+
+		int mealId = Integer.parseInt(mealId_String);
+		LocalTime meal_LocalTime = LocalTime.parse(meal_time_String,
+				DateTimeFormatter.ofPattern("HH:mm"));
+		LocalDateTime meal_LocalDateTime = LocalDateTime.of(planAndResult.getPlanAndResultDate(),
+				meal_LocalTime);
+		PostMealAct postMealAct = new PostMealAct(planAndResult.getPlanAndResultId(), meal_LocalDateTime,
+				mealId,
+				i);
+		MealActDAO mealActDAO = new MealActDAO();
+		mealActDAO.deleteMealAct(planAndResult.getPlanAndResultId(), i); //以前の登録を削除
+
+		mealAct = bo.execute(postMealAct);
+		return mealAct;
+	}
+
+	public void setPlanAndResult(int i, PlanAndResult planAndResult, MealAct mealAct) {
+		switch (i) { //食事計画と実績インスタンスに食事行為IDを登録
+		case 1:
+			planAndResult.setActIdBreakfastPlan(mealAct.getActId());
+			break;
+		case 2:
+			planAndResult.setActIdBreakfast(mealAct.getActId());
+			break;
+		case 3:
+			planAndResult.setActIdAMSnackPlan(mealAct.getActId());
+			break;
+		case 4:
+			planAndResult.setActIdAMSnack(mealAct.getActId());
+			break;
+		case 5:
+			planAndResult.setActIdLunchPlan(mealAct.getActId());
+			break;
+		case 6:
+			planAndResult.setActIdLunch(mealAct.getActId());
+			break;
+		case 7:
+			planAndResult.setActIdPMSnackPlan(mealAct.getActId());
+			break;
+		case 8:
+			planAndResult.setActIdPMSnack(mealAct.getActId());
+			break;
+		case 9:
+			planAndResult.setActIdDinnerPlan(mealAct.getActId());
+			break;
+		case 10:
+			planAndResult.setActIdDinner(mealAct.getActId());
+			break;
+		case 11:
+			planAndResult.setActIdNightSnackPlan(mealAct.getActId());
+			break;
+		case 12:
+			planAndResult.setActIdNightSnack(mealAct.getActId());
+			break;
+		}
+	}
+
 }

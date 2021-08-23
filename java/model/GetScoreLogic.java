@@ -8,31 +8,26 @@ public class GetScoreLogic {
 
 			if (durationMinutes[j] == 0) {
 				score[j] = 0;
-			} else if (durationMinutes[j] >= digestionMinutes[j] + 180) {
-				score[j] = 80;
-
-			} else if (durationMinutes[j] >= digestionMinutes[j] + 150) {
-				score[j] = 80;
 
 			} else if (durationMinutes[j] >= digestionMinutes[j] + 120) {
-				score[j] = 60;
-
-			} else if (durationMinutes[j] >= digestionMinutes[j] + 90) {
-				score[j] = 50;
+				score[j] = 15;
 
 			} else if (durationMinutes[j] >= digestionMinutes[j] + 60) {
-				score[j] = 40;
-
-			} else if (durationMinutes[j] >= digestionMinutes[j]) {
-				score[j] = 30;
-
-			} else if (durationMinutes[j] >= digestionMinutes[j] - 60) {
 				score[j] = 10;
 
-			} else if (durationMinutes[j] >= digestionMinutes[j] - 90) {
+			} else if (durationMinutes[j] > digestionMinutes[j]) {
+				score[j] = 5;
+
+			} else if (durationMinutes[j] == digestionMinutes[j]) {
 				score[j] = 0;
-			} else {
+
+			} else if (durationMinutes[j] >= digestionMinutes[j] - 60) {
+				score[j] = -5;
+
+			} else if (durationMinutes[j] >= digestionMinutes[j] - 120) {
 				score[j] = -10;
+			} else {
+				score[j] = -15;
 
 			}
 		}

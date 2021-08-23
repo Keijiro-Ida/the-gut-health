@@ -26,7 +26,7 @@
 				<ul class="float">
 					<li><a href="?year=<%=mc.getYear() %>&month=<%=mc.getMonth()-1 %>">前月</a></li>
 					<li><a href="?year=<%=mc.getYear() %>&month=<%=mc.getMonth()+1 %>">翌月</a></li>
-					<li><a href="/the-gut-healthy/MonthGraphServlet" >スコアグラフ</a></li>
+					<li><a href="/the-gut-healthy/MonthGraphServlet" >偏差値グラフ</a></li>
 					<li><a href="/the-gut-healthy/YearGraphServlet?year=<%=mc.getYear() %>&month=<%=mc.getMonth() %>">月平均グラフ</a></li>
 				</ul>
 			</div>
@@ -58,7 +58,7 @@
 											<%= mc.getData()[i][j] %>
 											<br>
 											<span class="score">
-											<%= mc.getPlanAndResult_cal()[i][j].getScore() %>点
+											<%= mc.getPlanAndResult_cal()[i][j].getScore() %>
 											</span>
 											<br>
 											</a>
@@ -67,7 +67,7 @@
 										<td><a href="/the-gut-healthy/PastPlanAndResultServlet?planAndResultId=<%=mc.getPlanAndResult_cal()[i][j].getPlanAndResultId()%>" class="other" >
 											<%= mc.getData()[i][j] %>
 											<br>
-									 		<span class="score"><%= mc.getPlanAndResult_cal()[i][j].getScore() %>点
+									 		<span class="score"><%= mc.getPlanAndResult_cal()[i][j].getScore() %>
 											</span>
 											</a>
 										</td>

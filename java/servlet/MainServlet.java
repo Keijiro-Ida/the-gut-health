@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import DAO.DefaultPlanAndResultDAO;
 import DAO.MealActDAO;
 import DAO.PlanAndResultDAO;
@@ -57,6 +60,11 @@ public class MainServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		Logger logger = LogManager.getLogger("Logger");
+		logger.trace("Logged by logger.trace");
+		logger.debug("Logged by logger.debug");
+		logger.info("Logged by logger.info");
 
 		HttpSession session = request.getSession();
 		Users users = (Users) session.getAttribute("users");
@@ -174,6 +182,7 @@ public class MainServlet extends HttpServlet {
 
 		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic(); //3食と間食の名前の獲得
 		ArrayList<String> threeMealsList = null;
+
 		try {
 			threeMealsList = threeMealsName.execute();
 			if (threeMealsList == null) {
@@ -257,8 +266,8 @@ public class MainServlet extends HttpServlet {
 		GetDigestionMinutes_strLogic digestion_strBO = new GetDigestionMinutes_strLogic(); //消化時間 文字列
 		String[] digestionMinutes_str = digestion_strBO.execute(digestionMinutes);
 
-		int totalScorePlan = 0; //トータルスコア
-		int totalScore = 0;
+		int totalScorePlan = 50; //トータルスコア
+		int totalScore = 50;
 		for (int i = 0; i < 10; i += 2) { //トータルスコアの獲得
 			totalScorePlan += score[i];
 			totalScore += score[i + 1];

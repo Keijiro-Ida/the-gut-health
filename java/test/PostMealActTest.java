@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.apache.log4j.Logger;
+
 import DAO.MealActDAO;
 import DAO.PlanAndResultDAO;
 import model.MealAct;
@@ -16,10 +18,11 @@ public class PostMealActTest {
 
 	public static void main(String[] args) throws SQLException {
 		//testExecute1();
-		testExecute2();
+		//testExecute2();
 		//testExecute3();
 		//testExecute4();
 		//testExecute5();
+		testExecute6();
 	}
 
 	public static void testExecute1() throws SQLException {
@@ -81,5 +84,11 @@ public class PostMealActTest {
 		} else {
 			System.out.println("失敗");
 		}
+	}
+
+	public static void testExecute6() {
+		Logger logger = Logger.getLogger("MyLogger");
+		// ログ出力
+		logger.info("This is info.");
 	}
 }

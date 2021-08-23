@@ -3,7 +3,13 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * 食事計画と実績クラス
+ * @author keijiro
+ */
+
 public class PlanAndResult implements Serializable {
+	/** ユーザーID*/
 	private int usrId;
 	private int planAndResultId;
 	private LocalDate planAndResultDate;

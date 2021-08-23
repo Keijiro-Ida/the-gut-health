@@ -56,7 +56,7 @@
 			labels: dateList_str,
 			datasets:[
 				{ 
-					label:'日別スコア',
+					label:'日別偏差値',
 					data: scoreList,
 					borderColor: "rgba(200,112,126,1)",
 					backGroundColor:"rgba(0, 0, 0, 0)"
@@ -68,11 +68,11 @@
 			scales: {
 				yAxes: [{
 					ticks: {
-						suggestedMax:140,
+						suggestedMax:80,
 						suggestedMin: 0,
 						stepSize: 10,
 						callback: function(value, index, values){
-							return value + '点'
+							return value + ''
 						}
 					}
 				}]

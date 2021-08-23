@@ -60,7 +60,7 @@
 			labels: monthList_str,
 			datasets:[
 				{ 
-					label:'月平均スコア',
+					label:'月平均偏差値',
 					data: averageScoreList,
 					borderColor: "rgba(100,100,255,1)",
 					backGroundColor:"rgba(0, 0, 0, 0)"
@@ -72,11 +72,11 @@
 			scales: {
 				yAxes: [{
 					ticks: {
-						suggestedMax:140,
+						suggestedMax:80,
 						suggestedMin: 0,
 						stepSize: 10,
 						callback: function(value, index, values){
-							return value + '点'
+							return value + ''
 						}
 					}
 				}]

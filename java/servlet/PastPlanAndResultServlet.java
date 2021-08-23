@@ -234,8 +234,8 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
 		request.setAttribute("score", score);
 
-		int totalScorePlan = 0;
-		int totalScore = 0;
+		int totalScorePlan = 50;
+		int totalScore = 50;
 		for (int i = 0; i < 10; i += 2) {
 			totalScorePlan += score[i];
 			totalScore += score[i + 1];

@@ -31,13 +31,13 @@ public class CalendarServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Users users = (Users) session.getAttribute("users");
 
-		String s_year = request.getParameter("year");
-		String s_month = request.getParameter("month");
+		String s_year = request.getParameter("year"); //カレンダーの年を獲得
+		String s_month = request.getParameter("month"); //月を獲得
 
-		Calendar now = Calendar.getInstance();
+		Calendar now = Calendar.getInstance(); //現在の時間のカレンダーインスタンスを獲得
 		MyCalendarLogic myCalendarLogic = new MyCalendarLogic();
 		MyCalendar mc = null;
-		if (s_year != null && s_month != null) {
+		if (s_year != null && s_month != null) { //入力値がある場合の設定
 			int year = Integer.parseInt(s_year);
 			int month = Integer.parseInt(s_month);
 			if (month == 0) {
@@ -54,7 +54,7 @@ public class CalendarServlet extends HttpServlet {
 				response.sendRedirect("/WEB-INF/jsp/error.jsp");
 			}
 
-		} else {
+		} else { //入力値がない場合は現在時間で取得
 			try {
 				mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH + 1), users);
 			} catch (SQLException e) {

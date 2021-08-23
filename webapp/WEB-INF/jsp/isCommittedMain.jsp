@@ -33,7 +33,7 @@
 					<ul><li><a href="/the-gut-healthy/Point1Servlet">腸活とは？</a></li>
 						<li><a href="/the-gut-healthy/Point2Servlet">消化スピード</a></li>
 						<li><a href="/the-gut-healthy/CalendarServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1 %>">カレンダー</a></li>
-						<li><a href="/the-gut-healthy/MonthGraphServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1%>">スコアグラフ</a></li>
+						<li><a href="/the-gut-healthy/MonthGraphServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1%>">偏差値グラフ</a></li>
 					</ul>
 			</div>
 			<br>
@@ -115,15 +115,15 @@
 							<% } %>
 						</tr>
 						<tr>
-							<th>スコア</th>
+							<th>偏差値上昇</th>
 							<% if(score[j] != 0) {%>
 							
-							<td><%=score[j] %> 点</td>
+							<td><%=score[j] %></td>
 							<% } else { %>
 							<td></td>
 							<% } %>
 							<% if(score[j+1] != 0) {%>
-							<td><%=score[j+1] %> 点</td>
+							<td><%=score[j+1] %></td>
 						
 							<% } else { %>
 							<td></td>
@@ -194,14 +194,14 @@
 							<% } %>
 						</tr>
 						<tr class="snack">
-							<th>スコア</th>
+							<th>偏差値上昇</th>
 							<% if(score[j+2] != 0) {%>
-							<td><%=score[j+2] %> 点</td>
+							<td><%=score[j+2] %></td>
 							<% } else { %>
 							<td></td>
 							<% } %>
 							<% if(score[j+3] != 0) {%>
-							<td><%=score[j+3] %> 点</td>
+							<td><%=score[j+3] %></td>
 							<% } else { %>
 							<td></td>
 							<% } %>
@@ -269,14 +269,14 @@
 							<% } %>
 						</tr>
 						<tr>
-							<th>スコア</th>
+							<th>偏差値上昇</th>
 							<% if(score[8] != 0) {%>
-							<td><%=score[8] %> 点</td>
+							<td><%=score[8] %></td>
 							<% } else { %>
 							<td></td>
 							<% } %>
 							<% if(score[9] != 0) {%>
-							<td><%=score[9] %> 点</td>
+							<td><%=score[9] %></td>
 							<% } else { %>
 							<td></td>
 							<% } %>
@@ -341,23 +341,22 @@
 					
 					
 					<tr id="isCommittedScore">
-						<th>TOTALスコア</th>
-						<td><%=planAndResult.getScorePlan() %> / 120 点</td>
+						<th>腸活偏差値</th>
+						<td><span class="score"><%=planAndResult.getScorePlan() %></span></td>
 						<td></td>
-						<td><%=planAndResult.getScore() %> / 120 点</td>
+						<td><span class="score"><%=planAndResult.getScore() %></span></td>
 						<td>
-						<% if(planAndResult.getScore() > 120 ) { %>
-							<%= ScoreMessage.getMsg140() %>
-						<% } else if(planAndResult.getScore() >= 100) {%>
-							<%= ScoreMessage.getMsg120() %>
-						<% } else if(planAndResult.getScore() >= 80) {%>
-							<%= ScoreMessage.getMsg100() %>
-						<% } else if(planAndResult.getScore() >= 60) {%>
-							<%= ScoreMessage.getMsg80() %>
-						<% } else if(planAndResult.getScore() >= 40) {%>
-							<%= ScoreMessage.getMsg60() %>
-						<% } %>
-						
+							<% if(planAndResult.getScore() > 75 ) { %>
+								<%= ScoreMessage.getMsg75() %>
+							<% } else if(planAndResult.getScore() >= 65) {%>
+								<%= ScoreMessage.getMsg65() %>
+							<% } else if(planAndResult.getScore() >= 55) {%>
+								<%= ScoreMessage.getMsg55() %>
+							<% } else if(planAndResult.getScore() >= 45) {%>
+								<%= ScoreMessage.getMsg45() %>
+							<% } else if(planAndResult.getScore() >= 35) {%>
+								<%= ScoreMessage.getMsg35() %>
+							<% } %>
 						</td>
 					</tr>
 					

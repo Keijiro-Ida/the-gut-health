@@ -2,12 +2,12 @@ package model;
 
 public class ScoreMessage {
 
-	static String[] msg35 = { "がんばってますね", "がんばれ〜！", "もう少し!", "もう少しでツルツルの腸が!", "ファイト!!", "ガンバ！！", "あとちょっとです！！" };
-	static String[] msg45 = { "がんばってますね", "継続してきましょう！", "すばらしい!", "腸のツルツルレベル上昇中" };
+	static String[] msg35 = { "がんばれ〜！", "ファイト!!", "ガンバ！！", "スキマ時間取りましょう！" };
+	static String[] msg45 = { "がんばってますね", "継続してきましょう！", "腸のツルツルレベル上昇中です。", "ナイスファイトです!" };
 	static String[] msg55 = { "素晴らしいです!", "よくがんばりました！", "腸が歓喜しています！", "すごい!継続しましょう！" };
 	static String[] msg65 = { "あなたの腸はアスリートレベルです", "素晴らしい!!", "スゴッ", "ヤバッ", "腸が喜んでます!!", "あなたすごいですね。", "半端ない!",
 			"あなたの腸はつるつるです。" };
-	static String[] msg75 = { "あなたの腸は超人レベルです", "鬼ヤバッ", "半端ないッ!!", "あなたの腸は最強です" };
+	static String[] msg75 = { "あなたの腸は超人レベルです", "鬼ヤバッ", "半端ないッ!!", "あなたの腸は最強です。" };
 	static int num35 = (int) (Math.random() * (msg35.length));
 	static int num45 = (int) (Math.random() * (msg45.length));
 	static int num55 = (int) (Math.random() * (msg55.length));

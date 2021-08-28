@@ -48,7 +48,7 @@ public class MealActDAO {
 		return mealAct;
 	}
 
-	public MealAct selectByActId(int actId) {
+	public MealAct selectByActId(int actId) throws SQLException {
 		MealAct mealAct = null;
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -70,13 +70,12 @@ public class MealActDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return mealAct;
 	}
 
-	public int deleteMealAct(int planAndResultId, int threeMealsId) {
+	public int deleteMealAct(int planAndResultId, int threeMealsId) throws SQLException {
 
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -92,12 +91,11 @@ public class MealActDAO {
 			return result;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
+			throw e;
 		}
 	}
 
-	public int deleteMealActById(int mealActId) {
+	public int deleteMealActById(int mealActId) throws SQLException {
 
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -112,8 +110,7 @@ public class MealActDAO {
 			return result;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
+			throw e;
 		}
 	}
 }

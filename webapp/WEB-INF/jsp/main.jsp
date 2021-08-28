@@ -197,7 +197,7 @@
 								
 							</tr>
 							<tr>
-								<th>偏差値加算</th>
+								<th>ポイント</th>
 								<% if(score[j] != 0) {%>
 								
 								<td><%=score[j] %></td>
@@ -350,7 +350,7 @@
 								
 							</tr>
 							<tr class="snack">
-								<th>偏差値加算</th>
+								<th>ポイント</th>
 								<% if(score[j+2] != 0) {%>
 								<td><%=score[j+2] %></td>
 								<% } else { %>
@@ -494,7 +494,7 @@
 								<% } %>
 							</tr>
 							<tr>
-								<th>偏差値加算</th>
+								<th>ポイント</th>
 								<% if(score[8] != 0) {%>
 								<td><%=score[8] %></td>
 								<% } else { %>

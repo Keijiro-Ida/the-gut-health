@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
@@ -19,7 +18,7 @@ import model.PlanAndResult;
 import model.users.Users;
 
 /**
- * Servlet implementation class CalendarServlet
+ * カレンダー画面への遷移
  */
 @WebServlet("/CalendarServlet")
 public class CalendarServlet extends HttpServlet {
@@ -28,48 +27,48 @@ public class CalendarServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Users users = (Users) session.getAttribute("users");
+		try {
+			HttpSession session = request.getSession();
+			Users users = (Users) session.getAttribute("users");
 
-		String s_year = request.getParameter("year"); //カレンダーの年を獲得
-		String s_month = request.getParameter("month"); //月を獲得
+			String s_year = request.getParameter("year"); //カレンダーの年を獲得
+			String s_month = request.getParameter("month"); //月を獲得
 
-		Calendar now = Calendar.getInstance(); //現在の時間のカレンダーインスタンスを獲得
-		MyCalendarLogic myCalendarLogic = new MyCalendarLogic();
-		MyCalendar mc = null;
-		if (s_year != null && s_month != null) { //入力値がある場合の設定
-			int year = Integer.parseInt(s_year);
-			int month = Integer.parseInt(s_month);
-			if (month == 0) {
-				month = 12;
-				year--;
-			}
-			if (month == 13) {
-				month = 1;
-				year++;
-			}
-			try {
+			Calendar now = Calendar.getInstance(); //現在の時間のカレンダーインスタンスを獲得
+			MyCalendarLogic myCalendarLogic = new MyCalendarLogic();
+			MyCalendar mc = null;
+
+			//入力値がある場合の設定
+			if (s_year != null && s_month != null) {
+				int year = Integer.parseInt(s_year);
+				int month = Integer.parseInt(s_month);
+				if (month == 0) {
+					month = 12;
+					year--;
+				}
+				if (month == 13) {
+					month = 1;
+					year++;
+				}
 				mc = myCalendarLogic.createMyCalendar(year, month, users);
-			} catch (SQLException e) {
-				response.sendRedirect("/WEB-INF/jsp/error.jsp");
-			}
 
-		} else { //入力値がない場合は現在時間で取得
-			try {
+				//入力値がない場合は現在時間で取得
+			} else {
 				mc = myCalendarLogic.createMyCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH + 1), users);
-			} catch (SQLException e) {
-				response.sendRedirect("/WEB-INF/jsp/error.jsp");
 			}
+			GetPlanAndResultByUsersLogic bo3 = new GetPlanAndResultByUsersLogic();
+			PlanAndResult todayPlanAndResult = bo3.execute(users);
+
+			request.setAttribute("todayPlanAndResultId", todayPlanAndResult.getPlanAndResultId());
+
+			session.setAttribute("mc", mc);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/calendar.jsp");
+			dispatcher.forward(request, response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendRedirect("/the-gut-healthy/error.jsp");
 		}
-		GetPlanAndResultByUsersLogic bo3 = new GetPlanAndResultByUsersLogic();
-		PlanAndResult todayPlanAndResult = bo3.execute(users);
-
-		request.setAttribute("todayPlanAndResultId", todayPlanAndResult.getPlanAndResultId());
-
-		session.setAttribute("mc", mc);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/calendar.jsp");
-		dispatcher.forward(request, response);
 
 	}
-
 }

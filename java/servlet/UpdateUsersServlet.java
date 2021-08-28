@@ -14,7 +14,7 @@ import model.users.UpdateUsersLogic;
 import model.users.Users;
 
 /**
- * Servlet implementation class UpdateUsersServlet
+ * ユーザー情報更新の遷移
  */
 @WebServlet("/UpdateUsersServlet")
 public class UpdateUsersServlet extends HttpServlet {

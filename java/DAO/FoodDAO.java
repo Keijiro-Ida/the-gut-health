@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class FoodDAO {
-	public int selectDigestionMinutesFromId(int foodId) {
+	public int selectDigestionMinutesFromId(int foodId) throws SQLException {
 		ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 		int digestionMinutes = 0;
 		try (Connection conn = DriverManager.getConnection(
@@ -28,8 +28,7 @@ public class FoodDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return 0;
+			throw e;
 		}
 		return digestionMinutes;
 	}

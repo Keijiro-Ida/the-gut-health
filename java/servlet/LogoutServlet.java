@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class LogoutServlet
+ * ログアウトの遷移
  */
 @WebServlet("/LogoutServlet")
 public class LogoutServlet extends HttpServlet {

@@ -15,7 +15,7 @@ public class UsersDAO {
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 	//データベースの情報を取得
 
-	public Users findByLogin(Login login) {
+	public Users findByLogin(Login login) throws SQLException {
 		Users users = null;
 
 		try (Connection conn = DriverManager.getConnection(
@@ -36,13 +36,12 @@ public class UsersDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return users;
 	}
 
-	public int createUsers(SignUp signUp) {
+	public int createUsers(SignUp signUp) throws SQLException {
 
 		int result = 0;
 
@@ -61,13 +60,12 @@ public class UsersDAO {
 			return result;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
+			throw e;
 		}
 
 	}
 
-	public int updateUsers(Users users) {
+	public int updateUsers(Users users) throws SQLException {
 		int result = 0;
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -83,12 +81,11 @@ public class UsersDAO {
 
 			return result;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
+			throw e;
 		}
 	}
 
-	public Users findByUsrId(int usrId) {
+	public Users findByUsrId(int usrId) throws SQLException {
 		Users users = null;
 		// TODO 自動生成されたメソッド・スタブ
 		try (Connection conn = DriverManager.getConnection(
@@ -107,8 +104,7 @@ public class UsersDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return users;
 

@@ -13,7 +13,7 @@ import model.users.SignUp;
 import model.users.SignUpLogic;
 
 /**
- * Servlet implementation class SignUpServlet
+ * 新規登録の遷移
  */
 @WebServlet("/SignUpServlet")
 public class SignUpServlet extends HttpServlet {

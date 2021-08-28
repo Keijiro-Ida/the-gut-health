@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class PointServlet
+ * 腸活のポイント画面２への遷移
  */
 @WebServlet("/Point2Servlet")
 public class Point2Servlet extends HttpServlet {

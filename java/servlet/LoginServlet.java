@@ -15,7 +15,7 @@ import model.users.LoginLogic;
 import model.users.Users;
 
 /**
- * Servlet implementation class LoginServlet
+ * ログイン処理の遷移
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {

@@ -13,7 +13,7 @@ import model.PostDefaultPlanAndResult;
 public class DefaultPlanAndResultDAO {
 	ResourceBundle bundle = ResourceBundle.getBundle("properties.database");
 
-	public int createDefaultPlanAndResult(PostDefaultPlanAndResult postDefault) {
+	public int createDefaultPlanAndResult(PostDefaultPlanAndResult postDefault) throws SQLException {
 		int result = 0;
 
 		try (Connection conn = DriverManager.getConnection(
@@ -39,8 +39,7 @@ public class DefaultPlanAndResultDAO {
 			result = pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
+			throw e;
 		}
 		return result;
 	}
@@ -85,7 +84,7 @@ public class DefaultPlanAndResultDAO {
 		return defaultSetting;
 	}
 
-	public int deleteByUsrId(int usrId) {
+	public int deleteByUsrId(int usrId) throws SQLException {
 
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -98,8 +97,7 @@ public class DefaultPlanAndResultDAO {
 			int result = pstmt.executeUpdate();
 			return result;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
+			throw e;
 		}
 	}
 

@@ -1,10 +1,11 @@
 package model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GetMealActListLogic {
 
-	public ArrayList<MealAct> execute(PlanAndResult planAndResult) {
+	public ArrayList<MealAct> execute(PlanAndResult planAndResult) throws SQLException {
 		ArrayList<MealAct> mealActList = new ArrayList<MealAct>();
 		GetMealActLogic bo3 = new GetMealActLogic();
 		MealAct mealAct1 = bo3.execute(planAndResult.getActIdBreakfastPlan());

@@ -39,7 +39,7 @@ import model.PostMealActLogic;
 import model.UpdatePlanAndResultLogic;
 
 /**
- * Servlet implementation class PastPlanAndResultServlet
+ * 過去の食事計画と実績画面への遷移
  */
 @WebServlet("/PastPlanAndResultServlet")
 public class PastPlanAndResultServlet extends HttpServlet {
@@ -51,264 +51,199 @@ public class PastPlanAndResultServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		int planAndResultId = Integer.parseInt(request.getParameter("planAndResultId"));
-
-		GetPlanAndResultByIdLogic bo = new GetPlanAndResultByIdLogic();
-		PlanAndResult planAndResult = null;
 		try {
-			planAndResult = bo.execute(planAndResultId);
-			if (planAndResult == null) {
-				response.sendRedirect("/WEB-INF/error.jsp");
+			int planAndResultId = Integer.parseInt(request.getParameter("planAndResultId"));
+
+			GetPlanAndResultByIdLogic bo = new GetPlanAndResultByIdLogic();
+			PlanAndResult planAndResult = bo.execute(planAndResultId);
+
+			GetMealActLogic bo2 = new GetMealActLogic();
+			HttpSession session = request.getSession();
+
+			String isCommitted_str = request.getParameter("isCommitted");
+
+			if ("0".equals(isCommitted_str)) {
+				planAndResult.setIsCommitted(false);
+				UpdatePlanAndResultLogic bo3 = new UpdatePlanAndResultLogic();
+				bo3.execute(planAndResult);
 			}
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
+			GetMealActListLogic mealActListLogic = new GetMealActListLogic();
+			ArrayList<MealAct> mealActList = mealActListLogic.execute(planAndResult);
 
-		GetMealActLogic bo2 = new GetMealActLogic();
-		HttpSession session = request.getSession();
+			GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
+			ArrayList<String> mealActList_str = mealNameBO.execute(mealActList);
+			request.setAttribute("mealActList_str", mealActList_str);
 
-		String isCommitted_str = request.getParameter("isCommitted");
+			long[] durationMinutes = new long[10];
+			int[] score = new int[10];
+			long[] digestionMinutes = new long[12];
 
-		if ("0".equals(isCommitted_str)) {
-			planAndResult.setIsCommitted(false);
-			UpdatePlanAndResultLogic bo3 = new UpdatePlanAndResultLogic();
-			bo3.execute(planAndResult);
-		}
-		GetMealActListLogic mealActListLogic = new GetMealActListLogic();
-		ArrayList<MealAct> mealActList = mealActListLogic.execute(planAndResult);
-
-		GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
-		ArrayList<String> mealActList_str = null;
-		try {
-			mealActList_str = mealNameBO.execute(mealActList);
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
-		request.setAttribute("mealActList_str", mealActList_str);
-
-		long[] durationMinutes = new long[10];
-		int[] score = new int[10];
-		long[] digestionMinutes = new long[12];
-
-		GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
-		durationMinutes = durationBO.execute(mealActList);
-		GetDigestionMinutesLogic digestionLogic = new GetDigestionMinutesLogic();
-		try {
+			GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
+			durationMinutes = durationBO.execute(mealActList);
+			GetDigestionMinutesLogic digestionLogic = new GetDigestionMinutesLogic();
 			digestionMinutes = digestionLogic.execute(mealActList); //消化時間
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
 
-		GetScoreLogic scoreBO = new GetScoreLogic();
-		score = scoreBO.execute(digestionMinutes, durationMinutes);
+			GetScoreLogic scoreBO = new GetScoreLogic();
+			score = scoreBO.execute(digestionMinutes, durationMinutes);
 
-		GetDuration_strLogic duration_strBO = new GetDuration_strLogic();
-		String[] durationMinutes_str = duration_strBO.execute(durationMinutes); //スキマ時間 文字列
+			GetDuration_strLogic duration_strBO = new GetDuration_strLogic();
+			String[] durationMinutes_str = duration_strBO.execute(durationMinutes); //スキマ時間 文字列
 
-		GetDigestionMinutes_strLogic digestion_strBO = new GetDigestionMinutes_strLogic(); //消化時間 文字列
-		String[] digestionMinutes_str = digestion_strBO.execute(digestionMinutes);
+			GetDigestionMinutes_strLogic digestion_strBO = new GetDigestionMinutes_strLogic(); //消化時間 文字列
+			String[] digestionMinutes_str = digestion_strBO.execute(digestionMinutes);
 
-		request.setAttribute("durationMinutes", durationMinutes);
-		request.setAttribute("durationMinutes_str", durationMinutes_str);
+			request.setAttribute("durationMinutes", durationMinutes);
+			request.setAttribute("durationMinutes_str", durationMinutes_str);
 
-		request.setAttribute("score", score);
-		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
-		request.setAttribute("digestionMinutes", digestionMinutes);
-		session.setAttribute("mealActList", mealActList);
-		session.setAttribute("planAndResult", planAndResult);
+			request.setAttribute("score", score);
+			request.setAttribute("digestionMinutes_str", digestionMinutes_str);
+			request.setAttribute("digestionMinutes", digestionMinutes);
+			session.setAttribute("mealActList", mealActList);
+			session.setAttribute("planAndResult", planAndResult);
 
-		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
-		ArrayList<String> threeMealsList = null;
-		try {
-			threeMealsList = threeMealsName.execute();
-			if (threeMealsList == null) {
-				response.sendRedirect("/WEB-INF/error.jsp");
-			}
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
-		request.setAttribute("threeMealsList", threeMealsList);
+			GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
+			ArrayList<String> threeMealsList = threeMealsName.execute();
+			request.setAttribute("threeMealsList", threeMealsList);
 
-		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
-		ArrayList<MealGenre> genreList = null;
-		try {
-			genreList = getMealGenreBO.execute();
-			if (genreList == null) {
-				response.sendRedirect("/WEB-INF/error.jsp");
-			}
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
-		GetMealListLogic getMealListBO = new GetMealListLogic();
-		Map<MealGenre, ArrayList<Meal>> mealMap = new HashMap<>();
-		for (MealGenre mealGenre : genreList) {
-			try {
+			GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
+			ArrayList<MealGenre> genreList = getMealGenreBO.execute();
+
+			GetMealListLogic getMealListBO = new GetMealListLogic();
+			Map<MealGenre, ArrayList<Meal>> mealMap = new HashMap<>();
+			for (MealGenre mealGenre : genreList) {
 				ArrayList<Meal> mealList = getMealListBO.execute(mealGenre.getMealGenreId());
 				mealMap.put(mealGenre, mealList);
-			} catch (SQLException e) {
-				response.sendRedirect("/WEB-INF/error.jsp");
-			}
 
-		}
-		request.setAttribute("mealMap", mealMap);
-		request.setAttribute("genreList", genreList);
-		if (planAndResult.getIsCommitted() == false) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResult.jsp");
-			dispatcher.forward(request, response);
-		} else {
-			RequestDispatcher dispatcher = request
-					.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResultIsCommitted.jsp");
-			dispatcher.forward(request, response);
+			}
+			request.setAttribute("mealMap", mealMap);
+			request.setAttribute("genreList", genreList);
+			if (planAndResult.getIsCommitted() == false) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResult.jsp");
+				dispatcher.forward(request, response);
+			} else {
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResultIsCommitted.jsp");
+				dispatcher.forward(request, response);
+			}
+		} catch (SQLException e) {
+			response.sendRedirect("/the-gut-healthy/error.jsp");
 		}
 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession();
-		PlanAndResult planAndResult = (PlanAndResult) session.getAttribute("planAndResult");
-		ArrayList<MealAct> mealActList = (ArrayList<MealAct>) session.getAttribute("mealActList");
+		try {
+			HttpSession session = request.getSession();
+			PlanAndResult planAndResult = (PlanAndResult) session.getAttribute("planAndResult");
+			ArrayList<MealAct> mealActList = (ArrayList<MealAct>) session.getAttribute("mealActList");
 
-		for (int i = 1; i <= 12; i++) {
-			String mealId_String = request.getParameter("meal_name" + i);
-			String meal_time_String = request.getParameter("meal_time" + i);
-			if (!("0".equals(mealId_String)) && !("".equals(meal_time_String))
-					&& mealId_String != null && meal_time_String != null) { //食事行為の登録、食事計画と実績の登録
+			for (int i = 1; i <= 12; i++) {
+				String mealId_String = request.getParameter("meal_name" + i);
+				String meal_time_String = request.getParameter("meal_time" + i);
+				if (!("0".equals(mealId_String)) && !("".equals(meal_time_String))
+						&& mealId_String != null && meal_time_String != null) { //食事行為の登録、食事計画と実績の登録
 
-				MealAct mealAct = null;
-				try {
-					mealAct = getMealAct(i, mealId_String, meal_time_String, planAndResult);
-					if (mealAct == null) {
-						response.sendRedirect("/WEB-INF/error.jsp");
-					}
-				} catch (SQLException e) {
-					response.sendRedirect("/WEB-INF/error.jsp");
+					MealAct mealAct = getMealAct(i, mealId_String, meal_time_String, planAndResult);
+					setPlanAndResult(i, planAndResult, mealAct);//食事計画と実績インスタンスに食事行為IDを登録
+
+					mealActList.remove(i - 1);
+					mealActList.add(i - 1, mealAct);
+				} else { //登録が不正の場合はnullを登録
+					mealActList.remove(i - 1);
+					mealActList.add(i - 1, null);
 				}
-				setPlanAndResult(i, planAndResult, mealAct);//食事計画と実績インスタンスに食事行為IDを登録
-
-				mealActList.remove(i - 1);
-				mealActList.add(i - 1, mealAct);
-			} else { //登録が不正の場合はnullを登録
-				mealActList.remove(i - 1);
-				mealActList.add(i - 1, null);
 			}
-		}
-		GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
-		ArrayList<String> mealActList_str = null;
-		try {
-			mealActList_str = mealNameBO.execute(mealActList);
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
-		request.setAttribute("mealActList_str", mealActList_str);
+			GetMealNameListLogic mealNameBO = new GetMealNameListLogic();
+			ArrayList<String> mealActList_str = mealNameBO.execute(mealActList);
+			request.setAttribute("mealActList_str", mealActList_str);
 
-		long[] durationMinutes = new long[10];
-		int[] score = new int[10];
-		long[] digestionMinutes = new long[12];
+			long[] durationMinutes = new long[10];
+			int[] score = new int[10];
+			long[] digestionMinutes = new long[12];
 
-		GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
-		durationMinutes = durationBO.execute(mealActList);
-		GetDigestionMinutesLogic digestionLogic = new GetDigestionMinutesLogic();
-		try {
+			GetDurationMinutesLogic durationBO = new GetDurationMinutesLogic();
+			durationMinutes = durationBO.execute(mealActList);
+			GetDigestionMinutesLogic digestionLogic = new GetDigestionMinutesLogic();
 			digestionMinutes = digestionLogic.execute(mealActList); //消化時間
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
-		GetScoreLogic scoreBO = new GetScoreLogic();
-		score = scoreBO.execute(digestionMinutes, durationMinutes);
 
-		GetDuration_strLogic duration_strBO = new GetDuration_strLogic();
-		String[] durationMinutes_str = duration_strBO.execute(durationMinutes); //スキマ時間 文字列
+			GetScoreLogic scoreBO = new GetScoreLogic();
+			score = scoreBO.execute(digestionMinutes, durationMinutes);
 
-		GetDigestionMinutes_strLogic digestion_strBO = new GetDigestionMinutes_strLogic(); //消化時間 文字列
-		String[] digestionMinutes_str = digestion_strBO.execute(digestionMinutes);
+			GetDuration_strLogic duration_strBO = new GetDuration_strLogic();
+			String[] durationMinutes_str = duration_strBO.execute(durationMinutes); //スキマ時間 文字列
 
-		request.setAttribute("durationMinutes", durationMinutes);
-		request.setAttribute("durationMinutes_str", durationMinutes_str);
-		request.setAttribute("digestionMinutes", digestionMinutes);
-		request.setAttribute("digestionMinutes_str", digestionMinutes_str);
-		request.setAttribute("score", score);
+			GetDigestionMinutes_strLogic digestion_strBO = new GetDigestionMinutes_strLogic(); //消化時間 文字列
+			String[] digestionMinutes_str = digestion_strBO.execute(digestionMinutes);
 
-		int totalScorePlan = 50;
-		int totalScore = 50;
-		for (int i = 0; i < 10; i += 2) {
-			totalScorePlan += score[i];
-			totalScore += score[i + 1];
+			request.setAttribute("durationMinutes", durationMinutes);
+			request.setAttribute("durationMinutes_str", durationMinutes_str);
+			request.setAttribute("digestionMinutes", digestionMinutes);
+			request.setAttribute("digestionMinutes_str", digestionMinutes_str);
+			request.setAttribute("score", score);
 
-		}
+			int totalScorePlan = 50;
+			int totalScore = 50;
+			for (int i = 0; i < 10; i += 2) {
+				totalScorePlan += score[i];
+				totalScore += score[i + 1];
 
-		boolean isCommitted = false;
-		String isCommitted_str = request.getParameter("planAndResultSubmit");
-		if (isCommitted_str.equals("1")) {
-			isCommitted = true;
-		}
-		planAndResult.setScorePlan(totalScorePlan);
-		planAndResult.setScore(totalScore);
-		planAndResult.setIsCommitted(isCommitted);
+			}
 
-		UpdatePlanAndResultLogic bo2 = new UpdatePlanAndResultLogic();
-		int result = bo2.execute(planAndResult);
-		if (result != 1) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
+			boolean isCommitted = false;
+			String isCommitted_str = request.getParameter("planAndResultSubmit");
+			if (isCommitted_str.equals("1")) {
+				isCommitted = true;
+			}
+			planAndResult.setScorePlan(totalScorePlan);
+			planAndResult.setScore(totalScore);
+			planAndResult.setIsCommitted(isCommitted);
 
-		session.setAttribute("planAndResult", planAndResult);
-		session.setAttribute("mealActList", mealActList);
-
-		GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
-		ArrayList<String> threeMealsList = null;
-		try {
-			threeMealsList = threeMealsName.execute();
-			if (threeMealsList == null) {
+			UpdatePlanAndResultLogic bo2 = new UpdatePlanAndResultLogic();
+			int result = bo2.execute(planAndResult);
+			if (result != 1) {
 				response.sendRedirect("/WEB-INF/error.jsp");
 			}
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
-		request.setAttribute("threeMealsList", threeMealsList);
 
-		GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
-		ArrayList<MealGenre> genreList = null;
-		try {
-			genreList = getMealGenreBO.execute();
-			if (genreList == null) {
-				response.sendRedirect("/WEB-INF/error.jsp");
-			}
-		} catch (SQLException e) {
-			response.sendRedirect("/WEB-INF/error.jsp");
-		}
-		GetMealListLogic getMealListBO = new GetMealListLogic();
-		Map<MealGenre, ArrayList<Meal>> mealMap = new HashMap<>();
-		for (MealGenre mealGenre : genreList) {
-			try {
+			session.setAttribute("planAndResult", planAndResult);
+			session.setAttribute("mealActList", mealActList);
+
+			GetThreeMealsNameLogic threeMealsName = new GetThreeMealsNameLogic();
+			ArrayList<String> threeMealsList = threeMealsName.execute();
+			request.setAttribute("threeMealsList", threeMealsList);
+
+			GetMealGenreListLogic getMealGenreBO = new GetMealGenreListLogic();
+			ArrayList<MealGenre> genreList = getMealGenreBO.execute();
+
+			GetMealListLogic getMealListBO = new GetMealListLogic();
+			Map<MealGenre, ArrayList<Meal>> mealMap = new HashMap<>();
+			for (MealGenre mealGenre : genreList) {
 				ArrayList<Meal> mealList = getMealListBO.execute(mealGenre.getMealGenreId());
 				mealMap.put(mealGenre, mealList);
-			} catch (SQLException e) {
-				response.sendRedirect("/WEB-INF/error.jsp");
+
 			}
+			request.setAttribute("mealMap", mealMap);
+			request.setAttribute("genreList", genreList);
 
-		}
-		request.setAttribute("mealMap", mealMap);
-		request.setAttribute("genreList", genreList);
-
-		if (planAndResult.getIsCommitted() == false) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResult.jsp");
-			dispatcher.forward(request, response);
-		} else {
-			RequestDispatcher dispatcher = request
-					.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResultIsCommitted.jsp");
-			dispatcher.forward(request, response);
+			if (planAndResult.getIsCommitted() == false) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResult.jsp");
+				dispatcher.forward(request, response);
+			} else {
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/WEB-INF/jsp/pastPlanAndResultIsCommitted.jsp");
+				dispatcher.forward(request, response);
+			}
+		} catch (SQLException e) {
+			response.sendRedirect("/the-gut-healthy/error.jsp");
 		}
 
 	}
 
+	//食事行為の登録、食事計画と実績の登録
 	public MealAct getMealAct(int i, String mealId_String, String meal_time_String, PlanAndResult planAndResult)
-			throws SQLException {//食事行為の登録、食事計画と実績の登録
+			throws SQLException {
 		MealAct mealAct = null;
 		PostMealActLogic bo = new PostMealActLogic();
 
@@ -327,8 +262,9 @@ public class PastPlanAndResultServlet extends HttpServlet {
 		return mealAct;
 	}
 
+	//食事計画と実績インスタンスに食事行為IDを登録
 	public void setPlanAndResult(int i, PlanAndResult planAndResult, MealAct mealAct) {
-		switch (i) { //食事計画と実績インスタンスに食事行為IDを登録
+		switch (i) {
 		case 1:
 			planAndResult.setActIdBreakfastPlan(mealAct.getActId());
 			break;

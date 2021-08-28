@@ -48,7 +48,7 @@ public class PlanAndResultDAO {
 		return planAndResult;
 	}
 
-	public PlanAndResult findByUsers(Users users) {
+	public PlanAndResult findByUsers(Users users) throws SQLException {
 		PlanAndResult planAndResult = null;
 
 		try (Connection conn = DriverManager.getConnection(
@@ -92,8 +92,7 @@ public class PlanAndResultDAO {
 
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return planAndResult;
 	}
@@ -149,7 +148,7 @@ public class PlanAndResultDAO {
 		return planAndResult;
 	}
 
-	public int updatePlanAndResult(PlanAndResult planAndResult) {
+	public int updatePlanAndResult(PlanAndResult planAndResult) throws SQLException {
 		int result = 0;
 		try (Connection conn = DriverManager.getConnection(
 				bundle.getString("JDBC_URL_LOCAL"),
@@ -181,8 +180,7 @@ public class PlanAndResultDAO {
 
 			return result;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
+			throw e;
 		}
 	}
 

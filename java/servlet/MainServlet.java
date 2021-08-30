@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import DAO.DefaultPlanAndResultDAO;
+import DAO.FoodDAO;
 import DAO.MealActDAO;
+import DAO.MealDAO;
 import DAO.PlanAndResultDAO;
+import model.CancelRemindLogic;
 import model.CreatePlanAndResultLogic;
 import model.DefaultPlanAndResult;
 import model.GetDefaultNameListLogic;
@@ -44,6 +48,10 @@ import model.PlanAndResult;
 import model.PostMealAct;
 import model.PostMealActLogic;
 import model.PostPlanAndResult;
+import model.PostRemind;
+import model.PostRemindLogic;
+import model.Remind;
+import model.SendMailLogic;
 import model.UpdatePlanAndResultLogic;
 import model.users.Users;
 
@@ -182,6 +190,15 @@ public class MainServlet extends HttpServlet {
 					MealAct mealAct = getMealAct(i, mealId_String, meal_time_String, planAndResult); //食事行為インスタンスの獲得
 					setPlanAndResult(i, planAndResult, mealAct);//食事計画と実績インスタンスに食事行為IDを登録
 
+					//リマインド通知の処理　データベースに登録
+					PostRemind postRemind = getPostRemind(mealAct, users.getMail());
+					PostRemindLogic remindBO = new PostRemindLogic();
+					Remind remind = remindBO.execute(postRemind);
+					//リマインドIDを基にリマインド処理を実行
+					SendMailLogic sendMailBO = new SendMailLogic(remind);
+					sendMailBO.execute();
+
+					//過去の登録と削除して、現在の情報での表示のためのリスト
 					mealActList.remove(i - 1);
 					mealActList.add(i - 1, mealAct);
 
@@ -246,8 +263,8 @@ public class MainServlet extends HttpServlet {
 
 				//削除の場合の遷移
 			} else if (isCommitted_str.equals("2")) {
+				deleteRemind(planAndResult); //リマインド通知の削除
 				deleteMealAct(planAndResult); //食事計画と実績インスタンスに紐づく食事行為の削除
-
 				//食事行為リストにnullを設定
 				for (int i = 0; i < mealActList.size(); i++) {
 					mealActList.set(i, null);
@@ -299,22 +316,25 @@ public class MainServlet extends HttpServlet {
 
 	//食事行為の登録、食事計画と実績の登録
 	public MealAct getMealAct(int i, String mealId_String, String meal_time_String, PlanAndResult planAndResult)
-			throws SQLException {
+			throws SQLException, InterruptedException {
 		MealAct mealAct = null;
 		PostMealActLogic bo = new PostMealActLogic();
-
+		//登録内容を基に、食事行為インスタンスを作成
 		int mealId = Integer.parseInt(mealId_String);
 		LocalTime meal_LocalTime = LocalTime.parse(meal_time_String,
 				DateTimeFormatter.ofPattern("HH:mm"));
 		LocalDateTime meal_LocalDateTime = LocalDateTime.of(planAndResult.getPlanAndResultDate(),
 				meal_LocalTime);
 		PostMealAct postMealAct = new PostMealAct(planAndResult.getPlanAndResultId(), meal_LocalDateTime,
-				mealId,
-				i);
+				mealId, i);
 		MealActDAO mealActDAO = new MealActDAO();
+		int pastActId = mealActDAO.selectActId(planAndResult.getPlanAndResultId(), i);//過去の登録内容のactId
+		System.out.println("pastId" + pastActId);
+		CancelRemindLogic cancelBO = new CancelRemindLogic();
+		cancelBO.execute(pastActId);//過去の登録があるときのリマインドの削除
 		mealActDAO.deleteMealAct(planAndResult.getPlanAndResultId(), i); //以前の登録を削除
 
-		mealAct = bo.execute(postMealAct);
+		mealAct = bo.execute(postMealAct);//新しい食事行為の登録
 		return mealAct;
 	}
 
@@ -361,8 +381,9 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 
-	public void deleteMealAct(PlanAndResult planAndResult) throws SQLException {
+	public void deleteMealAct(PlanAndResult planAndResult) throws SQLException, InterruptedException {
 		MealActDAO mealActDAO = new MealActDAO();
+
 		mealActDAO.deleteMealActById(planAndResult.getActIdBreakfastPlan());
 		mealActDAO.deleteMealActById(planAndResult.getActIdBreakfast());
 		mealActDAO.deleteMealActById(planAndResult.getActIdAMSnackPlan());
@@ -375,6 +396,50 @@ public class MainServlet extends HttpServlet {
 		mealActDAO.deleteMealActById(planAndResult.getActIdDinner());
 		mealActDAO.deleteMealActById(planAndResult.getActIdNightSnack());
 		mealActDAO.deleteMealActById(planAndResult.getActIdNightSnackPlan());
+
+	}
+
+	//リマインド通知の情報を登録するためのPostRemindインスタンスの取得
+	public PostRemind getPostRemind(MealAct mealAct, String mail) throws SQLException {
+		LocalDateTime mealActTime = mealAct.getActTime();
+		MealDAO mealDAO = new MealDAO();
+		FoodDAO foodDAO = new FoodDAO();
+		Meal meal = mealDAO.selectMealByMealId(mealAct.getMealId());
+		int foodId = meal.getFoodId();
+
+		//消化時間に基づくリマインド通知の時刻を獲得
+		long digestionMinutes = foodDAO.selectDigestionMinutesFromId(foodId);
+		System.out.println("消化時間" + digestionMinutes);
+		LocalDateTime remindTime_local = mealActTime.plusMinutes(digestionMinutes);
+		Timestamp remindTime = Timestamp.valueOf(remindTime_local);
+
+		String text = getText(meal.getMealName());//メール送信のテキスト
+
+		PostRemind postRemind = new PostRemind(mealAct.getActId(), remindTime, text, mail);
+		return postRemind;
+	}
+
+	//リマインド通知内容の獲得
+	private String getText(String mealName) {
+		String text = mealName + "のスキマ時間の終了時刻になりました。胃腸の次の食事への準備ができています。";
+		return text;
+	}
+
+	//食事計画と実績に基づくリマインド通知のキャンセル
+	private void deleteRemind(PlanAndResult planAndResult) throws SQLException, InterruptedException {
+		CancelRemindLogic cancelBO = new CancelRemindLogic();
+		cancelBO.execute(planAndResult.getActIdBreakfastPlan());
+		cancelBO.execute(planAndResult.getActIdBreakfast());
+		cancelBO.execute(planAndResult.getActIdAMSnackPlan());
+		cancelBO.execute(planAndResult.getActIdAMSnack());
+		cancelBO.execute(planAndResult.getActIdLunch());
+		cancelBO.execute(planAndResult.getActIdLunchPlan());
+		cancelBO.execute(planAndResult.getActIdPMSnackPlan());
+		cancelBO.execute(planAndResult.getActIdPMSnack());
+		cancelBO.execute(planAndResult.getActIdDinnerPlan());
+		cancelBO.execute(planAndResult.getActIdDinner());
+		cancelBO.execute(planAndResult.getActIdNightSnackPlan());
+		cancelBO.execute(planAndResult.getActIdNightSnack());
 	}
 
 }

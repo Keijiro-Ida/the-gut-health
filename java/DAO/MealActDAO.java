@@ -113,4 +113,27 @@ public class MealActDAO {
 			throw e;
 		}
 	}
+
+	public int selectActId(int planAndResultId, int threeMealsId) throws SQLException {
+		int actId = 0;
+		try (Connection conn = DriverManager.getConnection(
+				bundle.getString("JDBC_URL_LOCAL"),
+				bundle.getString("DB_USER_LOCAL"),
+				bundle.getString("DB_PASS_LOCAL"))) {
+
+			String sql = "SELECT * FROM MEALACT WHERE PLANANDRESULTID = ? AND THREEMEALSID= ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, planAndResultId);
+			pstmt.setInt(2, threeMealsId);
+
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				actId = rs.getInt("ACTID");
+			}
+
+		} catch (SQLException e) {
+			throw e;
+		}
+		return actId;
+	}
 }

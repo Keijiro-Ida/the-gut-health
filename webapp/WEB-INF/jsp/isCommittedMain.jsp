@@ -30,8 +30,8 @@
 		</div>
 		<div id="main">
 			<div id="nav">
-					<ul><li><a href="/the-gut-healthy/Point1Servlet">腸活とは？</a></li>
-						<li><a href="/the-gut-healthy/Point2Servlet">消化スピード</a></li>
+					<ul><li><a href="/the-gut-healthy/Point1Servlet">使い方</a></li>
+						<li><a href="/the-gut-healthy/Point2Servlet">腸活とは？</a></li>
 						<li><a href="/the-gut-healthy/CalendarServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1 %>">カレンダー</a></li>
 						<li><a href="/the-gut-healthy/MonthGraphServlet?year=<%=now.get(Calendar.YEAR)%>&month=<%=now.get(Calendar.MONTH) + 1%>">偏差値グラフ</a></li>
 					</ul>

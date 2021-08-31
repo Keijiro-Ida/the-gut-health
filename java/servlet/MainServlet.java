@@ -190,14 +190,21 @@ public class MainServlet extends HttpServlet {
 					MealAct mealAct = getMealAct(i, mealId_String, meal_time_String, planAndResult); //食事行為インスタンスの獲得
 					setPlanAndResult(i, planAndResult, mealAct);//食事計画と実績インスタンスに食事行為IDを登録
 
-					//リマインド通知の処理　データベースに登録
-					PostRemind postRemind = getPostRemind(mealAct, users.getMail());
-					PostRemindLogic remindBO = new PostRemindLogic();
-					Remind remind = remindBO.execute(postRemind);
-					//リマインドIDを基にリマインド処理を実行
-					SendMailLogic sendMailBO = new SendMailLogic(remind);
-					sendMailBO.execute();
+					//実績の時のみ、リマインド送信
+					if (i == 2 || i == 4 || i == 6 || i == 8 || i == 10 || i == 12) {
 
+						PostRemind postRemind = getPostRemind(mealAct, users.getMail());
+						Timestamp now = new Timestamp(System.currentTimeMillis());
+						//現在時刻よりも後のみ、リマインド送信
+						if (postRemind.getRemindTime().after(now)) {
+							PostRemindLogic remindBO = new PostRemindLogic();
+							Remind remind = remindBO.execute(postRemind);
+							//リマインドIDを基にリマインド処理を実行
+							SendMailLogic sendMailBO = new SendMailLogic(remind);
+							sendMailBO.execute();
+							System.out.println("MailServlet:SendMail起動remindId" + remind.getRemindId());
+						}
+					}
 					//過去の登録と削除して、現在の情報での表示のためのリスト
 					mealActList.remove(i - 1);
 					mealActList.add(i - 1, mealAct);

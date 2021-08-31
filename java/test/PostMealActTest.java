@@ -47,7 +47,7 @@ public class PostMealActTest {
 		}
 	}
 
-	public static void testExecute3() {
+	public static void testExecute3() throws SQLException {
 		Users users = new Users(1, "11223344", "idatt1122@gmail.com");
 		PlanAndResultDAO dao = new PlanAndResultDAO();
 		PlanAndResult actDate = dao.findByUsers(users);
@@ -58,7 +58,7 @@ public class PostMealActTest {
 		}
 	}
 
-	public static void testExecute4() {
+	public static void testExecute4() throws SQLException {
 		int actId = 1;
 		MealActDAO dao = new MealActDAO();
 		MealAct mealAct = dao.selectByActId(actId);
@@ -69,7 +69,7 @@ public class PostMealActTest {
 		}
 	}
 
-	public static void testExecute5() {
+	public static void testExecute5() throws SQLException {
 
 		PostPlanAndResult date = new PostPlanAndResult(1, LocalDate.now());
 		PlanAndResultDAO dao = new PlanAndResultDAO();

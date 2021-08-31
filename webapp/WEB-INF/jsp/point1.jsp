@@ -11,11 +11,7 @@
 <meta charset="UTF-8">
 <title>腸活アプリ</title>
 <link rel="stylesheet" type="text/css" href="/the-gut-healthy/css/style.css">
-<style>
-#point{
-text-align: left;
-}
-</style>
+
 </head>
 <body>
 	<div id="pagebody">

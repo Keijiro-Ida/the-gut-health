@@ -24,7 +24,7 @@ public class Remind { //リマインド通知の情報
 		return actId;
 	}
 
-	public int getReimindId() {
+	public int getRemindId() {
 		return remindId;
 	}
 

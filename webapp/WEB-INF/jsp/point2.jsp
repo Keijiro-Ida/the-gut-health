@@ -6,11 +6,6 @@
 <meta charset="UTF-8">
 <title>腸活アプリ</title>
 <link rel="stylesheet" type="text/css" href="/the-gut-healthy/css/style.css">
-<style>
-#point1{
-	text-align: left;
-}
-</style>
 </head>
 <body>
 	<div id="pagebody">
@@ -19,7 +14,7 @@
 		</div>
 		<div id="main">
 			<img src="point.jpeg" width="400px">
-			<div id="point1">
+			<div id="point">
 			<h1>腸活とは？</h1>
 			<h3>『全ての体調不良は腸の乱れが原因』</h3>
 			<p>頭痛、不眠、肌荒れ、腰痛、コレステロール、この全てが腸の乱れによるものとされています。</p>

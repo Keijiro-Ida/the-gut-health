@@ -67,8 +67,8 @@ public class SendMailLogic { //リマインド通知を行うクラス
 		long time = remind.getRemindTime().getTime() - now.getTime(); //リマインド時刻と現在時刻の差分
 		sf = service.schedule(task1, time, TimeUnit.MILLISECONDS); //リマインドを設定
 
-		futureMap.put(remind.getReimindId(), sf); //キャンセルを行う時のための格納
-		threadMap.put(remind.getReimindId(), service);
+		futureMap.put(remind.getRemindId(), sf); //キャンセルを行う時のための格納
+		threadMap.put(remind.getRemindId(), service);
 
 	}
 }

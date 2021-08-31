@@ -37,7 +37,7 @@ public class Listener implements ServletContextListener {
 		CancelMailLogic cancelBO = new CancelMailLogic();
 		try {
 			for (Remind remind : list) {
-				System.out.println("cancel thread" + remind.getReimindId());
+				System.out.println("cancel thread" + remind.getRemindId());
 				cancelBO.execute(remind.getActId());
 			}
 		} catch (Exception e) {
@@ -58,7 +58,7 @@ public class Listener implements ServletContextListener {
 			for (Remind remind : list) {
 				SendMailLogic threadBO = new SendMailLogic(remind);
 				threadBO.execute();
-				System.out.println("start thread" + remind.getReimindId());
+				System.out.println("start thread" + remind.getRemindId());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

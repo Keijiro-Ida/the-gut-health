@@ -95,74 +95,77 @@ public class DefaultSettingServlet extends HttpServlet {
 			if (defaultSetting != null) {
 				DefaultPlanAndResultDAO defaultDAO = new DefaultPlanAndResultDAO();
 				defaultDAO.deleteByUsrId(users.getUsrId());
+			}
 
-				String isRegist_str = request.getParameter("defaultSubmit");
-				//登録の場合
-				if (isRegist_str.equals("1")) {
+			String isRegist_str = request.getParameter("defaultSubmit");
+			//登録の場合
+			if (isRegist_str.equals("1")) {
 
-					PostDefaultPlanAndResult postDefault = new PostDefaultPlanAndResult();
-					for (int i = 1; i <= 12; i += 2) {
-						String mealId_String = request.getParameter("meal_name" + i);
-						String mealTime = request.getParameter("meal_time" + i);
+				PostDefaultPlanAndResult postDefault = new PostDefaultPlanAndResult();
+				for (int i = 1; i <= 12; i += 2) {
+					String mealId_String = request.getParameter("meal_name" + i);
+					String mealTime = request.getParameter("meal_time" + i);
 
-						if (!("0".equals(mealId_String)) && !("".equals(mealTime))
-								&& mealId_String != null && mealTime != null) {
-							int mealId = Integer.parseInt(mealId_String);
-							//デフォルト設定インスタンスの設定
-							switch (i) {
-							case 1:
-								postDefault.setBreakfastId(mealId);
-								postDefault.setBreakfastTime(mealTime);
-								break;
-							case 3:
-								postDefault.setAmSnackId(mealId);
-								postDefault.setAmSnackTime(mealTime);
-								break;
-							case 5:
-								postDefault.setLunchId(mealId);
-								postDefault.setLunchTime(mealTime);
-								break;
-							case 7:
-								postDefault.setPmSnackId(mealId);
-								postDefault.setPmSnackTime(mealTime);
-								break;
-							case 9:
-								postDefault.setDinnerId(mealId);
-								postDefault.setDinnerTime(mealTime);
-								break;
-							case 11:
-								postDefault.setNightSnackId(mealId);
-								postDefault.setNightSnackTime(mealTime);
-								break;
+					if (!("0".equals(mealId_String)) && !("".equals(mealTime))
+							&& mealId_String != null && mealTime != null) {
+						int mealId = Integer.parseInt(mealId_String);
+						//デフォルト設定インスタンスの設定
+						switch (i) {
+						case 1:
+							postDefault.setBreakfastId(mealId);
+							postDefault.setBreakfastTime(mealTime);
+							break;
+						case 3:
+							postDefault.setAmSnackId(mealId);
+							postDefault.setAmSnackTime(mealTime);
+							break;
+						case 5:
+							postDefault.setLunchId(mealId);
+							postDefault.setLunchTime(mealTime);
+							break;
+						case 7:
+							postDefault.setPmSnackId(mealId);
+							postDefault.setPmSnackTime(mealTime);
+							break;
+						case 9:
+							postDefault.setDinnerId(mealId);
+							postDefault.setDinnerTime(mealTime);
+							break;
+						case 11:
+							postDefault.setNightSnackId(mealId);
+							postDefault.setNightSnackTime(mealTime);
+							break;
 
-							}
 						}
 					}
+				}
 
-					postDefault.setUsrId(users.getUsrId());
-					CreateDefaultPlanAndResultLogic bo = new CreateDefaultPlanAndResultLogic();
-					int resultDefault = bo.execute(postDefault);
+				postDefault.setUsrId(users.getUsrId());
+				CreateDefaultPlanAndResultLogic bo = new CreateDefaultPlanAndResultLogic();
+				int resultDefault = bo.execute(postDefault);
 
-					if (resultDefault == 1) {
-						request.setAttribute("msg", "登録完了しました。");
-						RequestDispatcher dispatcher = request
-								.getRequestDispatcher("/WEB-INF/jsp/defaultSettingResult.jsp");
-						dispatcher.forward(request, response);
-					} else {
-						request.setAttribute("msg", "システムエラー");
-						RequestDispatcher dispatcher = request
-								.getRequestDispatcher("/WEB-INF/jsp/defaultSettingResult.jsp");
-						dispatcher.forward(request, response);
-					}
-				} else {
-					request.setAttribute("msg", "削除しました。");
+				if (resultDefault == 1) {
+					request.setAttribute("msg", "登録完了しました。");
 					RequestDispatcher dispatcher = request
 							.getRequestDispatcher("/WEB-INF/jsp/defaultSettingResult.jsp");
 					dispatcher.forward(request, response);
-
+				} else {
+					request.setAttribute("msg", "システムエラー");
+					RequestDispatcher dispatcher = request
+							.getRequestDispatcher("/WEB-INF/jsp/defaultSettingResult.jsp");
+					dispatcher.forward(request, response);
 				}
+			} else {
+				request.setAttribute("msg", "削除しました。");
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/WEB-INF/jsp/defaultSettingResult.jsp");
+				dispatcher.forward(request, response);
+
 			}
-		} catch (Exception e) {
+
+		} catch (
+
+		Exception e) {
 			response.sendRedirect("/the-gut-healthy/error.jsp");
 		}
 

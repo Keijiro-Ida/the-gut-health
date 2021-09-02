@@ -78,7 +78,6 @@ public class DefaultPlanAndResultDAO {
 
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw e;
 		}
 		return defaultSetting;
